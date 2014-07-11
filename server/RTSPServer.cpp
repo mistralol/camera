@@ -17,6 +17,8 @@ RTSPServer::~RTSPServer()
 
 void RTSPServer::PipelineAdd(const std::string url, const std::string pipeline)
 {
+	LogDebug("RTSPServer::PipelineAdd(%s, %s)", url.c_str(), pipeline.c_str());
+
 	GstRTSPMediaMapping *mapping = gst_rtsp_server_get_media_mapping (m_server);
 	GstRTSPMediaFactory *factory = gst_rtsp_media_factory_new ();
 
@@ -29,6 +31,8 @@ void RTSPServer::PipelineAdd(const std::string url, const std::string pipeline)
 
 void RTSPServer::PipelineRemove(const std::string url)
 {
+	LogDebug("RTSPServer::PipelineRemove(%s)", url.c_str());
+
 	GstRTSPMediaMapping *mapping = gst_rtsp_server_get_media_mapping (m_server);
 	gst_rtsp_media_mapping_remove_factory(mapping, url.c_str());
 	g_object_unref (mapping);	
@@ -36,6 +40,8 @@ void RTSPServer::PipelineRemove(const std::string url)
 
 void RTSPServer::SessionsSetMax(guint max)
 {
+	LogDebug("RTSPServer::SessionsSetMax(%ud)", max);
+
 	GstRTSPSessionPool *Pool = gst_rtsp_server_get_session_pool(m_server);
 	gst_rtsp_session_pool_set_max_sessions(Pool, max);
 	g_object_unref(Pool);
@@ -43,6 +49,8 @@ void RTSPServer::SessionsSetMax(guint max)
 
 guint RTSPServer::SessionsGetMax()
 {
+	LogDebug("RTSPServer::SessionsGetMax()");
+
 	guint max = 0;
 	GstRTSPSessionPool *Pool = gst_rtsp_server_get_session_pool(m_server);
 	max = gst_rtsp_session_pool_get_max_sessions(Pool);
@@ -52,6 +60,8 @@ guint RTSPServer::SessionsGetMax()
 
 guint RTSPServer::SessionsCount()
 {
+	LogDebug("RTSPServer::SessionsCount()");
+
 	guint current = 0;
 	GstRTSPSessionPool *Pool = gst_rtsp_server_get_session_pool(m_server);
 	current = gst_rtsp_session_pool_get_n_sessions(Pool);
@@ -61,11 +71,13 @@ guint RTSPServer::SessionsCount()
 
 void RTSPServer::BacklogSet(guint max)
 {
+	LogDebug("RTSPServer::BacklogSet(%ud)", max);
 	gst_rtsp_server_set_backlog(m_server, max);
 }
 
 guint RTSPServer::BacklogGet(guint max)
 {
+	LogDebug("RTSPServer::BacklogGet(%ud)", max);
 	return gst_rtsp_server_get_backlog(m_server);
 }
 

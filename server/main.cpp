@@ -3,25 +3,32 @@
 
 int main(int argc, char **argv)
 {
+	LogManager::Init();
 	RTSPServer *RServer = NULL;
+
+	if (isatty(fileno(stdout)) == 1)
+	{
+		LogManager::Add(new LogStdout());
+	}
 
 	gst_init (&argc, &argv);
 	RServer = new RTSPServer();
 
 
-	printf("Adding PipeLine");
+	LogDebug("Adding PipeLine");
 	RServer->PipelineAdd("/test", "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )");
 
 	while(1)
 	{
-		printf("Running - Total Sessions: %d\n", RServer->SessionsCount());
+		LogInfo("Running - Total Sessions: %d", RServer->SessionsCount());
 		sleep(1);
 	}
 
-	printf("Exiting\n");
+	LogInfo("RTSP Server Exiting");
 
 	delete RServer;
 	gst_deinit();
+	LogManager::RemoveAll(true);
 	return 0;
 }
 

@@ -1,8 +1,8 @@
 
-INCLUDE+=-I. -I../../libclientserver/include 
+INCLUDE+=-I. -I../../libclientserver/include -I../../liblogger/include
 INCLUDE+=`pkg-config --cflags gstreamer-0.10`
 
-LIBS+=../../libclientserver/libclientserver.a
+LIBS+=../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
 LIBS+=`pkg-config --libs gstreamer-0.10`
 LIBS+=/usr/lib/libgstrtspserver-0.10.so.0
 
