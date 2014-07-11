@@ -17,5 +17,5 @@ using namespace liblogger;
 
 #include <RTSPServer.h>
 #include <RTSPServerCleanup.h>
-
+#include <RTSPHandler.h>
 
