@@ -7,7 +7,7 @@ LIBS+=`pkg-config --libs gstreamer-0.10`
 LIBS+=/usr/lib/libgstrtspserver-0.10.so.0
 
 CPP=g++
-CPP_OPTS+=-Wall -ggdb
+CPP_OPTS+=-Wall -ggdb -std=c++11
 MKDEP=gcc -E -MM
 
 SRCS=main.cpp \
