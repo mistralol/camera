@@ -19,23 +19,23 @@ void RTSPServer::PipelineAdd(const std::string url, const std::string pipeline)
 {
 	LogDebug("RTSPServer::PipelineAdd(%s, %s)", url.c_str(), pipeline.c_str());
 
-	GstRTSPMediaMapping *mapping = gst_rtsp_server_get_media_mapping (m_server);
+	GstRTSPMountPoints *mounts = gst_rtsp_server_get_mount_points (m_server);
 	GstRTSPMediaFactory *factory = gst_rtsp_media_factory_new ();
 
 	gst_rtsp_media_factory_set_launch (factory, pipeline.c_str());
 	gst_rtsp_media_factory_set_shared (factory, TRUE);
-	gst_rtsp_media_mapping_add_factory (mapping, url.c_str(), factory);
+	gst_rtsp_mount_points_add_factory (mounts, url.c_str(), factory);
 
-	g_object_unref(mapping);
+	g_object_unref(mounts);
 }
 
 void RTSPServer::PipelineRemove(const std::string url)
 {
 	LogDebug("RTSPServer::PipelineRemove(%s)", url.c_str());
 
-	GstRTSPMediaMapping *mapping = gst_rtsp_server_get_media_mapping (m_server);
-	gst_rtsp_media_mapping_remove_factory(mapping, url.c_str());
-	g_object_unref (mapping);	
+	GstRTSPMountPoints *mounts = gst_rtsp_server_get_mount_points (m_server);
+	gst_rtsp_mount_points_remove_factory(mounts, url.c_str());
+	g_object_unref (mounts);	
 }
 
 void RTSPServer::SessionsSetMax(guint max)

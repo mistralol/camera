@@ -79,6 +79,10 @@ int main(int argc, char **argv)
 	//Load Config
 	LogDebug("Adding PipeLine");
 	RServer->PipelineAdd("/test", "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )");
+	RServer->PipelineAdd("/test2", "( videotestsrc ! x264enc ! rtpbin name=pay0 )");
+
+	//RServer->PipelineAdd("/test2", "( rtspsrc latency=0 location=rtsp://root:metoo@192.168.200.76/axis-media/media.amp ! rtph264depay ! h264parse ! rtph264pay name=pay0 pt=96 )");
+
 
 	//Start Our Local Services
 	LogDebug("Serverice Listen On: %s", LocSocket.c_str());
