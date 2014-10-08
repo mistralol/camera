@@ -1,9 +1,9 @@
 
-class RTSPHandler : public IServerHandler
+class CameraHandler : public IServerHandler
 {
 	public:
-		RTSPHandler();
-		~RTSPHandler();
+		CameraHandler();
+		~CameraHandler();
 
 		void OnPreNewConnection();
 

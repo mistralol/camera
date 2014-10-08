@@ -1,32 +1,32 @@
 
 #include <main.h>
 
-RTSPHandler::RTSPHandler()
+CameraHandler::CameraHandler()
 {
 	LogDebug("RTSPHandler::RTSPHandler");
 }
 
-RTSPHandler::~RTSPHandler()
+CameraHandler::~CameraHandler()
 {
 	LogDebug("RTSPHandler::~RTSPHandler");
 }
 
-void RTSPHandler::OnPreNewConnection()
+void CameraHandler::OnPreNewConnection()
 {
 	LogDebug("RTSPHandler::OnPreNewConnection");
 }
 
-void RTSPHandler::OnPostNewConnection(IServerConnection *Connection)
+void CameraHandler::OnPostNewConnection(IServerConnection *Connection)
 {
 	LogDebug("RTSPHandler::OnPostNewConnection");
 }
 
-void RTSPHandler::OnDisconnect(IServerConnection *Connection)
+void CameraHandler::OnDisconnect(IServerConnection *Connection)
 {
 	LogDebug("RTSPHandler::OnDisconnect");
 }
 		
-int RTSPHandler::OnRequest(IServerConnection *Connection, Request *request, Request *response)
+int CameraHandler::OnRequest(IServerConnection *Connection, Request *request, Request *response)
 {
 	LogDebug("RTSPHandler::OnRequest");
 
@@ -41,24 +41,24 @@ int RTSPHandler::OnRequest(IServerConnection *Connection, Request *request, Requ
 	return -ENOSYS;
 }
 
-int RTSPHandler::OnCommand(IServerConnection *Connection, Request *request)
+int CameraHandler::OnCommand(IServerConnection *Connection, Request *request)
 {
 	LogDebug("RTSPHandler::OnCommand");
 	return -ENOSYS;
 }
 
-void RTSPHandler::OnBadLine(IServerConnection *Connection, const std::string *line)
+void CameraHandler::OnBadLine(IServerConnection *Connection, const std::string *line)
 {
 	LogDebug("RTSPHandler::OnBadLine(%s)", line->c_str());
 }
 
-void RTSPHandler::Wait()
+void CameraHandler::Wait()
 {
 	LogDebug("RTSPHandler::Wait");
 	m_QuitBarrier.Wait();
 }
 
-void RTSPHandler::Quit()
+void CameraHandler::Quit()
 {
 	LogDebug("RTSPHandler::Quit");
 	m_QuitBarrier.WakeUp();

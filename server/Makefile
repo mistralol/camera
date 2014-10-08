@@ -14,7 +14,7 @@ MKDEP=gcc -E -MM
 SRCS=main.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \
-	RTSPHandler.cpp
+	CameraHandler.cpp
 
 OBJS=$(SRCS:%.cpp=%.o)
 

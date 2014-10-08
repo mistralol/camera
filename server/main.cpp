@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {
 	LogManager::Init();
 	RTSPServer *RServer = NULL;
-	RTSPHandler Handler;
+	CameraHandler Handler;
 	ServerManager Manager(&Handler);
 	std::string LocSocket = "/tmp/CameraServer";
 	std::string LocPidFile = "";
