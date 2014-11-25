@@ -78,8 +78,7 @@ int main(int argc, char **argv)
 
 	//Load Config
 	LogDebug("Adding PipeLine");
-	RServer->PipelineAdd("/test", "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )");
-	RServer->PipelineAdd("/test2", "( videotestsrc ! x264enc ! rtpbin name=pay0 )");
+	RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 bitrate=1000 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
 
 	//RServer->PipelineAdd("/test2", "( rtspsrc latency=0 location=rtsp://root:metoo@192.168.200.76/axis-media/media.amp ! rtph264depay ! h264parse ! rtph264pay name=pay0 pt=96 )");
 

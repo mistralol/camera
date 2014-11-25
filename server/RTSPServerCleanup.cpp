@@ -25,9 +25,9 @@ void RTSPServerCleanup::Run()
 {
 	while(m_exit == false)
 	{
-		LogDebug("RTSPServerCleanup::Run()");
+		LogDebug("RTSPServerCleanup::Run() SessionCount: %d", gst_rtsp_session_pool_get_n_sessions(m_pool));
 		gst_rtsp_session_pool_cleanup(m_pool);
-		sleep(10);
+		sleep(60);
 	}
 }
 

@@ -1,4 +1,6 @@
 
+#ifdef __cplusplus
+
 class CameraClient
 {
 	public:
@@ -15,4 +17,6 @@ class CameraClient
 		ClientBase *m_Client;
 
 };
+
+#endif
 
