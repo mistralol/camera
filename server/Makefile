@@ -1,20 +1,14 @@
 
-INCLUDE+=-I. -I../../libclientserver/include -I../../liblogger/include
-INCLUDE+=`pkg-config --cflags gstreamer-1.0` -I/usr/local/include/gstreamer-1.0
-
-LIBS+=../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
-LIBS+=`pkg-config --libs gstreamer-1.0`
-LIBS+=/usr/local/lib/libgstrtspserver-1.0.so.0
-LIBS+=-pthread
-
-CPP=g++
-CPP_OPTS+=-Wall -ggdb -std=c++11
-MKDEP=gcc -E -MM
+include Makefile.Rules
 
 SRCS=main.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \
-	CameraHandler.cpp
+	CameraHandler.cpp \
+	Platform/Platform.cpp \
+	Platform/PlatformBase.cpp \
+	Platform/Example/Example.cpp
+	
 
 OBJS=$(SRCS:%.cpp=%.o)
 
@@ -38,7 +32,7 @@ endif
 
 
 clean:
-	$(RM) *.o camera-server .depend
+	$(RM) $(OBJS) *.o camera-server .depend
 
 
 

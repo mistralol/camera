@@ -20,3 +20,7 @@ using namespace liblogger;
 #include <RTSPServerCleanup.h>
 #include <CameraHandler.h>
 
+#include <Platform/PlatformBase.h>
+#include <Platform/Platform.h>
+
+

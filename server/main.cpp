@@ -21,6 +21,7 @@ int main(int argc, char **argv)
 	std::string LocSocket = "/tmp/CameraServer";
 	std::string LocPidFile = "";
 	PIDFile *PidFile = NULL;
+	PlatformBase *System = NULL;
 	bool AlwaysLog = false;
 
 	const char *opts = "h";
@@ -76,9 +77,18 @@ int main(int argc, char **argv)
 	gst_init (&argc, &argv);
 	RServer = new RTSPServer();
 
+	//LoadPlatform
+	System = Platform::Create("Example");
+
+	if (System->Init() == false)
+	{
+		LogCritical("Failed To Init Platform");
+		exit(EXIT_FAILURE);
+	}
+
 	//Load Config
 	LogDebug("Adding PipeLine");
-	RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 bitrate=1000 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
+	RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 bitrate=1000 intra-refresh=true tune=4 speed-preset=1 ! rtph264pay name=pay0 pt=96 )");
 
 	//RServer->PipelineAdd("/test2", "( rtspsrc latency=0 location=rtsp://root:metoo@192.168.200.76/axis-media/media.amp ! rtph264depay ! h264parse ! rtph264pay name=pay0 pt=96 )");
 
