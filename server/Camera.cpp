@@ -1,5 +1,5 @@
 
-#include <main.h>
+#include <Camera.h>
 
 void print_help(FILE *fp, const char *app)
 {

@@ -1,13 +1,13 @@
 
 include Makefile.Rules
 
-SRCS=main.cpp \
+SRCS=	Camera.cpp \
+	CameraHandler.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \
-	CameraHandler.cpp \
 	Platform/Platform.cpp \
 	Platform/PlatformBase.cpp \
-	Platform/Example/Example.cpp
+	Platform/Example.cpp
 	
 
 OBJS=$(SRCS:%.cpp=%.o)

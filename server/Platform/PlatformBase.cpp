@@ -1,8 +1,5 @@
 
-#include <string>
-
-
-#include "PlatformBase.h"
+#include <Camera.h>
 
 PlatformBase::~PlatformBase()
 {

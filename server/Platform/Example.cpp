@@ -1,12 +1,5 @@
 
-#include <string>
-
-#include <liblogger.h>
-
-using namespace liblogger;
-
-#include "../PlatformBase.h"
-#include "Example.h"
+#include <Camera.h>
 
 Example::Example()
 {

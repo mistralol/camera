@@ -1,10 +1,5 @@
 
-#include <string>
-
-#include "PlatformBase.h"
-#include "Platform.h"
-#include "Example/Example.h"
-
+#include <Camera.h>
 
 PlatformBase *Platform::Create(const std::string str)
 {

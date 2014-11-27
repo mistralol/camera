@@ -1,5 +1,5 @@
 
-#include <main.h>
+#include <Camera.h>
 
 RTSPServer::RTSPServer()
 {

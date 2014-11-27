@@ -23,4 +23,5 @@ using namespace liblogger;
 #include <Platform/PlatformBase.h>
 #include <Platform/Platform.h>
 
+#include <Platform/Example.h>
 
