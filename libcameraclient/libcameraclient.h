@@ -1,6 +1,4 @@
 
-#ifdef __cplusplus
-
 class CameraClient
 {
 	public:
@@ -18,5 +16,4 @@ class CameraClient
 
 };
 
-#endif
 

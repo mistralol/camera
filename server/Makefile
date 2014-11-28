@@ -8,22 +8,23 @@ SRCS=	Camera.cpp \
 	Platform/Platform.cpp \
 	Platform/PlatformBase.cpp \
 	Platform/Example.cpp
-	
+
+INCS=$(shell find include -type f)	
 
 OBJS=$(SRCS:%.cpp=%.o)
 
 
-all: camera-server
+all: camera
 
 %.o: %.cpp Makefile
 	$(CPP) $(CPP_OPTS) $(INCLUDE) -o $@ -c $<
 
-camera-server: $(OBJS) .depend
+camera: $(OBJS) .depend
 	$(CPP) $(OBJS) $(LIBS) -o $@
 
 dep: .depend
 
-.depend: $(SRCS)
+.depend: $(SRCS) $(INCS)
 	$(MKDEP) $(INCLUDE) $(SRCS) > .depend
 
 ifeq (.depend,$(wildcard .depend))
