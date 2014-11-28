@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <getopt.h>
 
+#include <list>
+#include <map>
 #include <string>
 
 #include <gst/gst.h>
@@ -19,6 +21,8 @@ using namespace liblogger;
 #include <RTSPServer.h>
 #include <RTSPServerCleanup.h>
 #include <CameraHandler.h>
+
+#include <VideoSupported.h>
 
 #include <Platform/PlatformBase.h>
 #include <Platform/Platform.h>
