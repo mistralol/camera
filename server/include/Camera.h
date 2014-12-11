@@ -22,6 +22,11 @@ using namespace liblogger;
 #include <RTSPServerCleanup.h>
 #include <CameraHandler.h>
 
+#include <IPipeline.h>
+#include <PipelineBasic.h>
+
+#include <GstUtil.h>
+
 #include <VideoSupported.h>
 
 #include <Platform/PlatformBase.h>

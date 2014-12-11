@@ -5,6 +5,8 @@ SRCS=	Camera.cpp \
 	CameraHandler.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \
+	GstUtil.cpp \
+	PipelineBasic.cpp \
 	Platform/Platform.cpp \
 	Platform/PlatformBase.cpp \
 	Platform/Example.cpp
