@@ -20,7 +20,6 @@ using namespace liblogger;
 
 #include <RTSPServer.h>
 #include <RTSPServerCleanup.h>
-#include <CameraHandler.h>
 
 #include <IPipeline.h>
 #include <PipelineBasic.h>
@@ -33,4 +32,6 @@ using namespace liblogger;
 #include <Platform/Platform.h>
 
 #include <Platform/Example.h>
+
+#include <CameraHandler.h>
 

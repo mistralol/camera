@@ -5,6 +5,15 @@ class CameraHandler : public IServerHandler
 		CameraHandler();
 		~CameraHandler();
 
+
+		void Init(const std::string Platform, const std::string CfgFile);
+		bool ConfigLoad();
+		bool ConfigSave();
+
+		void Wait();
+		void Quit();
+
+
 		void OnPreNewConnection();
 
 		void OnPostNewConnection(IServerConnection *Connection);		
@@ -15,11 +24,11 @@ class CameraHandler : public IServerHandler
 		int OnCommand(IServerConnection *Connection, Request *request);
 		void OnBadLine(IServerConnection *Connection, const std::string *line);
 
-		void Wait();
-		void Quit();
-
 	private:
 		Barrier m_QuitBarrier;
+		PlatformBase *m_Platform = NULL;
+		RTSPServer *m_RServer = NULL;
+		std::string m_CfgFile;
 
 };
 
