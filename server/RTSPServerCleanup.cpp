@@ -20,9 +20,9 @@ void RTSPServerCleanup::Init(GstRTSPServer *server)
 	Thread::Start();
 }
 
-
 void RTSPServerCleanup::Run()
 {
+	sleep(60); //Don't cleanup immediatly
 	while(m_exit == false)
 	{
 		LogDebug("RTSPServerCleanup::Run() SessionCount: %d", gst_rtsp_session_pool_get_n_sessions(m_pool));
