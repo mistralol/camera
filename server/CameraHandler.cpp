@@ -32,13 +32,13 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 
 	if (m_Platform->Init() == false)
 	{
-		LogCritical("Failed To Init Platform");
+		LogCritical("Failed To Init Platform exiting....");
 		exit(EXIT_FAILURE);
 	}
 
 	if (ConfigLoad() == false)
 	{
-		LogCritical("Failed To Load Config: %s", m_CfgFile.c_str());
+		LogCritical("Failed To Load Config File: \"%s\" exiting ....", m_CfgFile.c_str());
 		exit(EXIT_FAILURE);
 	}
 }
@@ -56,6 +56,7 @@ bool CameraHandler::ConfigLoad()
 bool CameraHandler::ConfigSave()
 {
 	LogDebug("CameraHandler::ConfigSave");
+
 	return false;
 }
 

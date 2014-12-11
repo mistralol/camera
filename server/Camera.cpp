@@ -77,14 +77,13 @@ int main(int argc, char **argv)
 		LogManager::Add(new LogStdout());
 	}
 
-
 	//Setup PID File
 	if (LocPidFile != "")
 	{
 		PidFile = new PIDFile(LocPidFile);
 		if (PidFile->Create() == false)
 		{
-			LogError("Cannot Create Pid File - %s", LocPidFile.c_str());
+			LogCritical("Cannot Create Pid File - %s", LocPidFile.c_str());
 			exit(EXIT_FAILURE);
 		}
 		LogInfo("Created PIDFile: %s", LocPidFile.c_str());
