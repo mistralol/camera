@@ -16,27 +16,32 @@ bool PlatformBase::GetVideoSupported(struct VideoSupported *)
 	return false;
 }
 
-bool PlatformBase::GetVideoStreamSupported(int Stream, struct VideoStreamSupported *)
+bool PlatformBase::GetVideoStreamSupported(unsigned int Stream, struct VideoStreamSupported *)
 {
 	return false;
 }
 
-bool PlatformBase::GetVideoStreamConfig(int Stream, struct ConfigVideoStream *)
+bool PlatformBase::GetVideoStreamDefaultConfig(unsigned int Stream, struct ConfigVideoStream *)
 {
 	return false;
 }
 
-bool PlatformBase::SetVideoStreamConfig(int Stream, struct ConfigVideoStream *)
+bool PlatformBase::GetVideoStreamConfig(unsigned int Stream, struct ConfigVideoStream *)
 {
 	return false;
 }
 
-bool PlatformBase::VideoStreamEnable(int Stream)
+bool PlatformBase::SetVideoStreamConfig(unsigned int Stream, struct ConfigVideoStream *)
 {
 	return false;
 }
 
-bool PlatformBase::VideoStreamDisable(int Stream)
+bool PlatformBase::VideoStreamEnable(unsigned int Stream)
+{
+	return false;
+}
+
+bool PlatformBase::VideoStreamDisable(unsigned int Stream)
 {
 	return false;
 }
@@ -46,7 +51,7 @@ bool PlatformBase::GetAudioSupported(struct AudioSupported *)
 	return false;
 }
 
-bool PlatformBase::GetAudioStreamSupported(int Stream, struct AudioStreamSupported *)
+bool PlatformBase::GetAudioStreamSupported(unsigned int Stream, struct AudioStreamSupported *)
 {
 	return false;
 }
@@ -56,7 +61,7 @@ bool PlatformBase::GetTextSupported(struct TextSupported *)
 	return false;
 }
 
-bool PlatformBase::GetTextStreamSupported(int Stream, struct TextStreamSupported *)
+bool PlatformBase::GetTextStreamSupported(unsigned int Stream, struct TextStreamSupported *)
 {
 	return false;
 }

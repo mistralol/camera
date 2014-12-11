@@ -26,7 +26,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	m_Platform = Platform::Create(Platform);
 	if (m_Platform == NULL)
 	{
-		LogCritical("Fail to loaf platform: %s", Platform.c_str());
+		LogCritical("Fail to load platform: %s", Platform.c_str());
 		exit(EXIT_FAILURE);
 	}
 

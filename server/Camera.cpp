@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	std::string LocSocket = "/tmp/CameraServer";
 	std::string LocPidFile = "";
 	std::string DefPlatform = "Example";
-	std::string CfgFile = "Default.json";
+	std::string CfgFile = "Config.json";
 	PIDFile *PidFile = NULL;
 	bool AlwaysLog = false;
 

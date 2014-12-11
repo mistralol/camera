@@ -13,7 +13,6 @@ class CameraHandler : public IServerHandler
 		void Wait();
 		void Quit();
 
-
 		void OnPreNewConnection();
 
 		void OnPostNewConnection(IServerConnection *Connection);		
@@ -29,6 +28,9 @@ class CameraHandler : public IServerHandler
 		PlatformBase *m_Platform = NULL;
 		RTSPServer *m_RServer = NULL;
 		std::string m_CfgFile;
+
+		//Video Stuff
+		std::map<unsigned int, struct ConfigVideoStream *> m_VideoStreams;
 
 };
 
