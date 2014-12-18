@@ -10,6 +10,7 @@ CameraHandler::CameraHandler()
 CameraHandler::~CameraHandler()
 {
 	LogDebug("CameraHandler::~RTSPHandler");
+	delete m_Config;
 	delete m_Platform;
 	delete m_RServer;
 	gst_deinit();
@@ -36,16 +37,20 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		exit(EXIT_FAILURE);
 	}
 
-	if (ConfigLoad() == false)
+	m_Config = new Config(this, CfgFile);
+
+	if (m_Config->Load() == false)
 	{
 		LogCritical("Failed To Load Config File: \"%s\" exiting ....", m_CfgFile.c_str());
 		exit(EXIT_FAILURE);
 	}
 }
 
-bool CameraHandler::ConfigLoad()
+bool CameraHandler::ConfigLoad(Json::Value *json)
 {
 	LogDebug("CameraHandler::ConfigLoad");
+
+	//FIXME: Pass JSon Struct to correct places for loading the config
 
 	//Temporary the Platform Should do this
 	m_RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
@@ -53,11 +58,13 @@ bool CameraHandler::ConfigLoad()
 	return true;
 }
 
-bool CameraHandler::ConfigSave()
+bool CameraHandler::ConfigSave(Json::Value *json)
 {
 	LogDebug("CameraHandler::ConfigSave");
+	
+	//Save All Settings
 
-	return false;
+	return true;
 }
 
 void CameraHandler::Wait()

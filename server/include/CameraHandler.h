@@ -7,8 +7,8 @@ class CameraHandler : public IServerHandler
 
 
 		void Init(const std::string Platform, const std::string CfgFile);
-		bool ConfigLoad();
-		bool ConfigSave();
+		bool ConfigLoad(Json::Value *);
+		bool ConfigSave(Json::Value *);
 
 		void Wait();
 		void Quit();
@@ -25,8 +25,9 @@ class CameraHandler : public IServerHandler
 
 	private:
 		Barrier m_QuitBarrier;
-		PlatformBase *m_Platform = NULL;
-		RTSPServer *m_RServer = NULL;
+		PlatformBase *m_Platform;
+		RTSPServer *m_RServer;
+		Config *m_Config;
 		std::string m_CfgFile;
 
 		//Video Stuff

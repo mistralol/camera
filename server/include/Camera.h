@@ -12,6 +12,8 @@
 #include <gst/gst.h>
 #include <gst/rtsp-server/rtsp-server.h>
 
+#include <json/json.h>
+
 #include <liblogger.h>
 
 using namespace liblogger;
@@ -33,5 +35,7 @@ using namespace liblogger;
 
 #include <Platform/Example.h>
 
+#include <Config.h>
 #include <CameraHandler.h>
+
 

@@ -1,7 +1,8 @@
 
 include Makefile.Rules
 
-SRCS=	Camera.cpp \
+SRCS=	Config.cpp \
+	Camera.cpp \
 	CameraHandler.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \

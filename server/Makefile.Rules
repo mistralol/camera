@@ -1,13 +1,20 @@
 INCLUDE+=-I./include
 INCLUDE+=-I../../libclientserver/include
 INCLUDE+=-I../../liblogger/include
+
+LIBS+=-pthread
+LIBS+=../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
+
+#Gstreamer
 INCLUDE+=$(shell pkg-config --cflags gstreamer-1.0)
 INCLUDE+=-I/usr/local/include/gstreamer-1.0
-
-LIBS+=../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
 LIBS+=$(shell pkg-config --libs gstreamer-1.0)
 LIBS+=/usr/local/lib/libgstrtspserver-1.0.so.0
-LIBS+=-pthread
+
+#Jsoncpp
+INCLUDE+=$(shell pkg-config --cflags jsoncpp)
+LIBS+=$(shell pkg-config --libs jsoncpp)
+
 
 CPP=g++
 CPP_OPTS+=-Wall -ggdb -std=c++11
