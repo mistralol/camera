@@ -1,0 +1,10 @@
+For enviroment settings in this directory run
+
+For python client
+
+export PYTHONPATH=`pwd`
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
+
+Then inside python "import CameraClient" will work
+
+

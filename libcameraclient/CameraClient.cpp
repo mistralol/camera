@@ -19,6 +19,7 @@ CameraClient::~CameraClient()
 bool CameraClient::Connect(const std::string ConnectionString)
 {
 	m_Client = Client::Create(ConnectionString);
+	m_Client->Connect();
 	m_Client->WaitForConnect();
 	return true;
 }
