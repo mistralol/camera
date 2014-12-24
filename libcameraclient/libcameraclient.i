@@ -1,6 +1,7 @@
-%module CameraClient
+%module CameraClientWrapper
 %{
 using namespace std;
+#include <stdint.h>
 #include <libclientserver.h>
 #include "libcameraclient.h"
 %}

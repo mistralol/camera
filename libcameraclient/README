@@ -5,6 +5,24 @@ For python client
 export PYTHONPATH=`pwd`
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
 
-Then inside python "import CameraClient" will work
+Then inside python "import CameraClientWrapper" will work
+Then x = CameraClientWrapper.CameraClient()
+Then x.Ping, x.Quit, etc...
+
+For csharp
+
+using System;
+
+public class runme {
+	static void Main() {
+		CameraClient x = new CameraClient();
+		x.Connect("unix:/tmp/CameraServer");
+		x.Ping();
+		x.Quit();
+	}
+}
+
+ gmcs -nologo -out:runme.exe *.cs && ./runme.exe
+
 
 
