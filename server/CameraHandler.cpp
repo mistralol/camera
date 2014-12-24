@@ -82,43 +82,52 @@ void CameraHandler::Quit()
 
 void CameraHandler::OnPreNewConnection()
 {
-	LogDebug("RTSPHandler::OnPreNewConnection");
+	LogDebug("CameraHandler::OnPreNewConnection");
 }
 
 void CameraHandler::OnPostNewConnection(IServerConnection *Connection)
 {
-	LogDebug("RTSPHandler::OnPostNewConnection");
+	LogDebug("CameraHandler::OnPostNewConnection");
 }
 
 void CameraHandler::OnDisconnect(IServerConnection *Connection)
 {
-	LogDebug("RTSPHandler::OnDisconnect");
+	LogDebug("CameraHandler::OnDisconnect");
 }
 		
 int CameraHandler::OnRequest(IServerConnection *Connection, Request *request, Request *response)
 {
-	LogDebug("RTSPHandler::OnRequest");
+	LogDebug("CameraHandler::OnRequest");
 
 	std::string Command = request->GetCommand();
 
+	if (Command == "PING")
+	{
+		LogDebug("CameraHandler::OnRequest PING");
+		return 0;
+	}
+
 	if (Command == "QUIT")
 	{
+		LogDebug("CameraHandler::OnRequest PING");
 		Quit();
 		return 0;
 	}
+
+	LogDebug("CameraHandler::OnRequest Unknown Command: \"%s\"", Command.c_str());
 
 	return -ENOSYS;
 }
 
 int CameraHandler::OnCommand(IServerConnection *Connection, Request *request)
 {
-	LogDebug("RTSPHandler::OnCommand");
+	LogDebug("CameraHandler::OnCommand");
 	return -ENOSYS;
 }
 
 void CameraHandler::OnBadLine(IServerConnection *Connection, const std::string *line)
 {
-	LogDebug("RTSPHandler::OnBadLine(%s)", line->c_str());
+	LogError("CameraHandler::OnBadLine(%s)", line->c_str());
 }
 
 
