@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 	Handler.Init(DefPlatform, CfgFile);
 
 	//Start Our Local Services
-	LogDebug("Serverice Listen On: %s", LocSocket.c_str());
+	LogDebug("Service Listen On: %s", LocSocket.c_str());
 	ServerUnix Unix(LocSocket);
 	Manager.ServerAdd(&Unix);
 	Handler.Wait();
