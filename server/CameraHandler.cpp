@@ -109,7 +109,7 @@ int CameraHandler::OnRequest(IServerConnection *Connection, Request *request, Re
 
 	if (Command == "QUIT")
 	{
-		LogDebug("CameraHandler::OnRequest PING");
+		LogDebug("CameraHandler::OnRequest QUIT");
 		Quit();
 		return 0;
 	}
