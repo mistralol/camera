@@ -11,6 +11,7 @@ class RTSPServerCleanup : Thread
 		void Run();
 
 		bool m_exit;
+		Mutex m_mutex;
 		GstRTSPSessionPool *m_pool;
 };
 
