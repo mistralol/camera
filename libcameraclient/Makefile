@@ -50,6 +50,6 @@ endif
 
 clean:
 	$(RM) *.o *.so *.cs libcameraclient.a .depend libCameraClientWrapper
-	$(RM) libcameraclient_python.cxx CameraClientWrapper.py CameraClientWrapper.pyc
+	$(RM) libcameraclient_python.cxx libcameraclient_csharp.cxx CameraClientWrapper.py CameraClientWrapper.pyc
 
 

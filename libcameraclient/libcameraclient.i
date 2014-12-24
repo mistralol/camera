@@ -7,5 +7,9 @@ using namespace std;
 %}
 
 %include <std_string.i>
+%include <typemaps.i>
+
+%apply int *OUTPUT { int *value};
+
 %include libcameraclient.h
 

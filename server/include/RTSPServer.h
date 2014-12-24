@@ -13,7 +13,7 @@ class RTSPServer : Thread
 		guint SessionsCount();
 
 		void BacklogSet(guint max);
-		guint BacklogGet(guint max);
+		guint BacklogGet();
 
 		//Get/Set Port
 		//Set/Set Address

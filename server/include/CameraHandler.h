@@ -10,6 +10,14 @@ class CameraHandler : public IServerHandler
 		bool ConfigLoad(Json::Value *);
 		bool ConfigSave(Json::Value *);
 
+		int RTSPGetClientCount(int *value);
+
+		int RTSPSetMaxClients(int max);
+		int RTSPGetMaxClients(int *max);
+
+		int RTSPSetMaxBacklog(int max);
+		int RTSPGetMaxBacklog(int *max);
+
 		void Wait();
 		void Quit();
 

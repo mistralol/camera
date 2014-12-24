@@ -67,6 +67,36 @@ bool CameraHandler::ConfigSave(Json::Value *json)
 	return true;
 }
 
+int CameraHandler::RTSPGetClientCount(int *value)
+{
+	*value = m_RServer->SessionsCount();
+	return 0;
+}
+
+int CameraHandler::RTSPSetMaxClients(int max)
+{
+	m_RServer->SessionsSetMax(max);
+	return 0;
+}
+
+int CameraHandler::RTSPGetMaxClients(int *max)
+{
+	*max = m_RServer->SessionsGetMax();
+	return 0;
+}
+
+int CameraHandler::RTSPSetMaxBacklog(int max)
+{
+	m_RServer->BacklogSet(max);
+	return 0;
+}
+
+int CameraHandler::RTSPGetMaxBacklog(int *max)
+{
+	*max = m_RServer->BacklogGet();
+	return 0;
+}
+
 void CameraHandler::Wait()
 {
 	LogDebug("CameraHandler::Wait");
@@ -100,6 +130,82 @@ int CameraHandler::OnRequest(IServerConnection *Connection, Request *request, Re
 	LogDebug("CameraHandler::OnRequest");
 
 	std::string Command = request->GetCommand();
+
+	if (Command == "RTSPGetClientCount")
+	{
+		int value = 0;
+		int ret = RTSPGetClientCount(&value);
+		if (ret < 0)
+		{
+			LogError("RTSPGetClientCount Failed: %d", ret);
+			return ret;
+		}
+		response->SetArg("value", value);
+		LogDebug("RTSPGetClientCount { value = %d }", value);
+		return 0;
+	}
+
+	if (Command == "RTSPSetMaxClients")
+	{
+		int value = 0;
+		if (request->GetInt("value", &value) == false)
+		{
+			LogError("RTSPSetMaxClients Failed - exists: %s value: %d", request->HasArg("value") ? "true" : "false", value);
+			return -EINVAL;
+		}
+		if (value <= 0)
+		{
+			LogError("RTSPSetMaxClients Failed - value <= 0 value: %d", value);
+			return -EINVAL;
+		}
+		return RTSPSetMaxClients(value);
+	}
+
+	if (Command == "RTSPGetMaxClients")
+	{
+		int value = 0;
+		int ret = RTSPGetMaxClients(&value);
+		if (ret < 0)
+		{
+			LogError("RTSPGetMaxClients Failed: %d", ret);
+			return ret;
+		}
+		response->SetArg("value", value);
+		LogDebug("RTSPGetMaxClients { value = %d }", value);
+		return 0;
+	}
+
+	if (Command == "RTSPSetMaxBacklog")
+	{
+		int value = 0;
+		if (request->GetInt("value", &value) == false)
+		{
+			LogError("RTSPSetMaxBacklog Failed - exists: %s value: %d", request->HasArg("value") ? "true" : "false", value);
+			return -EINVAL;
+		}
+		if (value <= 0)
+		{
+			LogError("RTSPSetMaxBacklog Failed - value <= 0 value: %d", value);
+			return -EINVAL;
+		}
+		return RTSPSetMaxBacklog(value);
+	}
+
+	if (Command == "RTSPGetMaxBacklog")
+	{
+		int value = 0;
+		int ret = RTSPGetMaxBacklog(&value);
+		if (ret < 0)
+		{
+			LogError("RTSPGetMaxBacklog Failed: %d", ret);
+			return ret;
+		}
+		response->SetArg("value", value);
+		LogDebug("RTSPGetMaxBacklog { value = %d }", value);
+		return 0;
+	}
+
+
 
 	if (Command == "PING")
 	{

@@ -40,7 +40,7 @@ void RTSPServer::PipelineRemove(const std::string url)
 
 void RTSPServer::SessionsSetMax(guint max)
 {
-	LogDebug("RTSPServer::SessionsSetMax(%ud)", max);
+	LogDebug("RTSPServer::SessionsSetMax(%u)", max);
 
 	GstRTSPSessionPool *Pool = gst_rtsp_server_get_session_pool(m_server);
 	gst_rtsp_session_pool_set_max_sessions(Pool, max);
@@ -75,10 +75,11 @@ void RTSPServer::BacklogSet(guint max)
 	gst_rtsp_server_set_backlog(m_server, max);
 }
 
-guint RTSPServer::BacklogGet(guint max)
+guint RTSPServer::BacklogGet()
 {
-	LogDebug("RTSPServer::BacklogGet(%ud)", max);
-	return gst_rtsp_server_get_backlog(m_server);
+	int value = gst_rtsp_server_get_backlog(m_server);
+	LogDebug("RTSPServer::BacklogGet(%u)", value);
+	return value;
 }
 
 void RTSPServer::Run()
