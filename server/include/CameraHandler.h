@@ -39,6 +39,7 @@ class CameraHandler : public IServerHandler
 		std::string m_CfgFile;
 
 		//Video Stuff
+		std::map<unsigned int, IPipeline *> m_VideoPipelines;
 		std::map<unsigned int, struct ConfigVideoStream *> m_VideoStreams;
 
 };

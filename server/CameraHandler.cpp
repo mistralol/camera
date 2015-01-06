@@ -68,7 +68,6 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigSave");
 	
-	//Save All Settings
 	if (m_Platform->ConfigSave(json["platform"]) == false)
 		return false;
 	

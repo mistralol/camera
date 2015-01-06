@@ -9,6 +9,8 @@ class Example : public PlatformBase
 
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
+
+		unsigned int GetVideoNumStreams();
 };
 
 

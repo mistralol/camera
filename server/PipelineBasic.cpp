@@ -44,6 +44,7 @@ void *PipelineBasic::Run(void *arg)
 		if (!pipeline) {
 			LogError("Cannot Parse: %s", self->m_pipelinestr.c_str());
 			LogError("Parse error: %s", error->message);
+			LogCritical("Giving Up on pipeling: %s", self->m_pipelinestr.c_str());
 			//Not going to work the next time either so just bail.
 			return NULL;
 		}

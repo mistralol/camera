@@ -28,3 +28,9 @@ bool Example::ConfigSave(Json::Value &json)
 	return false;
 }
 
+unsigned int Example::GetVideoNumStreams()
+{
+	LogDebug("Example::GetVideoNumStreams");
+	return 1;
+}
+
