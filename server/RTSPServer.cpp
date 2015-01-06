@@ -5,7 +5,7 @@ RTSPServer::RTSPServer()
 {
 	m_loop = NULL;
 	m_server = NULL;
-	Thread::Start();
+	Thread::Start(); //FIXME: startup race exists here
 	m_startbar.Wait();
 }
 
@@ -71,7 +71,7 @@ guint RTSPServer::SessionsCount()
 
 void RTSPServer::BacklogSet(guint max)
 {
-	LogDebug("RTSPServer::BacklogSet(%ud)", max);
+	LogDebug("RTSPServer::BacklogSet(%u)", max);
 	gst_rtsp_server_set_backlog(m_server, max);
 }
 
@@ -80,6 +80,30 @@ guint RTSPServer::BacklogGet()
 	int value = gst_rtsp_server_get_backlog(m_server);
 	LogDebug("RTSPServer::BacklogGet(%u)", value);
 	return value;
+}
+
+bool RTSPServer::ConfigLoad(Json::Value &json)
+{
+	LogDebug("RTSPServer::ConfigLoad");
+
+	if (json.isMember("backlog") && json["backlog"].isNumeric())
+		BacklogSet(json["backlog"].asInt());
+
+	if (json.isMember("maxsessions") && json["maxsessions"].isNumeric())
+		SessionsSetMax(json["maxsessions"].asInt());
+
+
+	return true;
+}
+
+bool RTSPServer::ConfigSave(Json::Value &json)
+{
+	LogDebug("RTSPServer::ConfigSave");
+
+	json["backlog"] = BacklogGet();
+	json["maxsessions"] = SessionsGetMax();
+
+	return true;
 }
 
 void RTSPServer::Run()

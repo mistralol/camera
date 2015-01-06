@@ -7,8 +7,8 @@ class CameraHandler : public IServerHandler
 
 
 		void Init(const std::string Platform, const std::string CfgFile);
-		bool ConfigLoad(Json::Value *);
-		bool ConfigSave(Json::Value *);
+		bool ConfigLoad(Json::Value &);
+		bool ConfigSave(Json::Value &);
 
 		int RTSPGetClientCount(int *value);
 

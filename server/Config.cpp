@@ -59,7 +59,7 @@ bool Config::Load()
 		}
 	}
 
-	m_handler->ConfigLoad(&root);
+	m_handler->ConfigLoad(root);
 
 	//If we dont have a config file. Make a new config file
 	if (HaveFile == false)
@@ -74,7 +74,7 @@ bool Config::Save()
 	std::string BakFile = m_CfgFile + ".bak";
 	Json::Value json;
 
-	if (m_handler->ConfigSave(&json) == false)
+	if (m_handler->ConfigSave(json) == false)
 	{
 		LogError("Cannot Write Config: CameraHandler::ConfigSave Failed!");
 		return false;

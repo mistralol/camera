@@ -46,23 +46,26 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	}
 }
 
-bool CameraHandler::ConfigLoad(Json::Value *json)
+bool CameraHandler::ConfigLoad(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigLoad");
 
-	//FIXME: Pass JSon Struct to correct places for loading the config
+	if (json.isMember("rtspserver"))
+		m_RServer->ConfigLoad(json["rtspserver"]);
 
-	//Temporary the Platform Should do this
+
+	//FIXME: Remove .... Temporary the Platform Should do this
 	m_RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
 
 	return true;
 }
 
-bool CameraHandler::ConfigSave(Json::Value *json)
+bool CameraHandler::ConfigSave(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigSave");
 	
 	//Save All Settings
+	m_RServer->ConfigSave(json["rtspserver"]);
 
 	return true;
 }

@@ -15,6 +15,9 @@ class RTSPServer : Thread
 		void BacklogSet(guint max);
 		guint BacklogGet();
 
+		bool ConfigLoad(Json::Value &);
+		bool ConfigSave(Json::Value &);
+
 		//Get/Set Port
 		//Set/Set Address
 		//Multicast?
