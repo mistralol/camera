@@ -5,7 +5,7 @@ RTSPServer::RTSPServer()
 {
 	m_loop = NULL;
 	m_server = NULL;
-	Thread::Start(); //FIXME: startup race exists here
+	Thread::Start();
 	m_startbar.Wait();
 }
 
