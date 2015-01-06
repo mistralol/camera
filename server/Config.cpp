@@ -59,7 +59,11 @@ bool Config::Load()
 		}
 	}
 
-	m_handler->ConfigLoad(root);
+	if (m_handler->ConfigLoad(root) == false)
+	{
+		LogError("ConfigLoad Failed!");
+		return false;
+	}
 
 	//If we dont have a config file. Make a new config file
 	if (HaveFile == false)

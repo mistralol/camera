@@ -50,9 +50,13 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigLoad");
 
-	if (json.isMember("rtspserver"))
-		m_RServer->ConfigLoad(json["rtspserver"]);
+	if (json.isMember("platform"))
+		if (m_Platform->ConfigSave(json["platform"]) == false)
+			return false;
 
+	if (json.isMember("rtspserver"))
+		if (m_RServer->ConfigLoad(json["rtspserver"]) == false)
+			return false;
 
 	//FIXME: Remove .... Temporary the Platform Should do this
 	m_RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
@@ -65,7 +69,11 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	LogDebug("CameraHandler::ConfigSave");
 	
 	//Save All Settings
-	m_RServer->ConfigSave(json["rtspserver"]);
+	if (m_Platform->ConfigSave(json["platform"]) == false)
+		return false;
+	
+	if (m_RServer->ConfigSave(json["rtspserver"]) == false)
+		return false;
 
 	return true;
 }

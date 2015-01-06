@@ -18,3 +18,13 @@ bool Example::Init()
 	return true;
 }
 
+bool Example::ConfigLoad(Json::Value &json)
+{
+	return false;
+}
+
+bool Example::ConfigSave(Json::Value &json)
+{
+	return false;
+}
+

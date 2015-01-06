@@ -7,6 +7,9 @@ class PlatformBase
 
 		virtual bool Init();
 
+		virtual bool ConfigLoad(Json::Value &);
+		virtual bool ConfigSave(Json::Value &);
+
 		/* Video Stream Specific */
 
 		virtual bool GetVideoSupported(struct VideoSupported *);

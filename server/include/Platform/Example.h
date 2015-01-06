@@ -6,6 +6,9 @@ class Example : public PlatformBase
 		~Example();
 
 		bool Init();
+
+		bool ConfigLoad(Json::Value &);
+		bool ConfigSave(Json::Value &);
 };
 
 

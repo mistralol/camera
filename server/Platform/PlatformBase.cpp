@@ -11,6 +11,16 @@ bool PlatformBase::Init()
 	return false;
 }
 
+bool PlatformBase::ConfigLoad(Json::Value &)
+{
+	return false;
+}
+
+bool PlatformBase::ConfigSave(Json::Value &)
+{
+	return false;
+}
+
 bool PlatformBase::GetVideoSupported(struct VideoSupported *)
 {
 	return false;
