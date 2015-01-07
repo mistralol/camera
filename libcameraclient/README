@@ -5,9 +5,16 @@ For python client
 export PYTHONPATH=`pwd`
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
 
-Then inside python "import CameraClientWrapper" will work
-Then x = CameraClientWrapper.CameraClient()
-Then x.Ping, x.Quit, etc...
+For Python use....
+
+import CameraClientWrapper
+x = CameraClientWrapper.CameraClient()
+x.Connect("unix:/tmp/CameraServer")
+x.Ping
+
+x.Quit, etc...
+
+
 
 For csharp
 
