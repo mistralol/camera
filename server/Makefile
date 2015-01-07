@@ -8,6 +8,8 @@ SRCS=	Config.cpp \
 	RTSPServerCleanup.cpp \
 	GstUtil.cpp \
 	PipelineBasic.cpp \
+	VideoStreamSupported.cpp \
+	VideoStreamConfig.cpp \
 	Platform/Platform.cpp \
 	Platform/PlatformBase.cpp \
 	Platform/Example.cpp

@@ -11,6 +11,8 @@ class Example : public PlatformBase
 		bool ConfigSave(Json::Value &);
 
 		unsigned int GetVideoNumStreams();
+
+		bool GetVideoStreamSupported(unsigned int stream, VideoStreamSupported *info);
 };
 
 
