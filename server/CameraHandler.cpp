@@ -101,6 +101,7 @@ int CameraHandler::RTSPGetClientCount(int *value)
 int CameraHandler::RTSPSetMaxClients(int max)
 {
 	m_RServer->SessionsSetMax(max);
+	m_Config->Dirty();
 	return 0;
 }
 
@@ -113,6 +114,7 @@ int CameraHandler::RTSPGetMaxClients(int *max)
 int CameraHandler::RTSPSetMaxBacklog(int max)
 {
 	m_RServer->BacklogSet(max);
+	m_Config->Dirty();
 	return 0;
 }
 
@@ -132,6 +134,7 @@ void CameraHandler::Wait()
 void CameraHandler::Quit()
 {
 	LogDebug("CameraHandler::Quit");
+	m_Config->Dirty();
 	m_QuitBarrier.WakeUp();
 }
 

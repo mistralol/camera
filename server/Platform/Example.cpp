@@ -20,12 +20,12 @@ bool Example::Init()
 
 bool Example::ConfigLoad(Json::Value &json)
 {
-	return false;
+	return true;
 }
 
 bool Example::ConfigSave(Json::Value &json)
 {
-	return false;
+	return true;
 }
 
 unsigned int Example::GetVideoNumStreams()
