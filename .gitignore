@@ -19,3 +19,8 @@ camera
 Config.json
 Ping
 Quit
+RTSPGetClientCount
+RTSPGetMaxBacklog
+RTSPGetMaxClients
+RTSPSetMaxBacklog
+RTSPSetMaxClients

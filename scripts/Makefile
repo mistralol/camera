@@ -9,7 +9,12 @@ LIBS+=../libcameraclient/libcameraclient.a ../../liblogger/liblogger.a ../../lib
 DEPS+=../libcameraclient/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
 
 SRCS=Quit.cpp \
-	Ping.cpp
+	Ping.cpp \
+	RTSPGetMaxBacklog.cpp \
+	RTSPSetMaxBacklog.cpp \
+	RTSPGetClientCount.cpp \
+	RTSPSetMaxClients.cpp \
+	RTSPGetMaxClients.cpp
 
 EXES=$(SRCS:%.cpp=%)
 
