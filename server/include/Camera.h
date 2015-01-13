@@ -20,6 +20,7 @@ using namespace liblogger;
 
 #include <libclientserver.h>
 
+#include <Version.h>
 #include <RTSPServer.h>
 #include <RTSPServerCleanup.h>
 

@@ -15,6 +15,7 @@
 .depend
 *.exe
 *.bak
+SWIGTYPE_p_std__string.cs
 camera
 Config.json
 Ping

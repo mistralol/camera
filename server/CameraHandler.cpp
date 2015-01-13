@@ -18,6 +18,7 @@ CameraHandler::~CameraHandler()
 
 void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 {
+	LogInfo("Version: %s", Version::ToString().c_str());
 	LogDebug("CameraHandler::Init(\"%s\", \"%s\")", Platform.c_str(), CfgFile.c_str());
 	m_CfgFile = CfgFile;
 
@@ -82,6 +83,8 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 bool CameraHandler::ConfigSave(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigSave");
+
+	json["Version"] = Version::ToString();
 	
 	if (m_Platform->ConfigSave(json["platform"]) == false)
 		return false;
@@ -233,7 +236,12 @@ int CameraHandler::OnRequest(IServerConnection *Connection, Request *request, Re
 		return 0;
 	}
 
-
+	if (Command == "VERSION")
+	{
+		LogDebug("CameraHandler::OnRequest VERSION");
+		response->SetArg("value", Version::ToString());
+		return 0;
+	}
 
 	if (Command == "PING")
 	{

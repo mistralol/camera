@@ -101,6 +101,21 @@ int CameraClient::RTSPGetMaxBacklog(int *max)
 	return ret;
 }
 
+int CameraClient::Version(std::string *str)
+{
+	PerfCounter PC("VERSION");
+	Request request;
+	Request response;
+
+	request.SetCommand("PING");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetString("value", str) == false)
+		return -EINVAL;
+	return ret;
+}
+
 int CameraClient::Ping()
 {
 	PerfCounter PC("PING");

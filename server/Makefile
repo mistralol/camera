@@ -12,7 +12,8 @@ SRCS=	Config.cpp \
 	VideoStreamConfig.cpp \
 	Platform/Platform.cpp \
 	Platform/PlatformBase.cpp \
-	Platform/Example.cpp
+	Platform/Example.cpp \
+	Version.cpp
 
 INCS=$(shell find include -type f)	
 
