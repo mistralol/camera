@@ -10,6 +10,7 @@ DEPS+=../libcameraclient/libcameraclient.a ../../liblogger/liblogger.a ../../lib
 
 SRCS=Quit.cpp \
 	Ping.cpp \
+	Version.cpp \
 	RTSPGetMaxBacklog.cpp \
 	RTSPSetMaxBacklog.cpp \
 	RTSPGetClientCount.cpp \
