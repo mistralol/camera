@@ -27,3 +27,6 @@ RTSPGetMaxClients
 RTSPSetMaxBacklog
 RTSPSetMaxClients
 build
+WebUI.userprefs
+bin
+obj
