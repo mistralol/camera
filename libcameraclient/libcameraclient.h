@@ -17,6 +17,8 @@ class CameraClient
 		int RTSPGetMaxBacklog(int *value);
 
 		int Version(std::string *str);
+		std::string Version();
+
 		int Ping();
 		int Quit();
 

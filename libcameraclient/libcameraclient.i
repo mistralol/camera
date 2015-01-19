@@ -11,5 +11,6 @@ using namespace std;
 
 %apply int *OUTPUT { int *value};
 
+
 %include libcameraclient.h
 

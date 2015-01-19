@@ -12,7 +12,7 @@ SRCS=	CameraClient.cpp
 
 OBJS=$(SRCS:%.cpp=%.o)
 
-all: ../build/libcameraclient.so ../build/libcameraclient.a ../build/libcameraclient_python.so ../build/libcameraclient_csharp.so
+all: ../build/libcameraclient.so ../build/libcameraclient.a ../build/libcameraclient_python.so ../build/libcameraclient_csharp.so ../build/CameraClient.dll
 
 %.o: %.cpp Makefile
 	$(CPP) $(CPP_OPTS) $(INCLUDE) -o $@ -c $<
@@ -38,6 +38,9 @@ libcameraclient_csharp.cxx: $(SRCS) libcameraclient.i .depend
 ../build/libcameraclient_csharp.so: libcameraclient_csharp.cxx ../build/libcameraclient.a $(LIBS)
 	$(CPP) -shared -ggdb -Wall -fPIC libcameraclient_csharp.cxx ../build/libcameraclient.a $(LIBS) $(INCLUDE) -o $@
 	if [ ! -e ../build/libCameraClientWrapper ] ; then ln -s ../build/libcameraclient_csharp.so ../build/libCameraClientWrapper ; fi
+
+../build/CameraClient.dll: $(SRCS) libcameraclient_csharp.cxx
+	gmcs -t:library CameraClient.cs CameraClientWrapper.cs CameraClientWrapperPINVOKE.cs SWIGTYPE_p_std__string.cs -out:../build/CameraClient.dll
 
 dep: .depend
 

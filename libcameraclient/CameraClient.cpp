@@ -130,6 +130,14 @@ int CameraClient::Version(std::string *str)
 	return ret;
 }
 
+std::string CameraClient::Version()
+{
+	std::string str = "";
+	if (Version(&str) < 0)
+		return "";
+	return str;
+}
+
 int CameraClient::Ping()
 {
 	if (m_Client == NULL)
