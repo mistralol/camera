@@ -5,8 +5,8 @@ MKDEP=gcc -E -MM
 INCLUDE+=-I../libcameraclient
 INCLUDE+=-I../../libclientserver/include
 INCLUDE+=-I../../liblogger/include
-LIBS+=../libcameraclient/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a -pthread
-DEPS+=../libcameraclient/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
+LIBS+=../build/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a -pthread
+DEPS+=../build/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
 
 SRCS=Quit.cpp \
 	Ping.cpp \

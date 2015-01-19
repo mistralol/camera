@@ -26,3 +26,4 @@ RTSPGetMaxBacklog
 RTSPGetMaxClients
 RTSPSetMaxBacklog
 RTSPSetMaxClients
+build

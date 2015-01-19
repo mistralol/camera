@@ -20,12 +20,12 @@ INCS=$(shell find include -type f)
 OBJS=$(SRCS:%.cpp=%.o)
 
 
-all: camera
+all: ../build/camera
 
 %.o: %.cpp Makefile
 	$(CPP) $(CPP_OPTS) $(INCLUDE) -o $@ -c $<
 
-camera: $(OBJS) .depend
+../build/camera: $(OBJS) .depend
 	$(CPP) $(OBJS) $(LIBS) -o $@
 
 dep: .depend
@@ -39,7 +39,7 @@ endif
 
 
 clean:
-	$(RM) $(OBJS) *.o camera-server .depend
+	$(RM) $(OBJS) *.o ../build/camera .depend
 
 
 
