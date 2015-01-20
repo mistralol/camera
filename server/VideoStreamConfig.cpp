@@ -7,11 +7,19 @@ VideoStreamConfig::VideoStreamConfig()
 	m_framerate = 0;
 	m_codec = "";
 	m_resolution = "";
+	m_enabled = false;
 }
 
 VideoStreamConfig::~VideoStreamConfig()
 {
 
+}
+
+std::string VideoStreamConfig::ToString() const
+{
+	std::stringstream ss;
+	ss << m_codec << "/" << m_resolution << " @ " << m_framerate;
+	return ss.str();
 }
 
 int VideoStreamConfig::GetFrameRate()
@@ -39,8 +47,18 @@ std::string VideoStreamConfig::GetResolution()
 	return m_resolution;
 }
 
-void VideoStreamConfig::SetResolutions(const std::string &str)
+void VideoStreamConfig::SetResolution(const std::string &str)
 {
 	m_resolution = str;
+}
+
+bool VideoStreamConfig::GetEnabled()
+{
+	return m_enabled;
+}
+
+void VideoStreamConfig::SetEnabled(bool enabled)
+{
+	m_enabled = enabled;
 }
 

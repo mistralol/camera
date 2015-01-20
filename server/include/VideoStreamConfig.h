@@ -5,6 +5,8 @@ class VideoStreamConfig
 		VideoStreamConfig();
 		~VideoStreamConfig();
 
+		std::string ToString() const;
+
 		int GetFrameRate();
 		void SetFrameRate(int fps);
 
@@ -12,7 +14,10 @@ class VideoStreamConfig
 		void SetCodec(const std::string &str);
 
 		std::string GetResolution();
-		void SetResolutions(const std::string &str);
+		void SetResolution(const std::string &str);
+
+		bool GetEnabled();
+		void SetEnabled(bool enabled);
 
 		//FIXME: Codec Options eg bitrate, maxbitrate, vbr/cbr etc..
 
@@ -20,6 +25,7 @@ class VideoStreamConfig
 		int m_framerate;
 		std::string m_codec;
 		std::string m_resolution;
+		bool m_enabled;
 
 };
 

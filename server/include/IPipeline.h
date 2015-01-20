@@ -5,6 +5,6 @@ class IPipeline
 		virtual ~IPipeline() { };
 
 		virtual void Start() = 0;
-		virtual void stop() = 0;
+		virtual void Stop() = 0;
 };
 

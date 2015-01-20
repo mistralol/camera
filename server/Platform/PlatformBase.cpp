@@ -35,6 +35,18 @@ bool PlatformBase::VideoStreamSupportedInfo(unsigned int stream, VideoStreamSupp
 	return false;
 }
 
+void PlatformBase::VideoStreamDefaultConfig(unsigned int stream, VideoStreamConfig *config)
+{
+	LogCritical("Platform has not implemented function %s", __FUNCTION__);
+	abort();
+}
+
+bool PlatformBase::VideoStreamConfigure(unsigned int stream, const VideoStreamConfig *config)
+{
+	LogWarning("Platform has not implemented function %s", __FUNCTION__);
+	return false;
+}
+
 bool PlatformBase::VideoStreamEnable(unsigned int stream)
 {
 	LogWarning("Platform has not implemented function %s", __FUNCTION__);
@@ -45,6 +57,22 @@ bool PlatformBase::VideoStreamDisable(unsigned int stream)
 {
 	LogWarning("Platform has not implemented function %s", __FUNCTION__);
 	return false;
+}
+
+bool PlatformBase::VideoStreamRestart(unsigned int stream)
+{
+	if (VideoStreamDisable(stream) == false)
+	{
+		LogCritical("PlatformBase::VideoStreamRestart - VideoStreamDisable Failed!!");
+		return false;
+	}
+
+	if (VideoStreamEnable(stream) == false)
+	{
+		LogCritical("PlatformBase::VideoStreamRestart - VideoStreamDisable Failed!!");
+		return false;
+	}
+	return true;
 }
 
 
