@@ -28,13 +28,13 @@ bool Example::ConfigSave(Json::Value &json)
 	return true;
 }
 
-unsigned int Example::GetVideoNumStreams()
+unsigned int Example::VideoStreamCount()
 {
 	LogDebug("Example::GetVideoNumStreams");
 	return 1;
 }
 
-bool Example::GetVideoStreamSupported(unsigned int stream, VideoStreamSupported *info)
+bool Example::VideoStreamSupportedInfo(unsigned int stream, VideoStreamSupported *info)
 {
 	LogDebug("Example::GetVideoStreamSupported");
 	info->Clear();

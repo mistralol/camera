@@ -12,8 +12,11 @@ class PlatformBase
 
 		/* Video Stream Specific */
 
-		virtual unsigned int GetVideoNumStreams();
-		virtual bool GetVideoStreamSupported(unsigned int stream, VideoStreamSupported *info);
+		virtual unsigned int VideoStreamCount();
+		virtual bool VideoStreamSupportedInfo(unsigned int stream, VideoStreamSupported *info);
+
+		virtual bool VideoStreamEnable(unsigned int stream);
+		virtual bool VideoStreamDisable(unsigned int stream);
 
 		/* Audio Stream Specific */
 

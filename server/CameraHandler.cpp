@@ -38,15 +38,15 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		exit(EXIT_FAILURE);
 	}
 
-	unsigned int nStreams = m_Platform->GetVideoNumStreams();
+	unsigned int nStreams = m_Platform->VideoStreamCount();
 	LogInfo("Supported Video Streams: %d", nStreams);
 	for(unsigned int i = 0; i < nStreams; i++)
 	{
 		VideoStreamSupported info;
 		info.Clear();
-		if (m_Platform->GetVideoStreamSupported(i, &info) == false)
+		if (m_Platform->VideoStreamSupportedInfo(i, &info) == false)
 		{
-			LogError("Failure to GetVideoStreamSupported(%d)", i);
+			LogError("Failure to VideoStreamSupportedInfo(%d)", i);
 			exit(EXIT_FAILURE);
 		}
 		LogInfo("Stream %d Supports", i);

@@ -10,9 +10,9 @@ class Example : public PlatformBase
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 
-		unsigned int GetVideoNumStreams();
+		unsigned int VideoStreamCount();
 
-		bool GetVideoStreamSupported(unsigned int stream, VideoStreamSupported *info);
+		bool VideoStreamSupportedInfo(unsigned int stream, VideoStreamSupported *info);
 };
 
 
