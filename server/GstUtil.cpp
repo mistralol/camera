@@ -38,11 +38,11 @@ bool GstUtil::WaitForEos(GstElement *pipeline, GstBus *bus)
 
 			gst_message_parse_error (msg, &err, &dbg);
 			if (err) {
-				LogError("ERROR: %s\n", err->message);
+				LogError("ERROR: %s", err->message);
 				g_error_free (err);
 			}
 			if (dbg) {
-				LogError("[Debug details: %s]\n", dbg);
+				LogError("[Debug details: %s]", dbg);
 				g_free(dbg);
 			}
 
@@ -56,7 +56,7 @@ bool GstUtil::WaitForEos(GstElement *pipeline, GstBus *bus)
 		case GST_MESSAGE_NEW_CLOCK:
 			break;
 		default:
-			LogDebug("Unexpected message of type %s\n", GST_MESSAGE_TYPE_NAME (msg));
+			LogDebug("Unexpected message of type %s", GST_MESSAGE_TYPE_NAME (msg));
 			break;
 	}
 	gst_message_unref (msg);

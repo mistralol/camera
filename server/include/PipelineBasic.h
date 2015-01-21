@@ -13,8 +13,7 @@ class PipelineBasic : public IPipeline
 		static void *Run(void *arg);
 
 		pthread_t m_thread;
-		pthread_mutex_t lock;
-		bool m_running;
+		volatile bool m_running;
 		std::string m_pipelinestr;
 		struct timeval m_restartdelay;
 };

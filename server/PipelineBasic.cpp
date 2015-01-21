@@ -3,8 +3,6 @@
 
 PipelineBasic::PipelineBasic(const std::string str)
 {
-	if (pthread_mutex_init(&lock, NULL) != 0)
-		abort();
 	m_running = false;
 	m_pipelinestr = str;
 	m_restartdelay.tv_sec = 1;
@@ -13,8 +11,8 @@ PipelineBasic::PipelineBasic(const std::string str)
 
 PipelineBasic::~PipelineBasic()
 {
-	if (pthread_mutex_destroy(&lock))
-		abort();
+	if (m_running == true)
+		abort(); //Somebody forgot to call stop
 }
 
 void PipelineBasic::Start()
