@@ -87,6 +87,8 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		exit(EXIT_FAILURE);
 	}
 
+
+	//Start The Video Streams
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
 	while(it != m_VideoStreams.end())
 	{
@@ -119,12 +121,29 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		if (m_RServer->ConfigLoad(json["rtspserver"]) == false)
 			return false;
 
+	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
+	while(it != m_VideoStreams.end())
+	{
+		std::stringstream ss;
+		ss << "VideoStreamConfig_" << it->first;
+		if (json.isMember(ss.str()))
+		{
+			if (it->second->ConfigLoad(json[ss.str()]) == false)
+			{
+				LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video stream '%s'", ss.str().c_str());
+				return false;
+			}
+		}
+		else
+		{
+			LogWarning("CameraHandler::ConfigLoad - No configuration for video stream '%s'", ss.str().c_str());
+		}
+		it++;
+	}
+
 
 	//FIXME: Remove .... Temporary the Platform Should do this
 	m_RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
-
-
-
 
 	return true;
 }
@@ -140,6 +159,19 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	
 	if (m_RServer->ConfigSave(json["rtspserver"]) == false)
 		return false;
+
+	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
+	while(it != m_VideoStreams.end())
+	{
+		std::stringstream ss;
+		ss << "VideoStreamConfig_" << it->first;
+		if (it->second->ConfigSave(json[ss.str()]) == false)
+		{
+			LogError("CameraHandler::ConfigSave Failed to log configuration for video stream '%s'", ss.str().c_str());
+			return false;
+		}
+		it++;
+	}
 
 	return true;
 }

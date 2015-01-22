@@ -22,6 +22,32 @@ std::string VideoStreamConfig::ToString() const
 	return ss.str();
 }
 
+bool VideoStreamConfig::ConfigSave(Json::Value &json)
+{
+	json["framerate"] = m_framerate;
+	json["codec"] = m_codec;
+	json["resolution"] = m_resolution;
+	json["enabled"] = m_enabled;
+	return true;
+}
+
+bool VideoStreamConfig::ConfigLoad(Json::Value &json)
+{
+	if (json.isMember("framerate") && json["framerate"].isNumeric())
+		m_framerate = json["framerate"].asInt();
+
+	if (json.isMember("codec") && json["codec"].isString())
+		m_codec = json["codec"].asString();
+
+	if (json.isMember("resolution") && json["resolution"].isString())
+		m_resolution = json["resolution"].asString();
+
+	if (json.isMember("enabled") && json["enabled"].isBool())
+		m_enabled = json["enabled"].asBool();
+
+	return true;
+}
+
 int VideoStreamConfig::GetFrameRate()
 {
 	return m_framerate;

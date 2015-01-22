@@ -7,6 +7,9 @@ class VideoStreamConfig
 
 		std::string ToString() const;
 
+		bool ConfigSave(Json::Value &json);
+		bool ConfigLoad(Json::Value &json);
+
 		int GetFrameRate();
 		void SetFrameRate(int fps);
 
