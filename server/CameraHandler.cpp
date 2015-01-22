@@ -73,7 +73,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		//Load Up Default Configs
 		VideoStreamConfig *config = new VideoStreamConfig();
 		m_Platform->VideoStreamDefaultConfig(i, config);
-		LogInfo("Stream %u Default Config: %s", i, config->ToString().c_str());
+		LogInfo("VideoStream %u default Config: '%s'", i, config->ToString().c_str());
 		m_VideoStreams[i] = config;
 	}
 
@@ -133,6 +133,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 				LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video stream '%s'", ss.str().c_str());
 				return false;
 			}
+			LogInfo("VideoStream %u loaded config '%s'", it->first, it->second->ToString().c_str());
 		}
 		else
 		{
