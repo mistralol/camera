@@ -14,12 +14,13 @@ class CameraHandler
 
 
 		RTSPServer *RServer;
+		Config *Cfg;
 
 	private:
 		Barrier m_QuitBarrier;
 		PlatformBase *m_Platform;
 		
-		Config *m_Config;
+		
 		std::string m_CfgFile;
 
 		//Video Stuff

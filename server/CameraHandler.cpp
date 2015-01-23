@@ -22,7 +22,7 @@ CameraHandler::~CameraHandler()
 		delete config;
 	}
 
-	delete m_Config;
+	delete Cfg;
 	delete m_Platform;
 	delete RServer;
 	gst_deinit();
@@ -79,9 +79,9 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 
 
 	//Load The actual configuration
-	m_Config = new Config(this, CfgFile);
+	Cfg = new Config(this, CfgFile);
 
-	if (m_Config->Load() == false)
+	if (Cfg->Load() == false)
 	{
 		LogCritical("Failed To Load Config File: \"%s\" exiting ....", m_CfgFile.c_str());
 		exit(EXIT_FAILURE);
@@ -187,7 +187,7 @@ void CameraHandler::Wait()
 void CameraHandler::Quit()
 {
 	LogDebug("CameraHandler::Quit");
-	m_Config->Dirty();
+	Cfg->Dirty();
 	m_QuitBarrier.WakeUp();
 }
 

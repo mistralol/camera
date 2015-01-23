@@ -46,6 +46,7 @@ int CameraServer::RTSPSetMaxClients(CameraHandler *handler, IServerConnection *C
 		return -EINVAL;
 	}
 	handler->RServer->SessionsSetMax(value);
+	handler->Cfg->Dirty();
 	return 0;
 }
 
@@ -71,6 +72,7 @@ int CameraServer::RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *C
 		return -EINVAL;
 	}
 	handler->RServer->BacklogSet(value);
+	handler->Cfg->Dirty();
 	return 0;
 }
 
