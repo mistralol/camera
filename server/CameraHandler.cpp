@@ -24,7 +24,7 @@ CameraHandler::~CameraHandler()
 
 	delete m_Config;
 	delete m_Platform;
-	delete m_RServer;
+	delete RServer;
 	gst_deinit();
 }
 
@@ -35,7 +35,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	m_CfgFile = CfgFile;
 
 	//Start RTSP Service
-	m_RServer = new RTSPServer();
+	RServer = new RTSPServer();
 
 	m_Platform = Platform::Create(Platform);
 	if (m_Platform == NULL)
@@ -118,7 +118,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 			return false;
 
 	if (json.isMember("rtspserver"))
-		if (m_RServer->ConfigLoad(json["rtspserver"]) == false)
+		if (RServer->ConfigLoad(json["rtspserver"]) == false)
 			return false;
 
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
@@ -144,7 +144,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 
 
 	//FIXME: Remove .... Temporary the Platform Should do this
-	m_RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
+	RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
 
 	return true;
 }
@@ -158,7 +158,7 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	if (m_Platform->ConfigSave(json["platform"]) == false)
 		return false;
 	
-	if (m_RServer->ConfigSave(json["rtspserver"]) == false)
+	if (RServer->ConfigSave(json["rtspserver"]) == false)
 		return false;
 
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
@@ -175,38 +175,6 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	}
 
 	return true;
-}
-
-int CameraHandler::RTSPGetClientCount(int *value)
-{
-	*value = m_RServer->SessionsCount();
-	return 0;
-}
-
-int CameraHandler::RTSPSetMaxClients(int max)
-{
-	m_RServer->SessionsSetMax(max);
-	m_Config->Dirty();
-	return 0;
-}
-
-int CameraHandler::RTSPGetMaxClients(int *max)
-{
-	*max = m_RServer->SessionsGetMax();
-	return 0;
-}
-
-int CameraHandler::RTSPSetMaxBacklog(int max)
-{
-	m_RServer->BacklogSet(max);
-	m_Config->Dirty();
-	return 0;
-}
-
-int CameraHandler::RTSPGetMaxBacklog(int *max)
-{
-	*max = m_RServer->BacklogGet();
-	return 0;
 }
 
 void CameraHandler::Wait()

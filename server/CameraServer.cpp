@@ -26,13 +26,7 @@ void CameraServer::Wait()
 
 int CameraServer::RTSPGetClientCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	int value = 0;
-	int ret = handler->RTSPGetClientCount(&value);
-	if (ret < 0)
-	{
-		LogError("CameraServer::RTSPGetClientCount Failed: %d", ret);
-		return ret;
-	}
+	int value = handler->RServer->SessionsCount();
 	response->SetArg("value", value);
 	LogDebug("CameraServer::RTSPGetClientCount { value = %d }", value);
 	return 0;
@@ -51,23 +45,17 @@ int CameraServer::RTSPSetMaxClients(CameraHandler *handler, IServerConnection *C
 		LogError("CameraServer:RTSPSetMaxClients Failed - value <= 0 value: %d", value);
 		return -EINVAL;
 	}
-	return handler->RTSPSetMaxClients(value);
+	handler->RServer->SessionsSetMax(value);
+	return 0;
 }
 
 int CameraServer::RTSPGetMaxClients(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	int value = 0;
-	int ret = handler->RTSPGetMaxClients(&value);
-	if (ret < 0)
-	{
-		LogError("CameraServer::RTSPGetMaxClients Failed: %d", ret);
-		return ret;
-	}
+	int value = handler->RServer->SessionsGetMax();
 	response->SetArg("value", value);
 	LogDebug("CameraServer::RTSPGetMaxClients { value = %d }", value);
 	return 0;
 }
-
 
 int CameraServer::RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
@@ -82,19 +70,13 @@ int CameraServer::RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *C
 		LogError("CameraServer::RTSPSetMaxBacklog Failed - value <= 0 value: %d", value);
 		return -EINVAL;
 	}
-	return handler->RTSPSetMaxBacklog(value);
+	handler->RServer->BacklogSet(value);
+	return 0;
 }
-
 
 int CameraServer::RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	int value = 0;
-	int ret = handler->RTSPGetMaxBacklog(&value);
-	if (ret < 0)
-	{
-		LogError("CameraServer::RTSPGetMaxBacklog Failed: %d", ret);
-		return ret;
-	}
+	int value = handler->RServer->BacklogGet();
 	response->SetArg("value", value);
 	LogDebug("CameraServer::RTSPGetMaxBacklog { value = %d }", value);
 	return 0;
