@@ -17,8 +17,8 @@ void print_help(FILE *fp, const char *app)
 int main(int argc, char **argv)
 {
 	LogManager::Init();
-	CameraHandler Handler;
-	ServerManager Manager(&Handler);
+	CameraServer Server;
+	ServerManager Manager(&Server);
 	std::string LocSocket = "/tmp/CameraServer";
 	std::string LocPidFile = "";
 	std::string DefPlatform = "Example";
@@ -90,13 +90,13 @@ int main(int argc, char **argv)
 	}
 
 	//Init Handler (This is the "system" init call)
-	Handler.Init(DefPlatform, CfgFile);
+	Server.Init(DefPlatform, CfgFile);
 
 	//Start Our Local Services
 	LogDebug("Service Listen On: %s", LocSocket.c_str());
 	ServerUnix Unix(LocSocket);
 	Manager.ServerAdd(&Unix);
-	Handler.Wait();
+	Server.Wait();
 	Manager.ServerRemove(&Unix);
 
 	//Cleanup!

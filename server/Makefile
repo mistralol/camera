@@ -4,6 +4,7 @@ include Makefile.Rules
 SRCS=	Config.cpp \
 	Camera.cpp \
 	CameraHandler.cpp \
+	CameraServer.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \
 	GstUtil.cpp \
@@ -22,7 +23,11 @@ OBJS=$(SRCS:%.cpp=%.o)
 
 all: ../build/camera
 
-%.o: %.cpp Makefile
+
+CameraServerFunctions.i: CameraServerFunctions.gperf
+	gperf -tCG CameraServerFunctions.gperf > CameraServerFunctions.i
+
+%.o: %.cpp Makefile CameraServerFunctions.i
 	$(CPP) $(CPP_OPTS) $(INCLUDE) -o $@ -c $<
 
 ../build/camera: $(OBJS) .depend
@@ -39,7 +44,7 @@ endif
 
 
 clean:
-	$(RM) $(OBJS) *.o ../build/camera .depend
+	$(RM) $(OBJS) *.o CameraServerFunctions.i ../build/camera .depend
 
 
 

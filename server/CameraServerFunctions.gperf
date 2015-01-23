@@ -1,0 +1,25 @@
+%{
+
+struct TType {
+    const char *name;
+    int (*func) (CameraHandler *Handler, IServerConnection *Connection, Request *request, Request *response);
+};
+
+%}
+
+%language=C++
+%define lookup-function-name Lookup
+%define class-name CameraServerFunctions
+struct TType
+%%
+#####
+RTSPGetMaxBacklog,	CameraServer::RTSPGetMaxBacklog
+RTSPSetMaxBacklog,	CameraServer::RTSPSetMaxBacklog
+RTSPGetMaxClients,	CameraServer::RTSPGetMaxClients
+RTSPSetMaxClients,	CameraServer::RTSPSetMaxClients
+RTSPGetClientCount,	CameraServer::RTSPGetClientCount
+#####
+VERSION,		CameraServer::Version
+PING,			CameraServer::Ping
+QUIT,			CameraServer::Quit
+#####
