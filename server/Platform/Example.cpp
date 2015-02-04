@@ -85,8 +85,8 @@ bool Example::VideoStreamEnable(unsigned int stream)
 	{
 		pipe << "videotestsrc horizontal-speed=5 is-live=true ! " <<
 			"capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << m_videoconfig[stream].GetFrameRate() << "/1, width=" << width << " , height=" << height << "\" ! " <<
-			"x264enc key-int-max=30 intra-refresh=true ! " <<
-			"fakesink";
+			"x264enc key-int-max=30 intra-refresh=true byte-stream=true ! " <<
+			"internalsink streamname=video1";
 		LogDebug("Example::VideoStreamEnable - Pipeline %s", pipe.str().c_str());
 		LogInfo("Example::VideoStreamEnable - Starting Stream %u", stream);
 		PipelineBasic *pipeline = new PipelineBasic(pipe.str());

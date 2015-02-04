@@ -144,7 +144,9 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 
 
 	//FIXME: Remove .... Temporary the Platform Should do this
-	RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
+	//RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
+	RServer->PipelineAdd("/test", "( internalsrc streamname=video1 do-timestamps=true ! rtph264pay name=pay0 pt=96 )");
+
 
 	return true;
 }
