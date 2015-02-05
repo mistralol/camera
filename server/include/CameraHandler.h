@@ -9,6 +9,9 @@ class CameraHandler
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 
+		bool VideoStreamEnable(unsigned int stream);
+		bool VideoStreamDisable(unsigned int stream);
+
 		void Wait();
 		void Quit();
 

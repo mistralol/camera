@@ -99,7 +99,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		}
 		if (it->second->GetEnabled())
 		{
-			if (m_Platform->VideoStreamEnable(it->first) == false)
+			if (VideoStreamEnable(it->first) == false)
 			{
 				LogError("CameraHandler::Init Failed to Enable Stream %u", it->first);
 				abort();
@@ -142,12 +142,6 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		it++;
 	}
 
-
-	//FIXME: Remove .... Temporary the Platform Should do this
-	//RServer->PipelineAdd("/test", "( videotestsrc horizontal-speed=5 is-live=true ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=15/1, width=320, height=280\" ! x264enc key-int-max=30 intra-refresh=true ! rtph264pay name=pay0 pt=96 )");
-	RServer->PipelineAdd("/test", "( internalsrc streamname=video1 do-timestamps=true ! rtph264pay name=pay0 pt=96 )");
-
-
 	return true;
 }
 
@@ -176,6 +170,49 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 		it++;
 	}
 
+	return true;
+}
+
+bool CameraHandler::VideoStreamEnable(unsigned int stream)
+{
+	LogDebug("CameraHandler::VideoStreamEnable(%u)", stream);
+	
+	std::stringstream url;
+	url << "/video/" << stream;
+
+	if (m_Platform->VideoStreamEnable(stream) == false)
+	{
+		LogError("Platform Failed to enabled video stream %u", stream);
+		return false;
+	}
+	if (m_VideoStreams[stream]->GetCodec() == "H264")
+	{
+		std::stringstream pipe;
+		pipe << "( internalsrc streamname=video" << stream << " ! rtph264pay name=pay0 pt=96 )";
+
+		RServer->PipelineAdd(url.str().c_str(), pipe.str().c_str());
+	}
+	else
+	{
+		LogCritical("Unknown Codec: %s", m_VideoStreams[stream]->GetCodec().c_str());
+		abort();
+	}
+	return true;
+}
+
+bool CameraHandler::VideoStreamDisable(unsigned int stream)
+{
+	LogDebug("CameraHandler::VideoStreamDisable(%u)", stream);
+
+	std::stringstream url;
+	url << "/video/" << stream;
+
+	RServer->PipelineRemove(url.str().c_str());
+	if (m_Platform->VideoStreamDisable(stream) == false)
+	{
+		LogError("Platform Failed to disable video stream %u", stream);
+		return false;
+	}
 	return true;
 }
 
