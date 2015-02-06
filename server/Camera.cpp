@@ -10,6 +10,7 @@ void print_help(FILE *fp, const char *app)
 	fprintf(fp, " -c --config <filename> Use the filename as config file location\n");
 	fprintf(fp, " -p --pid <filename>    Use the filename as pid file\n");
 	fprintf(fp, " -s --socket <filename> Use the filename as a unix socket file for services\n");
+	fprintf(fp, " -l --log               Always log to stdout\n");
 	fprintf(fp, "\n");
 	fprintf(fp, "\n");
 }
@@ -17,8 +18,8 @@ void print_help(FILE *fp, const char *app)
 int main(int argc, char **argv)
 {
 	LogManager::Init();
-	CameraServer Server;
-	ServerManager Manager(&Server);
+	CameraServer *Server = NULL;
+	ServerManager *Manager = NULL;
 	std::string LocSocket = "/tmp/CameraServer";
 	std::string LocPidFile = "";
 	std::string DefPlatform = "Example";
@@ -36,6 +37,7 @@ int main(int argc, char **argv)
 		{"help", 0, 0, 'h'},
 		{"pid", 1, 0, 'p'},
 		{"socket", 1, 0, 's'},
+		{"log", 0, 0, 'l'},
 		{0, 0, 0, 0}
 	};
 
@@ -52,6 +54,9 @@ int main(int argc, char **argv)
 			case 'h':
 				print_help(stdout, argv[0]);
 				exit(EXIT_SUCCESS);
+				break;
+			case 'l':
+				AlwaysLog = true;
 				break;
 			case 'p':
 				LocPidFile = optarg;
@@ -90,16 +95,22 @@ int main(int argc, char **argv)
 	}
 
 	//Init Handler (This is the "system" init call)
-	Server.Init(DefPlatform, CfgFile);
+	Server = new CameraServer();
+	Manager = new ServerManager(Server);
+	Server->Init(DefPlatform, CfgFile);
 
 	//Start Our Local Services
 	LogDebug("Service Listen On: %s", LocSocket.c_str());
 	ServerUnix Unix(LocSocket);
-	Manager.ServerAdd(&Unix);
-	Server.Wait();
-	Manager.ServerRemove(&Unix);
+	Manager->ServerAdd(&Unix);
+	Server->Wait();
+	Manager->ServerRemove(&Unix);
+
+	LogInfo("Cleanup");
 
 	//Cleanup!
+	delete Server;
+	delete Manager;
 	delete PidFile;
 	LogManager::RemoveAll(true);
 	return 0;

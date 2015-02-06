@@ -10,7 +10,7 @@ CameraServer::CameraServer()
 
 CameraServer::~CameraServer()
 {
-
+	delete m_handler;
 }
 
 void CameraServer::Init(const std::string Platform, const std::string CfgFile)
@@ -22,6 +22,33 @@ void CameraServer::Init(const std::string Platform, const std::string CfgFile)
 void CameraServer::Wait()
 {
 	m_handler->Wait();
+}
+
+int CameraServer::RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int value = handler->RServer->GetPort();
+	response->SetArg("value", value);
+	LogDebug("CameraServer::RTSPGetPort { value = %d }", value);
+	return 0;
+}
+
+int CameraServer::RTSPSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int value = 0;
+	if (request->GetInt("value", &value) == false)
+	{
+		LogError("CameraServer:RTSPSetPort Failed - exists: %s value: %d", request->HasArg("value") ? "true" : "false", value);
+		return -EINVAL;
+	}
+	if (value <= 0 || value > 65535)
+	{
+		LogError("CameraServer:RTSPSetPort Failed - value <= 0 value: %d", value);
+		return -EINVAL;
+	}
+	if (handler->RServer->SetPort(value) < 0)
+		return -1;
+	handler->Cfg->Dirty();
+	return 0;
 }
 
 int CameraServer::RTSPGetClientCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)

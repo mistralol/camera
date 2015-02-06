@@ -33,6 +33,37 @@ void CameraClient::Disconnect()
 	m_Client = NULL;
 }
 
+int CameraClient::RTSPGetPort(int *value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("RTSPGetPort");
+	Request request;
+	Request response;
+
+	request.SetCommand("RTSPGetPort");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("value", value) == false)
+		return -EINVAL;
+
+	return ret;
+}
+
+int CameraClient::RTSPSetPort(int value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("RTSPSetPort");
+	Request request;
+	Request response;
+
+	request.SetCommand("RTSPSetPort");
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
 int CameraClient::RTSPGetClientCount(int *value)
 {
 	if (m_Client == NULL)

@@ -26,6 +26,8 @@ RTSPGetMaxBacklog
 RTSPGetMaxClients
 RTSPSetMaxBacklog
 RTSPSetMaxClients
+RTSPGetPort
+RTSPSetPort
 build
 WebUI.userprefs
 bin

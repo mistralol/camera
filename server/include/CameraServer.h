@@ -9,6 +9,8 @@ class CameraServer : public IServerHandler
 
 		void Wait();
 
+		static int RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int RTSPSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPGetClientCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPSetMaxClients(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPGetMaxClients(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

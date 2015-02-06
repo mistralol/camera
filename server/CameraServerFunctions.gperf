@@ -13,6 +13,8 @@ struct TType {
 struct TType
 %%
 #####
+RTSPGetPort,		CameraServer::RTSPGetPort
+RTSPSetPort,		CameraServer::RTSPSetPort
 RTSPGetMaxBacklog,	CameraServer::RTSPGetMaxBacklog
 RTSPSetMaxBacklog,	CameraServer::RTSPSetMaxBacklog
 RTSPGetMaxClients,	CameraServer::RTSPGetMaxClients

@@ -3,6 +3,7 @@
 
 RTSPServer::RTSPServer()
 {
+	LogDebug("RTSPServer::RTSPServer");
 	m_loop = NULL;
 	m_server = NULL;
 	Thread::Start();
@@ -11,6 +12,7 @@ RTSPServer::RTSPServer()
 
 RTSPServer::~RTSPServer()
 {
+	LogDebug("RTSPServer::~RTSPServer");
 	g_main_loop_quit(m_loop);
 	Thread::Stop();
 }
@@ -36,6 +38,30 @@ void RTSPServer::PipelineRemove(const std::string url)
 	GstRTSPMountPoints *mounts = gst_rtsp_server_get_mount_points (m_server);
 	gst_rtsp_mount_points_remove_factory(mounts, url.c_str());
 	g_object_unref (mounts);	
+}
+
+int RTSPServer::SetPort(int port)
+{
+	LogDebug("RTSPServer::SetPort(%d)", port);
+	if (port < 0 || port > 65535)
+	{
+		LogError("RTSPServer::SetPort(%d) - Value out of range < 0 || > 65535", port);
+		return -EINVAL;
+	}
+	std::stringstream ss;
+	ss << port;
+	gst_rtsp_server_set_service(m_server, ss.str().c_str());
+	if (GetPort() != port)
+	{
+		LogError("RTSPServer::SetPort(%d) Failed Current Port is %d", port, GetPort());
+		return -65535;
+	}
+	return port;
+}
+
+int RTSPServer::GetPort()
+{
+	return gst_rtsp_server_get_bound_port(m_server);
 }
 
 void RTSPServer::SessionsSetMax(guint max)
@@ -92,6 +118,13 @@ bool RTSPServer::ConfigLoad(Json::Value &json)
 	if (json.isMember("maxsessions") && json["maxsessions"].isNumeric())
 		SessionsSetMax(json["maxsessions"].asInt());
 
+	if (json.isMember("port") && json["port"].isNumeric())
+	{
+		if (SetPort(json["massessison"].asInt()) < 0)
+		{
+			LogError("RTSPServer::ConfigLoad - Failed to set port");
+		}
+	}
 
 	return true;
 }
@@ -102,6 +135,7 @@ bool RTSPServer::ConfigSave(Json::Value &json)
 
 	json["backlog"] = BacklogGet();
 	json["maxsessions"] = SessionsGetMax();
+	json["port"] = GetPort();
 
 	return true;
 }
