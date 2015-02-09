@@ -174,6 +174,12 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	return true;
 }
 
+void CameraHandler::VideoStreamCount(int *count)
+{
+	LogDebug("CameraHandler::VideoStreamCount");
+	*count = m_Platform->VideoStreamCount();
+}
+
 bool CameraHandler::VideoStreamSetEnabled(unsigned int stream, bool enabled)
 {
 	LogDebug("CameraHandler::VideoStreamSetEnabled(%u, %s)", stream, enabled ? "True" : "False");

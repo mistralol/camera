@@ -18,6 +18,7 @@ SRCS=Quit.cpp \
 	RTSPGetClientCount.cpp \
 	RTSPSetMaxClients.cpp \
 	RTSPGetMaxClients.cpp \
+	VideoStreamCount.cpp \
 	VideoStreamSetEnabled.cpp \
 	VideoStreamGetEnabled.cpp
 

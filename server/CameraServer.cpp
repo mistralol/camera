@@ -111,6 +111,13 @@ int CameraServer::RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *C
 	return 0;
 }
 
+int CameraServer::VideoStreamCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int count = 0;
+	handler->VideoStreamCount(&count);
+	response->SetArg("value", count);
+	return 0;
+}
 
 int CameraServer::VideoStreamSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {

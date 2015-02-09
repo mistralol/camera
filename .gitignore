@@ -30,6 +30,7 @@ RTSPSetMaxBacklog
 RTSPSetMaxClients
 RTSPGetPort
 RTSPSetPort
+VideoStreamCount
 VideoStreamGetEnabled
 VideoStreamSetEnabled
 build

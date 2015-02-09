@@ -161,6 +161,23 @@ int CameraClient::Version(std::string *str)
 	return ret;
 }
 
+int CameraClient::VideoStreamCount(int *value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("VideoStreamCount");
+	Request request;
+	Request response;
+
+	request.SetCommand("VideoStreamCount");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("value", value) == false)
+		return -EINVAL;
+	return 0;
+}
+
 int CameraClient::VideoStreamSetEnabled(unsigned int stream, bool enabled)
 {
 	if (m_Client == NULL)
