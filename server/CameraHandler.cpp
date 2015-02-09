@@ -17,7 +17,8 @@ CameraHandler::~CameraHandler()
 		std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
 		int stream = it->first;
 		VideoStreamConfig *config = it->second;
-		m_Platform->VideoStreamDisable(stream);
+		if (config->GetEnabled())
+			m_Platform->VideoStreamDisable(stream);
 		m_VideoStreams.erase(it);
 		delete config;
 	}
