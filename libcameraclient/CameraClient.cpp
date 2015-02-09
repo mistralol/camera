@@ -161,6 +161,39 @@ int CameraClient::Version(std::string *str)
 	return ret;
 }
 
+int CameraClient::VideoStreamSetEnabled(unsigned int stream, bool enabled)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("VideoStreamSetEnabled");
+	Request request;
+	Request response;
+
+	request.SetCommand("VideoStreamSetEnabled");
+	request.SetArg("stream", stream);
+	request.SetArg("enabled", enabled);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::VideoStreamGetEnabled(unsigned int stream, int *value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("VideoStreamGetEnabled");
+	Request request;
+	Request response;
+
+	request.SetCommand("VideoStreamGetEnabled");
+	request.SetArg("stream", stream);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("enabled", value) == false)
+		return -EINVAL;
+
+	return ret;
+}
+
 std::string CameraClient::Version()
 {
 	std::string str = "";

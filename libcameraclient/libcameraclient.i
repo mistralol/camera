@@ -9,7 +9,7 @@ using namespace std;
 %include <std_string.i>
 %include <typemaps.i>
 
-%apply int *OUTPUT { int *value};
+%apply int *OUTPUT { int *};
 
 
 %include libcameraclient.h

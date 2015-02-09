@@ -16,6 +16,8 @@
 *.exe
 *.bak
 SWIGTYPE_p_std__string.cs
+SWIGTYPE_p_bool.cs
+SWIGTYPE_p_int.cs
 camera
 Config.json
 Ping
@@ -28,6 +30,8 @@ RTSPSetMaxBacklog
 RTSPSetMaxClients
 RTSPGetPort
 RTSPSetPort
+VideoStreamGetEnabled
+VideoStreamSetEnabled
 build
 WebUI.userprefs
 bin

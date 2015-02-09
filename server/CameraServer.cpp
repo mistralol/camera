@@ -37,7 +37,7 @@ int CameraServer::RTSPSetPort(CameraHandler *handler, IServerConnection *Connect
 	int value = 0;
 	if (request->GetInt("value", &value) == false)
 	{
-		LogError("CameraServer:RTSPSetPort Failed - exists: %s value: %d", request->HasArg("value") ? "true" : "false", value);
+		LogError("CameraServer:RTSPSetPort Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
 	if (value <= 0 || value > 65535)
@@ -64,7 +64,7 @@ int CameraServer::RTSPSetMaxClients(CameraHandler *handler, IServerConnection *C
 	int value = 0;
 	if (request->GetInt("value", &value) == false)
 	{
-		LogError("CameraServer:RTSPSetMaxClients Failed - exists: %s value: %d", request->HasArg("value") ? "true" : "false", value);
+		LogError("CameraServer:RTSPSetMaxClients Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
 	if (value <= 0)
@@ -90,7 +90,7 @@ int CameraServer::RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *C
 	int value = 0;
 	if (request->GetInt("value", &value) == false)
 	{
-		LogError("CameraServer::RTSPSetMaxBacklog Failed - exists: %s value: %d", request->HasArg("value") ? "true" : "false", value);
+		LogError("CameraServer::RTSPSetMaxBacklog Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
 	if (value <= 0)
@@ -111,6 +111,52 @@ int CameraServer::RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *C
 	return 0;
 }
 
+
+int CameraServer::VideoStreamSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int stream = -1;
+	bool enabled = false;
+
+	if (request->GetUInt("stream", &stream) == false)
+	{
+		LogError("CameraServer::VideoStreamSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetBool("enabled", &enabled) == false)
+	{
+		LogError("CameraServer::VideoStreamSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (handler->VideoStreamSetEnabled(stream, enabled))
+	{
+		handler->Cfg->Dirty();
+		return 0;
+	}
+
+	return -1;
+}
+
+int CameraServer::VideoStreamGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int stream = -1;
+	bool enabled = false;
+
+	if (request->GetUInt("stream", &stream) == false)
+	{
+		LogError("CameraServer::VideoStreamGetEnabled Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	if (handler->VideoStreamGetEnabled(stream, enabled) == false)
+	{
+		LogError("CameraServer::VideoStreamGetEnabled(%u, *) - Failed", stream);
+		return -EINVAL;
+	}
+	response->SetArg("enabled", enabled);
+
+	return 0;
+}
 
 int CameraServer::Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {

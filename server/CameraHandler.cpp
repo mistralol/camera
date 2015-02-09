@@ -173,10 +173,60 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	return true;
 }
 
+bool CameraHandler::VideoStreamSetEnabled(unsigned int stream, bool enabled)
+{
+	LogDebug("CameraHandler::VideoStreamSetEnabled(%u, %s)", stream, enabled ? "True" : "False");
+	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
+	if (it == m_VideoStreams.end())
+	{
+		LogDebug("CameraHandler::VideoStreamSetEnabled(%u, %s) - No such stream", stream, enabled ? "True" : "False");
+		return false;
+	}
+
+
+	bool orig = m_VideoStreams[stream]->GetEnabled();
+
+	if (orig == false && enabled == true)
+	{
+		m_VideoStreams[stream]->SetEnabled(true);
+		return VideoStreamEnable(stream);
+	}
+
+	if (orig == true && enabled == false)
+	{
+		m_VideoStreams[stream]->SetEnabled(false);
+		return VideoStreamDisable(stream);
+	}
+
+	LogError("CameraHandler::VideostreamSetEnabled() - Did Nothing - Probably a bug in the client...");
+	return true;
+}
+
+bool CameraHandler::VideoStreamGetEnabled(unsigned int stream, bool &enabled)
+{
+	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)",stream);
+	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
+	if (it == m_VideoStreams.end())
+	{
+		LogDebug("CameraHandler::VideoStreamGetEnabled(%u) - No such stream", stream);
+		return false;
+	}
+
+	enabled = m_VideoStreams[stream]->GetEnabled();
+	return true;
+}
+
 bool CameraHandler::VideoStreamEnable(unsigned int stream)
 {
 	LogDebug("CameraHandler::VideoStreamEnable(%u)", stream);
+	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
+	if (it == m_VideoStreams.end())
+	{
+		LogDebug("CameraHandler::VideoStreamEnable(%u) - No such stream", stream);
+		return false;
+	}
 	
+
 	std::stringstream url;
 	url << "/video/" << stream;
 
@@ -203,6 +253,12 @@ bool CameraHandler::VideoStreamEnable(unsigned int stream)
 bool CameraHandler::VideoStreamDisable(unsigned int stream)
 {
 	LogDebug("CameraHandler::VideoStreamDisable(%u)", stream);
+	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
+	if (it == m_VideoStreams.end())
+	{
+		LogDebug("CameraHandler::VideoStreamDisable(%u) - No such stream", stream);
+		return false;
+	}
 
 	std::stringstream url;
 	url << "/video/" << stream;

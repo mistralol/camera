@@ -21,6 +21,9 @@ RTSPGetMaxClients,	CameraServer::RTSPGetMaxClients
 RTSPSetMaxClients,	CameraServer::RTSPSetMaxClients
 RTSPGetClientCount,	CameraServer::RTSPGetClientCount
 #####
+VideoStreamSetEnabled,	CameraServer::VideoStreamSetEnabled
+VideoStreamGetEnabled,	CameraServer::VideoStreamGetEnabled
+#####
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping
 QUIT,			CameraServer::Quit

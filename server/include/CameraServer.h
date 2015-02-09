@@ -17,6 +17,9 @@ class CameraServer : public IServerHandler
 		static int RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
+		static int VideoStreamSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoStreamGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+
 		static int Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Ping(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Quit(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

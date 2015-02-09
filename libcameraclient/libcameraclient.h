@@ -19,6 +19,9 @@ class CameraClient
 		int RTSPSetMaxBacklog(int max);
 		int RTSPGetMaxBacklog(int *value);
 
+		int VideoStreamSetEnabled(unsigned int stream, bool enabled);
+		int VideoStreamGetEnabled(unsigned int stream, int *enabled);
+
 		int Version(std::string *str);
 		std::string Version();
 
