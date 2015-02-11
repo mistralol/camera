@@ -8,6 +8,7 @@ class CameraServer : public IServerHandler
 		void Init(const std::string Platform, const std::string CfgFile);
 
 		void Wait();
+		void Quit();
 
 		static int RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

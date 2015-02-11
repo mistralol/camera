@@ -24,6 +24,12 @@ void CameraServer::Wait()
 	m_handler->Wait();
 }
 
+void CameraServer::Quit()
+{
+	LogDebug("CameraServer::Quit QUIT");
+	m_handler->Quit();
+}
+
 int CameraServer::RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	int value = handler->RServer->GetPort();
@@ -174,13 +180,13 @@ int CameraServer::Version(CameraHandler *handler, IServerConnection *Connection,
 
 int CameraServer::Ping(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	LogDebug("CameraServer::OnRequest PING");
+	LogDebug("CameraServer::Ping PING");
 	return 0;
 }
 
 int CameraServer::Quit(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	LogDebug("CameraServer::OnRequest QUIT");
+	LogDebug("CameraServer::Quit QUIT");
 	handler->Quit();
 	return 0;
 }

@@ -15,10 +15,70 @@ void print_help(FILE *fp, const char *app)
 	fprintf(fp, "\n");
 }
 
+class SigHandler : public ISignalHandler
+{
+	public:
+		SigHandler()
+		{
+			m_Server = NULL;
+		}
+
+		~SigHandler()
+		{
+
+		}
+
+		void SetServer(CameraServer *Server)
+		{
+			m_Server = Server;
+		}
+
+		void SigHUP(const siginfo_t *info)
+		{
+			LogInfo("SigHandler::SigHUP");
+			LoggerRotate();
+		}
+
+		void SigTerm(const siginfo_t *info)
+		{
+			LogInfo("SigHandler::SigTerm");
+			if (m_Server)
+			{
+				LogInfo("SigTerm::SigTerm - Telling server to quit");
+				m_Server->Quit();
+			}
+			else
+			{
+				LogError("SigTerm::SigTerm - No server to tell to quit");
+			}
+		}
+
+		void SigUser1(const siginfo_t *info)
+		{
+			LogInfo("SigHandler::SigUser1");
+		}
+
+		void SigUser2(const siginfo_t *info)
+		{
+			LogInfo("SigHandler::SigUser1");
+		}
+
+		void SigPipe(const siginfo_t *info)
+		{
+			//Just ignored
+		}
+
+	private:
+		CameraServer *m_Server;
+
+};
+
 int main(int argc, char **argv)
 {
 	LogManager::Init();
 	CameraServer *Server = NULL;
+	SigHandler SHandler;
+	SignalHandler Signals = SignalHandler(&SHandler);
 	ServerManager *Manager = NULL;
 	std::string LocSocket = "/tmp/CameraServer";
 	std::string LocPidFile = "";
@@ -97,16 +157,23 @@ int main(int argc, char **argv)
 	//Init Handler (This is the "system" init call)
 	Server = new CameraServer();
 	Manager = new ServerManager(Server);
+	Signals.Block(); //Switch off signals during startup
+	SHandler.SetServer(Server);
 	Server->Init(DefPlatform, CfgFile);
 
 	//Start Our Local Services
 	LogDebug("Service Listen On: %s", LocSocket.c_str());
 	ServerUnix Unix(LocSocket);
 	Manager->ServerAdd(&Unix);
+	Signals.UnBlock(); //Accept signals again
 	Server->Wait();
 	Manager->ServerRemove(&Unix);
 
 	LogInfo("Cleanup");
+
+	Signals.Block();
+	SHandler.SetServer(NULL);
+	Signals.UnBlock();
 
 	//Cleanup!
 	delete Server;
