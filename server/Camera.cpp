@@ -60,7 +60,7 @@ class SigHandler : public ISignalHandler
 
 		void SigUser2(const siginfo_t *info)
 		{
-			LogInfo("SigHandler::SigUser1");
+			LogInfo("SigHandler::SigUser2");
 		}
 
 		void SigPipe(const siginfo_t *info)
