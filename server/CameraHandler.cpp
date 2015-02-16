@@ -29,6 +29,7 @@ CameraHandler::~CameraHandler()
 	gst_deinit();
 }
 
+//Init Does not need locking as it should be the only code active in the system during startup
 void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 {
 	LogInfo("Version: %s", Version::ToString().c_str());
@@ -122,6 +123,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		if (RServer->ConfigLoad(json["rtspserver"]) == false)
 			return false;
 
+	ScopedLock VideoLock(&m_VideoMutex);
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
 	while(it != m_VideoStreams.end())
 	{
@@ -158,6 +160,7 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	if (RServer->ConfigSave(json["rtspserver"]) == false)
 		return false;
 
+	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
 	while(it != m_VideoStreams.end())
 	{
@@ -183,6 +186,7 @@ void CameraHandler::VideoStreamCount(int *count)
 bool CameraHandler::VideoStreamSetEnabled(unsigned int stream, bool enabled)
 {
 	LogDebug("CameraHandler::VideoStreamSetEnabled(%u, %s)", stream, enabled ? "True" : "False");
+	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
 	if (it == m_VideoStreams.end())
 	{
@@ -212,6 +216,7 @@ bool CameraHandler::VideoStreamSetEnabled(unsigned int stream, bool enabled)
 bool CameraHandler::VideoStreamGetEnabled(unsigned int stream, bool &enabled)
 {
 	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)",stream);
+	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
 	if (it == m_VideoStreams.end())
 	{
@@ -226,6 +231,7 @@ bool CameraHandler::VideoStreamGetEnabled(unsigned int stream, bool &enabled)
 bool CameraHandler::VideoStreamEnable(unsigned int stream)
 {
 	LogDebug("CameraHandler::VideoStreamEnable(%u)", stream);
+	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
 	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
 	if (it == m_VideoStreams.end())
 	{

@@ -26,12 +26,13 @@ class CameraHandler
 
 	private:
 		Barrier m_QuitBarrier;
+
 		PlatformBase *m_Platform;
-		
 		
 		std::string m_CfgFile;
 
 		//Video Stuff
+		Mutex m_VideoMutex;
 		std::map<unsigned int, struct VideoStreamConfig *> m_VideoStreams;
 
 };
