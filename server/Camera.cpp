@@ -55,12 +55,12 @@ class SigHandler : public ISignalHandler
 
 		void SigUser1(const siginfo_t *info)
 		{
-			LogInfo("SigHandler::SigUser1");
+			CameraServer::StatsDump();
 		}
 
 		void SigUser2(const siginfo_t *info)
 		{
-			LogInfo("SigHandler::SigUser2");
+			CameraServer::StatsReset();
 		}
 
 		void SigPipe(const siginfo_t *info)

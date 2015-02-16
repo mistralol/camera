@@ -191,6 +191,32 @@ int CameraServer::Quit(CameraHandler *handler, IServerConnection *Connection, Re
 	return 0;
 }
 
+void CameraServer::StatsDump()
+{
+	std::list<std::string> Keys = PerfManager::GetKeyList();
+	struct PerfDetails_t info;
+
+	LogInfo("Dumping Stats");
+	for(std::list<std::string>::iterator it = Keys.begin(); it != Keys.end(); it++)
+	{
+		if (PerfManager::GetInfo(*it, &info) < 0)
+			continue;
+		if (info.Count == 0)
+			continue;
+		LogInfo("%15s Total Calls: %d Average Time: %8ld.%ld Seconds",
+				it->c_str(), info.Count,
+				info.TotalTime.tv_sec / info.Count,
+				info.TotalTime.tv_nsec / 1000 / info.Count);
+	}
+	LogInfo("Finished Dumping stats");
+}
+
+void CameraServer::StatsReset()
+{
+	LogInfo("Resetting Stats");
+	PerfManager::Clear();
+}
+
 void CameraServer::OnPreNewConnection()
 {
 	LogDebug("CameraServer::OnPreNewConnection");
@@ -215,6 +241,7 @@ int CameraServer::OnRequest(IServerConnection *Connection, Request *request, Req
 		LogDebug("CameraServer::OnRequest Unknown Command: \"%s\"", Command.c_str());
 		return -ENOSYS;
 	}
+	PerfCounter PC(Command.c_str());
 	return tmp->func(m_handler, Connection, request, response);
 }
 

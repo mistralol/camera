@@ -27,6 +27,9 @@ class CameraServer : public IServerHandler
 		static int Ping(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Quit(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
+		static void StatsDump();
+		static void StatsReset();
+
 		void OnPreNewConnection();
 
 		void OnPostNewConnection(IServerConnection *Connection);		
