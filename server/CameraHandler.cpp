@@ -114,6 +114,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 bool CameraHandler::ConfigLoad(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigLoad");
+	ScopedLock Lock = ScopedLock(&m_ConfigMutex);
 
 	if (json.isMember("platform"))
 		if (m_Platform->ConfigSave(json["platform"]) == false)
@@ -151,6 +152,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 bool CameraHandler::ConfigSave(Json::Value &json)
 {
 	LogDebug("CameraHandler::ConfigSave");
+	ScopedLock Lock = ScopedLock(&m_ConfigMutex);
 
 	json["Version"] = Version::ToString();
 	

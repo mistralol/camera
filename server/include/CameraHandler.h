@@ -29,7 +29,9 @@ class CameraHandler
 
 		PlatformBase *m_Platform;
 		
+		//Config Stuff
 		std::string m_CfgFile;
+		Mutex m_ConfigMutex;
 
 		//Video Stuff
 		Mutex m_VideoMutex;
