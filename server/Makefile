@@ -11,6 +11,8 @@ SRCS=	Config.cpp \
 	PipelineBasic.cpp \
 	VideoStreamSupported.cpp \
 	VideoStreamConfig.cpp \
+	User.cpp \
+	Group.cpp \
 	Platform/Platform.cpp \
 	Platform/PlatformBase.cpp \
 	Platform/Example.cpp \

@@ -24,6 +24,10 @@ using namespace liblogger;
 #include <RTSPServer.h>
 #include <RTSPServerCleanup.h>
 
+#include <UserItem.h>
+#include <User.h>
+#include <Group.h>
+
 #include <IPipeline.h>
 #include <PipelineBasic.h>
 

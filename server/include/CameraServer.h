@@ -23,6 +23,21 @@ class CameraServer : public IServerHandler
 		static int VideoStreamSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int VideoStreamGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
+		static int UserCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserAuth(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserDelete(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserSetPassword(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupDelete(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupIsUserInGroup(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupUserAdd(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupUserRemove(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int GroupListUsers(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+
 		static int Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Ping(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Quit(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

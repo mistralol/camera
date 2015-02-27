@@ -171,6 +171,244 @@ int CameraServer::VideoStreamGetEnabled(CameraHandler *handler, IServerConnectio
 	return 0;
 }
 
+int CameraServer::UserCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+	std::string Password = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserCreate Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetString("Password", &Password) == false)
+	{
+		LogError("CameraServer::UserCreate Failed - Password exists: %s", request->HasArg("Password") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = User::Create(Username, Password);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::UserAuth(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+	std::string Password = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserAuth Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetString("Password", &Password) == false)
+	{
+		LogError("CameraServer::UserAuth Failed - Password exists: %s", request->HasArg("Password") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = User::Auth(Username, Password);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::UserDelete(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserDelete Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = User::Delete(Username);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::UserExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserExists Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	return User::Exists(Username);
+}
+
+int CameraServer::UserSetPassword(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+	std::string Password = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserSetPassword Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetString("Password", &Password) == false)
+	{
+		LogError("CameraServer::UserSetPassword Failed - Password exists: %s", request->HasArg("Password") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = User::SetPassword(Username, Password);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::UserList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::list<std::string> lst = User::List();
+	response->SetArg("value", &lst);
+	return lst.size();
+}
+
+int CameraServer::GroupCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupCreate Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = Group::Create(Group);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::GroupDelete(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupDelete Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = Group::Delete(Group);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::GroupExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupExists Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	return Group::Exists(Group);
+}
+
+int CameraServer::GroupIsUserInGroup(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+	std::string Username = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	return Group::IsUserInGroup(Group, Username);
+}
+
+int CameraServer::GroupUserAdd(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+	std::string Username = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = Group::UserAdd(Group, Username);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::GroupUserRemove(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+	std::string Username = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = Group::UserRemove(Group, Username);
+	if (ret >= 0)
+		handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::GroupList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::list<std::string> lst = Group::List();
+	response->SetArg("value", &lst);
+	return lst.size();
+}
+
+int CameraServer::GroupListUsers(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Group = "";
+
+	if (request->GetString("Group", &Group) == false)
+	{
+		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request->HasArg("Group") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	std::list<std::string> lst = Group::List();
+	response->SetArg("value", &lst);
+	return lst.size();
+}
+
 int CameraServer::Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	LogDebug("CameraServer::Version");

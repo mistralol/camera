@@ -25,6 +25,22 @@ VideoStreamCount,	CameraServer::VideoStreamCount
 VideoStreamSetEnabled,	CameraServer::VideoStreamSetEnabled
 VideoStreamGetEnabled,	CameraServer::VideoStreamGetEnabled
 #####
+UserCreate
+UserAuth
+UserDelete
+UserExists
+UserSetPassword
+UserList
+#####
+GroupCreate
+GroupDelete
+GroupExists
+GroupIsUserInGroup
+GroupUserAdd
+GroupUserRemove
+GroupList
+GroupListUsers
+#####
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping
 QUIT,			CameraServer::Quit

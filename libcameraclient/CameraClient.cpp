@@ -211,6 +211,254 @@ int CameraClient::VideoStreamGetEnabled(unsigned int stream, int *value)
 	return ret;
 }
 
+int CameraClient::UserCreate(const std::string Username, const std::string Password)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserCreate");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserCreate");
+	request.SetArg("Username", Username);
+	request.SetArg("Password", Password);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserAuth(const std::string Username, const std::string Password)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserAuth");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserAuth");
+	request.SetArg("Username", Username);
+	request.SetArg("Password", Password);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserDelete(const std::string Username)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserDelete");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserDelete");
+	request.SetArg("Username", Username);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserExists(const std::string Username)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserExists");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserExists");
+	request.SetArg("Username", Username);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserSetPassword(const std::string Username, const std::string Password)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserSetPassword");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserSetPassword");
+	request.SetArg("Username", Username);
+	request.SetArg("Password", Password);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserList(std::list<std::string> *lst)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserList");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserList");
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetListString("value", lst) == false)
+		return -1;
+	return lst->size();
+}
+
+int CameraClient::GroupCreate(const std::string Group)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupCreate");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupCreate");
+	request.SetArg("Group", Group);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::GroupDelete(const std::string Group)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupDelete");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupDelete");
+	request.SetArg("Group", Group);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::GroupExists(const std::string Group)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupExists");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupExists");
+	request.SetArg("Group", Group);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::GroupIsUserInGroup(const std::string Group, const std::string User, int *result)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupIsUserInGroup");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupIsUserInGroup");
+	request.SetArg("Group", Group);
+	request.SetArg("Username", User);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::GroupUserAdd(const std::string Group, const std::string User)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupUserAdd");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupUserAdd");
+	request.SetArg("Group", Group);
+	request.SetArg("Username", User);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::GroupUserRemove(const std::string Group, const std::string User)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupUserRemove");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupUserRemove");
+	request.SetArg("Group", Group);
+	request.SetArg("Username", User);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::GroupList(std::list<std::string> *lst)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupList");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupList");
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetListString("value", lst) == false)
+		return -1;
+	return lst->size();
+}
+
+int CameraClient::GroupListUsers(const std::string Group, std::list<std::string> *lst)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("GroupListUsers");
+	Request request;
+	Request response;
+
+	request.SetCommand("GroupListUsers");
+	request.SetArg("Group", Group);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetListString("value", lst) == false)
+		return -1;
+	return lst->size();
+}
+
 std::string CameraClient::Version()
 {
 	std::string str = "";

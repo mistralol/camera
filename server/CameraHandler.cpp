@@ -52,6 +52,12 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		exit(EXIT_FAILURE);
 	}
 
+	if (User::Init() == false)
+	{
+		LogCritical("Failed to Init user database....");
+		exit(EXIT_FAILURE);
+	}
+
 	//Dump out some debug info about how many streams we support
 	unsigned int nStreams = m_Platform->VideoStreamCount();
 	LogInfo("Supported Video Streams: %d", nStreams);
@@ -116,6 +122,14 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 	LogDebug("CameraHandler::ConfigLoad");
 	ScopedLock Lock = ScopedLock(&m_ConfigMutex);
 
+	if (json.isMember("users"))
+		if (User::ConfigLoad(json["users"]) == false)
+			return false;
+
+	if (json.isMember("group"))
+		if (Group::ConfigLoad(json["groups"]) == false)
+			return false;
+
 	if (json.isMember("platform"))
 		if (m_Platform->ConfigSave(json["platform"]) == false)
 			return false;
@@ -155,10 +169,10 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	ScopedLock Lock = ScopedLock(&m_ConfigMutex);
 
 	json["Version"] = Version::ToString();
-	
+
 	if (m_Platform->ConfigSave(json["platform"]) == false)
 		return false;
-	
+
 	if (RServer->ConfigSave(json["rtspserver"]) == false)
 		return false;
 
@@ -175,6 +189,12 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 		}
 		it++;
 	}
+
+	if (User::ConfigSave(json["users"]) == false)
+		return false;
+
+	if (Group::ConfigSave(json["groups"]) == false)
+		return false;
 
 	return true;
 }
