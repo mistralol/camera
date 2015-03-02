@@ -70,12 +70,26 @@ bool User::ConfigSave(Json::Value &json)
 
 int User::Create(const std::string User, const std::string Password)
 {
+	const std::string passchar = "!\"£$%^&*()_+=#~{}[],./\?:;";
 	ScopedLock lock = ScopedLock(&m_mutex);
 	if (m_map.find(User) != m_map.end())
 	{
 		LogError("User::Create - Username '%s' already exists", User.c_str());
 		return -EEXIST;
 	}
+
+	if (String::Sanity(&User) == false)
+	{
+		LogError("User::Create - Username '%s' contains invalid chars", User.c_str());
+		return -EINVAL;
+	}
+
+	if (String::Sanity(&User, &passchar) == false)
+	{
+		LogError("User::Create - Password contains invalid chars for user '%s'", User.c_str());
+		return -EINVAL;
+	}
+
 	struct UserItem *item = new UserItem();
 	item->Username = User;
 	item->Password = Password;
@@ -152,6 +166,16 @@ std::list<std::string> User::List()
 		it++;
 	}
 	return lst;
+}
+
+void User::Lock()
+{
+	m_mutex.Lock();
+}
+
+void User::Unlock()
+{
+	m_mutex.Unlock();
 }
 
 void User::Reset()

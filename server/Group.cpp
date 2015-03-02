@@ -56,6 +56,13 @@ int Group::Create(const std::string Group)
 		LogError("Group::Create - Cannot add group '%s' because group already exists", Group.c_str());
 		return -EEXIST;
 	}
+
+	if (String::Sanity(&Group) == false)
+	{
+		LogError("Group::Create - Group '%s' contains invalid chars", Group.c_str());
+		return -EINVAL;
+	}
+
 	m_map[Group] = std::list<std::string>();
 	LogInfo("Group::Create - Added group '%s'", Group.c_str());
 	return 0;
@@ -123,6 +130,13 @@ int Group::IsUserInGroup(const std::string Group, const std::string User)
 
 int Group::UserAdd(const std::string Group, const std::string User)
 {
+	User::Lock(); //Don't allow the user to be deleted while we are adding it to a group
+	if (User::Exists(User) == false)
+	{
+		LogError("Group::UserAdd - User '%s' does not exist\n", User.c_str());
+		User::Unlock();
+		return -EINVAL;
+	}
 	ScopedLock lock = ScopedLock(&m_mutex);
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
@@ -135,16 +149,19 @@ int Group::UserAdd(const std::string Group, const std::string User)
 				if (*uit == User)
 				{
 					LogError("Group::UserAdd - Cannot add user '%s' to group '%s' because already exists", User.c_str(), Group.c_str());
+					User::Unlock();
 					return -EEXIST;
 				}
 				uit++;
 			}
 			it->second.push_back(User);
+			User::Unlock();
 			return 0;
 		}
 		it++;
 	}
 	LogError("Group::UserAdd - Cannot add user '%s' to group '%s' because group does not exist", User.c_str(), Group.c_str());
+	User::Unlock();
 	return -ENOLINK;
 }
 

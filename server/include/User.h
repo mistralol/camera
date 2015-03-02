@@ -14,6 +14,9 @@ class User
 
 		static std::list<std::string> List();
 
+		static void Lock();
+		static void Unlock();
+
 	protected:
 		static void Reset();
 
