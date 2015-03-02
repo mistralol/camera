@@ -4,7 +4,6 @@ namespace WebUI.Code
 {
 	public class AppPage : System.Web.UI.Page
 	{
-
 		public CameraClient Camera {
 			get {
 				lock (Session) {
@@ -17,7 +16,6 @@ namespace WebUI.Code
 				}
 			}
 		}
-
 	}
 }
 
