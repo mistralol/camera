@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 	std::string CfgFile = "Config.json";
 	PIDFile *PidFile = NULL;
 	bool AlwaysLog = false;
+	SetUid ProcessPerms;
 
 	const char *opts = "h";
 	int longindex = 0;
@@ -153,6 +154,26 @@ int main(int argc, char **argv)
 		}
 		LogInfo("Created PIDFile: %s", LocPidFile.c_str());
 	}
+
+	//Find out if we are setuid enabled
+	if (ProcessPerms.Init() == false)
+	{
+		LogError("Failed to set process permissions using suid");
+	}
+	else
+	{
+		//grab some extra privs then drops user again back to what it was
+		do {
+			UserID user = UserID();
+			if (user.Up(0) < 0)
+				LogError("UserID Failed to set 0");
+			LogInfo("Setting CAP_NET_BIND_SERVICE");
+			int ret = Caps::SetCap(CAP_NET_BIND_SERVICE);
+			if (ret < 0)
+				LogError("Cannot SetCap CAP_NET_BIND_SERVICE - %s", Errno::ToStr(abs(ret)).c_str() );
+		} while(0);
+	}
+
 
 	//Init Handler (This is the "system" init call)
 	Server = new CameraServer();

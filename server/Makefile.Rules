@@ -4,6 +4,7 @@ INCLUDE+=-I../../liblogger/include
 
 LIBS+=-pthread
 LIBS+=../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
+LIBS+=-lcap
 
 #Gstreamer
 INCLUDE+=$(shell pkg-config --cflags gstreamer-1.0)
