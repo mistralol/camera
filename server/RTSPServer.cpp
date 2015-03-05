@@ -14,6 +14,7 @@ RTSPServer::RTSPServer()
 RTSPServer::~RTSPServer()
 {
 	LogDebug("RTSPServer::~RTSPServer");
+	while(!g_main_loop_is_running(m_loop)) { } //Glib Sucks!
 	g_main_loop_quit(m_loop);
 	Thread::Stop();
 }
@@ -225,16 +226,33 @@ void RTSPServer::Run()
 		gst_rtsp_server_set_service(m_server, ss.str().c_str());
 	}
 
-	gst_rtsp_server_attach (m_server, NULL);
-	PoolCleaner.Init(m_server);
+	guint id = gst_rtsp_server_attach (m_server, g_main_loop_get_context(m_loop));
+	if (id == 0)
+	{
+		LogError("RTSPServer::Run - Server failed to attach");
+		LogError("RTSPServer::Run - RTSP Is NOT running");
+		m_startbar.WakeUp();
+		g_main_loop_run(m_loop);
+	}
+	else
+	{
+		PoolCleaner.Init(m_server);
 
-	m_startbar.WakeUp();
+		m_startbar.WakeUp();
 
-	int cport = gst_rtsp_server_get_bound_port(m_server);
-	LogInfo("RTSPServer::Run - Running On Port %d", cport);
+		int cport = gst_rtsp_server_get_bound_port(m_server);
+		LogInfo("RTSPServer::Run - Running On Port %d", cport);
 
-	g_main_loop_run(m_loop);
-	LogInfo("RTSPServer::Run - exiting Loop");
+		g_main_loop_run(m_loop);
+		LogInfo("RTSPServer::Run - exiting Loop");
+
+		//Same as missing api gst_rtsp_server_detach
+		if (g_source_remove(id) == false)
+		{
+			LogError("RTSPServer::Run - Failed to remove g_source");
+			abort();
+		}
+	}
 
 	g_object_unref(m_server);
 	g_main_loop_unref(m_loop);
