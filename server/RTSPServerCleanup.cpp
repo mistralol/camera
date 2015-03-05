@@ -3,23 +3,29 @@
 
 RTSPServerCleanup::RTSPServerCleanup()
 {
-
+	m_exit = false;
+	m_started = false;
+	m_pool = NULL;
 }
 
 RTSPServerCleanup::~RTSPServerCleanup()
 {
-	m_mutex.Lock();
-	m_exit = true;
-	m_mutex.WakeUp();
-	m_mutex.Unlock();
-	Stop();
-	g_object_unref(m_pool);
+	if (m_started)
+	{
+		m_mutex.Lock();
+		m_exit = true;
+		m_mutex.WakeUp();
+		m_mutex.Unlock();
+		Stop();
+		g_object_unref(m_pool);
+	}
 }
 
 void RTSPServerCleanup::Init(GstRTSPServer *server)
 {
 	m_pool = gst_rtsp_server_get_session_pool(server);
 	m_exit = false;
+	m_started = true;
 	Thread::Start();
 }
 

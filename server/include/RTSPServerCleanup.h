@@ -9,7 +9,7 @@ class RTSPServerCleanup : Thread
 
 	private:
 		void Run();
-
+		bool m_started;
 		bool m_exit;
 		Mutex m_mutex;
 		GstRTSPSessionPool *m_pool;
