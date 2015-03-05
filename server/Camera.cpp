@@ -171,7 +171,19 @@ int main(int argc, char **argv)
 			int ret = Caps::SetCap(CAP_NET_BIND_SERVICE);
 			if (ret < 0)
 				LogError("Cannot SetCap CAP_NET_BIND_SERVICE - %s", Errno::ToStr(abs(ret)).c_str() );
+			ret = Caps::Keep();
+			if (ret < 0)
+				LogError("Unable to Keep Caps - '%s'", Errno::ToStr(abs(ret)).c_str());
 		} while(0);
+
+		int ret = Caps::SetCap(CAP_NET_BIND_SERVICE);
+		if (ret < 0)
+			LogError("Unable to keep cap CAP_NET_BIND_SERVICE - %s", Errno::ToStr(abs(ret)).c_str() );
+
+		if (Caps::HasCap(CAP_NET_BIND_SERVICE) <= 0)
+		{
+			LogError("Don't have CAP_NET_BIND_SERVER");
+		}
 	}
 
 

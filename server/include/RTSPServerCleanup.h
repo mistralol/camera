@@ -5,7 +5,8 @@ class RTSPServerCleanup : Thread
 		RTSPServerCleanup();
 		~RTSPServerCleanup();
 
-		void Init(GstRTSPServer *server);
+		void Start(GstRTSPServer *server);
+		void Stop();
 
 	private:
 		void Run();

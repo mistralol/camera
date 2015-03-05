@@ -70,11 +70,16 @@ int RTSPServer::SetPort(int port)
 		LogError("RTSPServer::SetPort(%d) - Value out of range <= 0 || > 65535", port);
 		return -EINVAL;
 	}
-
 	if (GetPort() == port)
 	{
 		LogInfo("RTSPServer::SetPort Port Already Set To %d - No work todo!", port);
 		return port;
+	}
+
+	if (port < 1024 && Caps::HasCap(CAP_NET_BIND_SERVICE) <= 0 && getuid() != 0)
+	{
+		LogInfo("RTSPServer::SetPort Don't have CAP_NET_BIND_SERVICE not trying to switch to port '%d'", port);
+		return -EPERM;
 	}
 
 	//Take a copy of our url + pipelines
@@ -236,7 +241,7 @@ void RTSPServer::Run()
 	}
 	else
 	{
-		PoolCleaner.Init(m_server);
+		PoolCleaner.Start(m_server);
 
 		m_startbar.WakeUp();
 
@@ -252,6 +257,8 @@ void RTSPServer::Run()
 			LogError("RTSPServer::Run - Failed to remove g_source");
 			abort();
 		}
+
+		PoolCleaner.Stop();
 	}
 
 	g_object_unref(m_server);
