@@ -61,6 +61,20 @@ void RTSPServer::PipelineRemove(const std::string url)
 	m_urls.erase(it);	
 }
 
+static GstRTSPFilterResult KickAllFilter (GstRTSPServer *server, GstRTSPClient *client, gpointer user_data)
+{
+	return GST_RTSP_FILTER_REMOVE;
+}
+
+void RTSPServer::KickAll()
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	//FIXME: This doesnt currently work in gst-rtsp-server 1.2
+	LogInfo("Kicking all RTSP Clients");
+	GList *lst = gst_rtsp_server_client_filter(m_server, KickAllFilter, NULL);
+	g_list_free(lst);
+}
+
 int RTSPServer::SetPort(int port)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);

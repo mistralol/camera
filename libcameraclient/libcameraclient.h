@@ -8,6 +8,8 @@ class CameraClient
 		bool Connect(const std::string ConnectionString);
 		void Disconnect();
 
+		int RTSPKickAll();
+
 		int RTSPGetPort(int *value);
 		int RTSPSetPort(int value);
 

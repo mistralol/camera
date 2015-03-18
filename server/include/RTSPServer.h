@@ -8,6 +8,8 @@ class RTSPServer : Thread
 		void PipelineAdd(const std::string url, const std::string pipeline);
 		void PipelineRemove(const std::string url);
 
+		void KickAll();
+
 		int SetPort(int port);
 		int GetPort();
 

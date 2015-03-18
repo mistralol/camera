@@ -10,6 +10,7 @@ class CameraServer : public IServerHandler
 		void Wait();
 		void Quit();
 
+		static int RTSPKickAll(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int RTSPGetClientCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

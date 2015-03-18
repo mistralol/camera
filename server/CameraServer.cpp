@@ -30,6 +30,12 @@ void CameraServer::Quit()
 	m_handler->Quit();
 }
 
+int CameraServer::RTSPKickAll(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	handler->RServer->KickAll();
+	return 0;
+}
+
 int CameraServer::RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	int value = handler->RServer->GetPort();

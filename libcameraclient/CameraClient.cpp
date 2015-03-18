@@ -33,6 +33,20 @@ void CameraClient::Disconnect()
 	m_Client = NULL;
 }
 
+int CameraClient::RTSPKickAll()
+{
+	PerfCounter PC("RTSPKickAll");
+	Request request;
+	Request response;
+
+	request.SetCommand("RTSPKickAll");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+
+	return ret;
+}
+
 int CameraClient::RTSPGetPort(int *value)
 {
 	if (m_Client == NULL)
