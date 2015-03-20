@@ -70,10 +70,8 @@ void RTSPServer::KickAll()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
 	LogInfo("Kicking all RTSP Clients");
-	//FIXME: This doesnt currently work in gst-rtsp-server 1.2
-	LogError("RTSPServer::KickAll - Not Implemented");
-	//GList *lst = gst_rtsp_server_client_filter(m_server, KickAllFilter, NULL);
-	//g_list_free(lst);
+	GList *lst = gst_rtsp_server_client_filter(m_server, KickAllFilter, NULL);
+	g_list_free(lst);
 }
 
 int RTSPServer::SetPort(int port)
@@ -114,6 +112,7 @@ int RTSPServer::SetPort(int port)
 	}
 
 	g_main_loop_quit(m_loop);
+
 	Thread::Stop();
 	m_startbar.Reset();
 
