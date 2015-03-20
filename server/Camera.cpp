@@ -196,7 +196,8 @@ int main(int argc, char **argv)
 
 	//Start Our Local Services
 	LogDebug("Service Listen On: %s", LocSocket.c_str());
-	ServerUnix Unix(LocSocket);
+	//ServerUnix Unix(LocSocket);
+	ServerUnixSelected Unix(LocSocket);
 	Manager->ServerAdd(&Unix);
 	Signals.UnBlock(); //Accept signals again
 	Server->Wait();
