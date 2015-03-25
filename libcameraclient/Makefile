@@ -40,7 +40,7 @@ libcameraclient_csharp.cxx: $(SRCS) libcameraclient.i .depend
 	if [ ! -e ../build/libCameraClientWrapper ] ; then ln -s ../build/libcameraclient_csharp.so ../build/libCameraClientWrapper ; fi
 
 ../build/CameraClient.dll: $(SRCS) libcameraclient_csharp.cxx
-	gmcs -t:library CameraClient.cs CameraClientWrapper.cs CameraClientWrapperPINVOKE.cs SWIGTYPE_p_std__string.cs SWIGTYPE_p_std__listT_std__string_t.cs -out:../build/CameraClient.dll
+	gmcs -t:library *.cs -out:../build/CameraClient.dll
 
 dep: .depend
 

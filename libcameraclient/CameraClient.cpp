@@ -313,7 +313,7 @@ int CameraClient::UserSetPassword(const std::string Username, const std::string 
 	return ret;
 }
 
-int CameraClient::UserList(std::list<std::string> *lst)
+int CameraClient::UserList(std::vector<std::string> &lst)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -326,9 +326,9 @@ int CameraClient::UserList(std::list<std::string> *lst)
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
-	if (response.GetListString("value", lst) == false)
+	if (response.GetVectorString("value", &lst) == false)
 		return -1;
-	return lst->size();
+	return lst.size();
 }
 
 int CameraClient::GroupCreate(const std::string Group)
@@ -436,7 +436,7 @@ int CameraClient::GroupUserRemove(const std::string Group, const std::string Use
 	return ret;
 }
 
-int CameraClient::GroupList(std::list<std::string> *lst)
+int CameraClient::GroupList(std::vector<std::string> &lst)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -449,12 +449,12 @@ int CameraClient::GroupList(std::list<std::string> *lst)
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
-	if (response.GetListString("value", lst) == false)
+	if (response.GetVectorString("value", &lst) == false)
 		return -1;
-	return lst->size();
+	return lst.size();
 }
 
-int CameraClient::GroupListUsers(const std::string Group, std::list<std::string> *lst)
+int CameraClient::GroupListUsers(const std::string Group, std::vector<std::string> &lst)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -468,9 +468,9 @@ int CameraClient::GroupListUsers(const std::string Group, std::list<std::string>
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
-	if (response.GetListString("value", lst) == false)
+	if (response.GetVectorString("value", &lst) == false)
 		return -1;
-	return lst->size();
+	return lst.size();
 }
 
 std::string CameraClient::Version()

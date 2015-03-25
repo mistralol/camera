@@ -5,6 +5,8 @@ namespace WebUI.Code
 {
 	public class CameraMemberShipProvider : System.Web.Security.MembershipProvider
 	{
+		private CameraClient Camera;
+
 		public CameraMemberShipProvider ()
 		{
 
@@ -12,18 +14,14 @@ namespace WebUI.Code
 
 		public override void Initialize (string name, System.Collections.Specialized.NameValueCollection config)
 		{
+			Camera = new CameraClient();
+			Camera.Connect("unix:/tmp/CameraServer");
 			base.Initialize (name, config);
 		}
 
 		public override string Name {
 			get {
-				return base.Name;
-			}
-		}
-
-		public override string Description {
-			get {
-				return base.Description;
+				return "CameraMemberShipProvider";
 			}
 		}
 
@@ -36,29 +34,42 @@ namespace WebUI.Code
 			}
 		}
 
+		public override string Description {
+			get {
+				return "Camera MemberShip Provider";
+			}
+		}
+
 		public override bool ChangePassword (string name, string oldPwd, string newPwd)
 		{
-			throw new NotImplementedException ();
+			int ret = Camera.UserAuth (name, oldPwd);
+			if (ret < 0)
+				throw(new Exception ());
+			if (ret == 0)
+				return false;
+			return true;
 		}
 
 		public override bool ChangePasswordQuestionAndAnswer (string name, string password, string newPwdQuestion, string newPwdAnswer)
 		{
-			throw new NotImplementedException ();
+			throw(new NotSupportedException ());
 		}
 
 		public override MembershipUser CreateUser (string username, string password, string email, string pwdQuestion, string pwdAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
 		{
-			throw new NotImplementedException ();
-		}
-
-		protected override byte[] DecryptPassword (byte[] encodedPassword)
-		{
-			return base.DecryptPassword (encodedPassword);
+			int ret = Camera.UserCreate (username, password);
+			if (ret < 0)
+				throw(new Exception ());
+			status = MembershipCreateStatus.Success;
+			MembershipUser tmp = new MembershipUser (this.Name, username, username, email, "", "", true, false, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.MinValue);
+			return tmp;
 		}
 
 		public override bool DeleteUser (string name, bool deleteAllRelatedData)
 		{
-			throw new NotImplementedException ();
+			if (Camera.UserDelete (name) < 0)
+				throw(new Exception ());
+			return true;
 		}
 
 		public override bool EnablePasswordReset {
@@ -73,19 +84,12 @@ namespace WebUI.Code
 			}
 		}
 
-		protected override byte[] EncryptPassword (byte[] password)
-		{
-			return base.EncryptPassword (password);
-		}
-
-		protected override byte[] EncryptPassword (byte[] password, System.Web.Configuration.MembershipPasswordCompatibilityMode legacyPasswordCompatibilityMode)
-		{
-			return base.EncryptPassword (password, legacyPasswordCompatibilityMode);
-		}
-
 		public override MembershipUserCollection FindUsersByEmail (string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
 		{
-			throw new NotImplementedException ();
+			//We dont use email
+			MembershipUserCollection col = new MembershipUserCollection();
+			totalRecords = 0;
+			return col;
 		}
 
 		public override MembershipUserCollection FindUsersByName (string nameToMatch, int pageIndex, int pageSize, out int totalRecords)
@@ -95,17 +99,20 @@ namespace WebUI.Code
 
 		public override MembershipUserCollection GetAllUsers (int pageIndex, int pageSize, out int totalRecords)
 		{
+			MembershipUserCollection col = new MembershipUserCollection ();
+
 			throw new NotImplementedException ();
+			return col;
 		}
 
 		public override int GetNumberOfUsersOnline ()
 		{
-			throw new NotImplementedException ();
+			return 0;
 		}
 
 		public override string GetPassword (string name, string answer)
 		{
-			throw new NotImplementedException ();
+			throw(new NotSupportedException ());
 		}
 
 		public override MembershipUser GetUser (object providerUserKey, bool userIsOnline)
@@ -125,37 +132,37 @@ namespace WebUI.Code
 
 		public override int MaxInvalidPasswordAttempts {
 			get {
-				throw new NotImplementedException ();
+				return 5;
 			}
 		}
 
 		public override int MinRequiredNonAlphanumericCharacters {
 			get {
-				throw new NotImplementedException ();
+				return 0;
 			}
 		}
 
 		public override int MinRequiredPasswordLength {
 			get {
-				throw new NotImplementedException ();
+				return 5;
 			}
 		}
 
 		public override int PasswordAttemptWindow {
 			get {
-				throw new NotImplementedException ();
+				return 5;
 			}
 		}
 
 		public override MembershipPasswordFormat PasswordFormat {
 			get {
-				throw new NotImplementedException ();
+				return MembershipPasswordFormat.Hashed;
 			}
 		}
 
 		public override string PasswordStrengthRegularExpression {
 			get {
-				throw new NotImplementedException ();
+				return "";
 			}
 		}
 
@@ -167,28 +174,33 @@ namespace WebUI.Code
 
 		public override bool RequiresUniqueEmail {
 			get {
-				return true;
+				return false;
 			}
 		}
 
 		public override string ResetPassword (string name, string answer)
 		{
-			throw new NotImplementedException ();
+			throw(new NotSupportedException ());
 		}
 
 		public override bool UnlockUser (string userName)
 		{
-			throw new NotImplementedException ();
+			throw(new NotSupportedException ());
 		}
 
 		public override void UpdateUser (MembershipUser user)
 		{
-			throw new NotImplementedException ();
+			throw(new NotSupportedException ());
 		}
 
 		public override bool ValidateUser (string name, string password)
 		{
-			throw new NotImplementedException ();
+			int ret = Camera.UserAuth (name, password);
+			if (ret < 0)
+				throw(new Exception ());
+			if (ret == 0)
+				return false;
+			return true;
 		}
 	}
 }

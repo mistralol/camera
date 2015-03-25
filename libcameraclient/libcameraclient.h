@@ -32,7 +32,7 @@ class CameraClient
 		int UserDelete(const std::string Username);
 		int UserExists(const std::string Username);
 		int UserSetPassword(const std::string Username, const std::string Password);
-		int UserList(std::list<std::string> *lst);
+		int UserList(std::vector<std::string> &lst);
 
 		int GroupCreate(const std::string Group);
 		int GroupDelete(const std::string Group);
@@ -40,8 +40,8 @@ class CameraClient
 		int GroupIsUserInGroup(const std::string Group, const std::string User, int *result);
 		int GroupUserAdd(const std::string Group, const std::string User);
 		int GroupUserRemove(const std::string Group, const std::string User);
-		int GroupList(std::list<std::string> *lst);
-		int GroupListUsers(const std::string Group, std::list<std::string> *lst);
+		int GroupList(std::vector<std::string> &lst);
+		int GroupListUsers(const std::string Group, std::vector<std::string> &lst);
 
 		int Version(std::string *str);
 		std::string Version();
