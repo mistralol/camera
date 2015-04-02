@@ -18,7 +18,15 @@ CameraClient::~CameraClient()
 
 bool CameraClient::Connect(const std::string ConnectionString)
 {
+	struct timespec soft = {120, 0};
+	struct timespec hard = {300, 0};
+	struct timespec reconnect = {5, 0};
 	m_Client = Client::Create(ConnectionString);
+
+	m_Client->SetSoftTimeout(&soft);
+	m_Client->SetHardTimeout(&hard);
+	m_Client->SetReConnectDelay(&reconnect);
+
 	m_Client->Connect();
 	m_Client->WaitForConnect();
 	return true;
