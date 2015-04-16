@@ -26,21 +26,24 @@ VideoStreamCount,	CameraServer::VideoStreamCount
 VideoStreamSetEnabled,	CameraServer::VideoStreamSetEnabled
 VideoStreamGetEnabled,	CameraServer::VideoStreamGetEnabled
 #####
-UserCreate
-UserAuth
-UserDelete
-UserExists
-UserSetPassword
-UserList
+UserCreate,		CameraServer::UserCreate
+UserAuth,		CameraServer::UserAuth
+UserDelete,		CameraServer::UserDelete
+UserExists,		CameraServer::UserExists
+UserSetPassword,	CameraServer::UserSetPassword
+UserList,		CameraServer::UserList
 #####
-GroupCreate
-GroupDelete
-GroupExists
-GroupIsUserInGroup
-GroupUserAdd
-GroupUserRemove
-GroupList
-GroupListUsers
+GroupCreate,		CameraServer::GroupCreate
+GroupDelete,		CameraServer::GroupDelete
+GroupExists,		CameraServer::GroupExists
+GroupIsUserInGroup,	CameraServer::GroupIsUserInGroup
+GroupUserAdd,		CameraServer::GroupUserAdd
+GroupUserRemove,	CameraServer::GroupUserRemove
+GroupList,		CameraServer::GroupList
+GroupListUsers,		CameraServer::GroupListUsers
+#####
+SystemReboot,		System::Reboot
+SystemShutdown,		System::Shutdown
 #####
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping

@@ -5,6 +5,7 @@ SRCS=	Config.cpp \
 	Camera.cpp \
 	CameraHandler.cpp \
 	CameraServer.cpp \
+	System.cpp \
 	RTSPServer.cpp \
 	RTSPServerCleanup.cpp \
 	GstUtil.cpp \

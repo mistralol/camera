@@ -21,7 +21,9 @@ SRCS=Quit.cpp \
 	RTSPGetMaxClients.cpp \
 	VideoStreamCount.cpp \
 	VideoStreamSetEnabled.cpp \
-	VideoStreamGetEnabled.cpp
+	VideoStreamGetEnabled.cpp \
+	SystemReboot.cpp \
+	SystemShutdown.cpp
 
 EXES=$(SRCS:%.cpp=%)
 

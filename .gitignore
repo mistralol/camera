@@ -36,6 +36,8 @@ RTSPSetPort
 VideoStreamCount
 VideoStreamGetEnabled
 VideoStreamSetEnabled
+SystemReboot
+SystemShutdown
 build
 WebUI.userprefs
 bin

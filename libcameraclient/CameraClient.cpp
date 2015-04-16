@@ -481,6 +481,32 @@ int CameraClient::GroupListUsers(const std::string Group, std::vector<std::strin
 	return lst.size();
 }
 
+int CameraClient::SystemReboot()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("SystemReboot");
+	Request request;
+	Request response;
+
+	request.SetCommand("SystemReboot");
+
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::SystemShutdown()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("SystemShutdown");
+	Request request;
+	Request response;
+
+	request.SetCommand("SystemShutdown");
+
+	return m_Client->SendRequest(&request, &response);
+}
+
 std::string CameraClient::Version()
 {
 	std::string str = "";

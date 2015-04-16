@@ -43,6 +43,9 @@ class CameraClient
 		int GroupList(std::vector<std::string> &lst);
 		int GroupListUsers(const std::string Group, std::vector<std::string> &lst);
 
+		int SystemReboot();
+		int SystemShutdown();
+
 		int Version(std::string *str);
 		std::string Version();
 
