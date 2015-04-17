@@ -46,4 +46,7 @@ using namespace liblogger;
 #include <CameraServer.h>
 #include <System.h>
 
+extern Timers *CameraTimers;
+
+
 

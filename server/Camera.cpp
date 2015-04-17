@@ -1,6 +1,8 @@
 
 #include <Camera.h>
 
+Timers *CameraTimers = NULL;
+
 void print_help(FILE *fp, const char *app)
 {
 	fprintf(fp, "Usage: %s <options>\n", app);
@@ -186,6 +188,8 @@ int main(int argc, char **argv)
 		}
 	}
 
+	CameraTimers = new Timers();
+	CameraTimers->Start();
 
 	//Init Handler (This is the "system" init call)
 	Server = new CameraServer();
@@ -212,6 +216,8 @@ int main(int argc, char **argv)
 	//Cleanup!
 	delete Server;
 	delete Manager;
+	CameraTimers->Stop();
+	delete CameraTimers;
 	delete PidFile;
 	LogManager::RemoveAll(true);
 	return 0;

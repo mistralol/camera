@@ -68,10 +68,16 @@ static GstRTSPFilterResult KickAllFilter (GstRTSPServer *server, GstRTSPClient *
 
 void RTSPServer::KickAll()
 {
+	TimerAbort abrt = TimerAbort(120);
+	CameraTimers->Add(&abrt); //This hangs sometime because of a bug in gst-rtsp-server
+
 	ScopedLock lock = ScopedLock(&m_mutex);
-	LogInfo("Kicking all RTSP Clients");
+	LogInfo("RTSPServer::KickAll all RTSP Clients");
 	GList *lst = gst_rtsp_server_client_filter(m_server, KickAllFilter, NULL);
 	g_list_free(lst);
+	LogInfo("RTSPServer::KickAll Finished");
+
+	CameraTimers->Remove(&abrt);
 }
 
 int RTSPServer::SetPort(int port)
