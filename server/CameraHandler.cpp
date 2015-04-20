@@ -5,6 +5,11 @@ CameraHandler::CameraHandler()
 {
 	LogDebug("CameraHandler::CameraHandler");
 	gst_init (0, NULL);
+
+	guint major, minor, micro, nano;
+	gst_version(&major, &minor, &micro, &nano);
+	LogInfo("Gstreamer Version: %u.%u.%u.%u", major, minor, micro, nano);
+
 }
 
 CameraHandler::~CameraHandler()
