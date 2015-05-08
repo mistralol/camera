@@ -28,7 +28,7 @@ all: ../build/camera
 
 
 CameraServerFunctions.i: CameraServerFunctions.gperf
-	gperf -tCG CameraServerFunctions.gperf > CameraServerFunctions.i
+	gperf -tCG CameraServerFunctions.gperf > CameraServerFunctions.i || rm -f CameraServerFunctions.i
 
 %.o: %.cpp Makefile CameraServerFunctions.i
 	$(CPP) $(CPP_OPTS) $(INCLUDE) -o $@ -c $<
