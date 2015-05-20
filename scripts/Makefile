@@ -4,9 +4,12 @@ CPP_OPTS+=-Wall -ggdb -std=c++11
 MKDEP=gcc -E -MM
 INCLUDE+=-I../libcameraclient
 INCLUDE+=-I../../libclientserver/include
-INCLUDE+=-I../../liblogger/include
-LIBS+=../build/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a -pthread
-DEPS+=../build/libcameraclient.a ../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
+LIBS+=../build/libcameraclient.a ../../libclientserver/libclientserver.a -pthread
+DEPS+=../build/libcameraclient.a ../../libclientserver/libclientserver.a
+
+#liblogger
+INCLUDE+=$(shell pkg-config --cflags liblogger)
+LIBS+=$(shell pkg-config --libs liblogger)
 
 SRCS=Quit.cpp \
 	Ping.cpp \

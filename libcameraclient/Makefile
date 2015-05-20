@@ -1,8 +1,10 @@
 
-INCLUDE+=-I. -I../../libclientserver/include -I../../liblogger/include
-INCLUDE+=
+INCLUDE+=-I. -I../../libclientserver/include
+LIBS+=../../libclientserver/libclientserver.a
 
-LIBS+=../../liblogger/liblogger.a ../../libclientserver/libclientserver.a
+#liblogger
+INCLUDE+=$(shell pkg-config --cflags liblogger)
+LIBS+=$(shell pkg-config --libs liblogger)
 
 CPP=g++
 CPP_OPTS+=-Wall -ggdb -std=c++11 -fpic
@@ -27,7 +29,7 @@ all: ../build/libcameraclient.so ../build/libcameraclient.a ../build/libcameracl
 libcameraclient_python.cxx: $(SRCS) libcameraclient.i .depend
 	swig -Wall -c++ -o libcameraclient_python.cxx -python libcameraclient.i
 
-../build/libcameraclient_python.so: libcameraclient_python.cxx ../build/libcameraclient.a $(LIBS)
+../build/libcameraclient_python.so: libcameraclient_python.cxx ../build/libcameraclient.a
 	$(CPP) -shared -ggdb -Wall -fPIC libcameraclient_python.cxx ../build/libcameraclient.a $(LIBS) $(INCLUDE) -I/usr/include/python2.7 -o $@
 	if [ ! -e ../build/_CameraClientWrapper.so ] ; then ln -s ../build/libcameraclient_python.so ../build/_CameraClientWrapper.so ; fi
 
@@ -35,7 +37,7 @@ libcameraclient_python.cxx: $(SRCS) libcameraclient.i .depend
 libcameraclient_csharp.cxx: $(SRCS) libcameraclient.i .depend
 	swig -Wall -c++ -o libcameraclient_csharp.cxx -csharp libcameraclient.i
 
-../build/libcameraclient_csharp.so: libcameraclient_csharp.cxx ../build/libcameraclient.a $(LIBS)
+../build/libcameraclient_csharp.so: libcameraclient_csharp.cxx ../build/libcameraclient.a
 	$(CPP) -shared -ggdb -Wall -fPIC libcameraclient_csharp.cxx ../build/libcameraclient.a $(LIBS) $(INCLUDE) -o $@
 	if [ ! -e ../build/libCameraClientWrapper ] ; then ln -s ../build/libcameraclient_csharp.so ../build/libCameraClientWrapper ; fi
 
