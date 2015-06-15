@@ -1,10 +1,12 @@
 
-INCLUDE+=-I. -I../../libclientserver/include
-LIBS+=../../libclientserver/libclientserver.a
+INCLUDE+=-I.
 
 #liblogger
 INCLUDE+=$(shell pkg-config --cflags liblogger)
 LIBS+=$(shell pkg-config --libs liblogger)
+
+INCLUDE+=$(shell pkg-config --cflags libclientserver)
+LIBS+=$(shell pkg-config --libs libclientserver)
 
 CPP=g++
 CPP_OPTS+=-Wall -ggdb -std=c++11 -fpic
