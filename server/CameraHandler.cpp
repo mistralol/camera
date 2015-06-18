@@ -31,6 +31,9 @@ CameraHandler::~CameraHandler()
 		delete config;
 	}
 
+	WServer->Stop();
+	delete WServer;
+
 	delete Cfg;
 	delete m_Platform;
 	delete RServer;
