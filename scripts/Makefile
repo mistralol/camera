@@ -29,6 +29,11 @@ SRCS=Quit.cpp \
 	VideoStreamCount.cpp \
 	VideoStreamSetEnabled.cpp \
 	VideoStreamGetEnabled.cpp \
+	WebServerSetEnabled.cpp \
+	WebServerGetEnabled.cpp \
+	WebServerGetPort.cpp \
+	WebServerSetPort.cpp \
+	WebServerRestart.cpp \
 	SystemReboot.cpp \
 	SystemShutdown.cpp
 

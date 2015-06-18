@@ -481,6 +481,80 @@ int CameraClient::GroupListUsers(const std::string Group, std::vector<std::strin
 	return lst.size();
 }
 
+int CameraClient::WebServerGetPort(int *port)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerGetPort");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerGetPort");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("port", port) == false)
+		return -EINVAL;
+
+	return ret;
+}
+
+int CameraClient::WebServerSetPort(int port)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerSetPort");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerSetPort");
+	request.SetArg("port", port);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::WebServerGetEnabled(int *enabled)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerGetEnabled");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerGetEnabled");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("enabled", enabled) == false)
+		return -EINVAL;
+		
+	return 0;
+}
+
+int CameraClient::WebServerSetEnabled(bool enabled)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerSetEnabled");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerSetEnabled");
+	request.SetArg("enabled", enabled);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::WebServerRestart()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerRestart");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerRestart");
+	return m_Client->SendRequest(&request, &response);	
+}
+
 int CameraClient::SystemReboot()
 {
 	if (m_Client == NULL)

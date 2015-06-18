@@ -41,6 +41,8 @@ using namespace liblogger;
 
 #include <Platform/Example.h>
 
+#include <WebServer.h>
+
 #include <Config.h>
 #include <CameraHandler.h>
 #include <CameraServer.h>

@@ -415,6 +415,53 @@ int CameraServer::GroupListUsers(CameraHandler *handler, IServerConnection *Conn
 	return lst.size();
 }
 
+int CameraServer::WebServerGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int port = handler->WServer->GetPort();
+	response->SetArg("port", port);
+	return 0;
+}
+
+int CameraServer::WebServerSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int port = -1;
+
+	if (request->GetInt("port", &port) == false)
+	{
+		LogError("CameraServer::WebServerSetPort Failed - Paramater '%s' is missing", request->HasArg("port") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	return handler->WServer->SetPort(port);
+}
+
+int CameraServer::WebServerGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	bool enabled = handler->WServer->GetEnabled();
+	response->SetArg("enabled", enabled);
+	return 0;
+}
+
+int CameraServer::WebServerSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	bool enabled = false;
+
+	if (request->GetBool("enabled", &enabled) == false)
+	{
+		LogError("CameraServer::WebServerSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	handler->WServer->SetEnabled(enabled);
+	return 0;
+}
+
+int CameraServer::WebServerRestart(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	handler->WServer->Restart();
+	return 0;
+}
+
 int CameraServer::Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	LogDebug("CameraServer::Version");

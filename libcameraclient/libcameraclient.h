@@ -43,6 +43,12 @@ class CameraClient
 		int GroupList(std::vector<std::string> &lst);
 		int GroupListUsers(const std::string Group, std::vector<std::string> &lst);
 
+		int WebServerGetPort(int *port);
+		int WebServerSetPort(int port);
+		int WebServerGetEnabled(int *enabled);
+		int WebServerSetEnabled(bool enabled);
+		int WebServerRestart();
+
 		int SystemReboot();
 		int SystemShutdown();
 

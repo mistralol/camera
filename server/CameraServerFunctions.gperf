@@ -42,6 +42,12 @@ GroupUserRemove,	CameraServer::GroupUserRemove
 GroupList,		CameraServer::GroupList
 GroupListUsers,		CameraServer::GroupListUsers
 #####
+WebServerGetPort,	CameraServer::WebServerGetPort
+WebServerSetPort,	CameraServer::WebServerSetPort
+WebServerGetEnabled,	CameraServer::WebServerGetEnabled
+WebServerSetEnabled,	CameraServer::WebServerSetEnabled
+WebServerRestart,	CameraServer::WebServerRestart
+#####
 SystemReboot,		System::Reboot
 SystemShutdown,		System::Shutdown
 #####

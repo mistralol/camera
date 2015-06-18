@@ -9,6 +9,9 @@ CameraHandler::CameraHandler()
 	guint major, minor, micro, nano;
 	gst_version(&major, &minor, &micro, &nano);
 	LogInfo("Gstreamer Version: %u.%u.%u.%u", major, minor, micro, nano);
+	
+	WServer = NULL;
+	RServer = NULL;
 
 }
 
@@ -41,7 +44,8 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	LogDebug("CameraHandler::Init(\"%s\", \"%s\")", Platform.c_str(), CfgFile.c_str());
 	m_CfgFile = CfgFile;
 
-	//Start RTSP Service
+	//Start Various Services
+	WServer = new WebServer();
 	RServer = new RTSPServer();
 
 	m_Platform = Platform::Create(Platform);
@@ -120,6 +124,9 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		}
 		it++;
 	}
+	
+	//Load WebService Last
+	WServer->Start();
 }
 
 bool CameraHandler::ConfigLoad(Json::Value &json)
@@ -141,6 +148,10 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 
 	if (json.isMember("rtspserver"))
 		if (RServer->ConfigLoad(json["rtspserver"]) == false)
+			return false;
+			
+	if (json.isMember("webserver"))
+		if (WServer->ConfigLoad(json["webserver"]) == false)
 			return false;
 
 	ScopedLock VideoLock(&m_VideoMutex);
@@ -199,6 +210,9 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 		return false;
 
 	if (Group::ConfigSave(json["groups"]) == false)
+		return false;
+
+	if (WServer->ConfigSave(json["webserver"]) == false)
 		return false;
 
 	return true;

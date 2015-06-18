@@ -21,6 +21,7 @@ class CameraHandler
 		void Quit();
 
 
+		WebServer *WServer;
 		RTSPServer *RServer;
 		Config *Cfg;
 
@@ -28,7 +29,7 @@ class CameraHandler
 		Barrier m_QuitBarrier;
 
 		PlatformBase *m_Platform;
-		
+	
 		//Config Stuff
 		std::string m_CfgFile;
 		Mutex m_ConfigMutex;

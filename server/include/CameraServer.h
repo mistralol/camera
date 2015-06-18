@@ -39,6 +39,12 @@ class CameraServer : public IServerHandler
 		static int GroupList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int GroupListUsers(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
+		static int WebServerGetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int WebServerSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int WebServerGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int WebServerSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int WebServerRestart(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+
 		static int Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Ping(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Quit(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
