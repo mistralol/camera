@@ -432,7 +432,11 @@ int CameraServer::WebServerSetPort(CameraHandler *handler, IServerConnection *Co
 		return -EINVAL;
 	}
 
-	return handler->WServer->SetPort(port);
+	int ret = handler->WServer->SetPort(port);
+	if (ret <= 0)
+		return ret;
+	handler->Cfg->Dirty();
+	return ret;
 }
 
 int CameraServer::WebServerGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
@@ -453,6 +457,7 @@ int CameraServer::WebServerSetEnabled(CameraHandler *handler, IServerConnection 
 	}
 
 	handler->WServer->SetEnabled(enabled);
+	handler->Cfg->Dirty();
 	return 0;
 }
 

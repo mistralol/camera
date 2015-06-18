@@ -1,5 +1,5 @@
 
-class WebServer
+class WebServer : private Thread
 {
 	public:
 		WebServer();
@@ -19,8 +19,11 @@ class WebServer
 		int GetPort();
 		
 	private:
+		void Run(); //Monitoring Thread
+	
 		Mutex m_mutex;
 		bool m_enabled;
 		int m_port;
+		pid_t m_pid;
 		
 };
