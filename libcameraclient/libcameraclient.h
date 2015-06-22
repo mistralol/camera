@@ -47,6 +47,8 @@ class CameraClient
 		int WebServerSetPort(int port);
 		int WebServerGetEnabled(int *enabled);
 		int WebServerSetEnabled(bool enabled);
+		int WebServerGetProperty(const std::string key, const std::string def, std::string *value);
+		int WebServerSetProperty(const std::string key, const std::string value);
 		int WebServerRestart();
 
 		int SystemReboot();

@@ -461,6 +461,53 @@ int CameraServer::WebServerSetEnabled(CameraHandler *handler, IServerConnection 
 	return 0;
 }
 
+int CameraServer::WebServerGetProperty(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string key = "";
+	std::string value = "";
+	std::string def = ""; //Optional
+	
+	if (request->GetString("key", &key) == false)
+	{
+		LogError("CameraServer::WebServerGetProperty - Missing argument 'key': %s", request->HasArg("key") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (request->GetString("def", &def) == true)
+	{
+		value = handler->WServer->GetProperty(key, def);
+	}
+	else
+	{
+		value = handler->WServer->GetProperty(key);
+	}
+
+	response->SetArg("value", value);
+	return 0;
+}
+
+int CameraServer::WebServerSetProperty(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string key = "";
+	std::string value = "";
+	
+	if (request->GetString("key", &key) == false)
+	{
+		LogError("CameraServer::WebServerSetProperty - Missing argument 'key': %s", request->HasArg("key") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (request->GetString("value", &value) == false)
+	{
+		LogError("CameraServer::WebServerSetProperty - Missing argument 'value': %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	handler->WServer->SetProperty(key, value);
+	handler->Cfg->Dirty();
+	return 0;
+}
+
+
 int CameraServer::WebServerRestart(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	handler->WServer->Restart();

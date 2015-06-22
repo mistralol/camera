@@ -16,7 +16,7 @@ WebServer::~WebServer()
 bool WebServer::ConfigLoad(Json::Value &json)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
-	
+	m_props.clear();
 	
 	if (json.isMember("enabled") && json["enabled"].isBool())
 		SetEnabled(json["enabled"].asBool());
@@ -30,6 +30,18 @@ bool WebServer::ConfigLoad(Json::Value &json)
 		}
 	}
 	
+	if (json.isMember("props"))
+	{
+		Json::Value &props = json["props"];
+		for(unsigned int idx = 0; idx < props.size(); idx++)
+		{
+			std::string key = props[idx].asString();
+			std::string value = props[key].asString();
+			m_props[key] = value;
+		}
+
+	}
+	
 	return true;
 }
 
@@ -40,6 +52,13 @@ bool WebServer::ConfigSave(Json::Value &json)
 
 	json["enabled"] = GetEnabled();
 	json["port"] = GetPort();
+	
+	for(std::map<std::string, std::string>::iterator it = m_props.begin(); it != m_props.end(); it++)
+	{
+		json["props"][it->first] = it->second;
+	}
+
+	
 	return true;
 }
 		
@@ -150,6 +169,30 @@ int WebServer::GetPort()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
 	return m_port;
+}
+
+std::string WebServer::GetProperty(const std::string key)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	std::map<std::string, std::string>::iterator it = m_props.find(key);
+	if (it == m_props.end())
+		return "";
+	return it->second;
+}
+
+std::string WebServer::GetProperty(const std::string key, const std::string def)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	std::map<std::string, std::string>::iterator it = m_props.find(key);
+	if (it == m_props.end())
+		return def;
+	return it->second;
+}
+
+void WebServer::SetProperty(const std::string key, const std::string value)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	m_props[key] = value;
 }
 
 void WebServer::Run()

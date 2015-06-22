@@ -543,6 +543,37 @@ int CameraClient::WebServerSetEnabled(bool enabled)
 	return m_Client->SendRequest(&request, &response);
 }
 
+int CameraClient::WebServerGetProperty(const std::string key, const std::string def, std::string *value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerGetProperty");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerGetProperty");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetString("value", value) == false)
+		return -EINVAL;
+	return 0;
+}
+
+int CameraClient::WebServerSetProperty(const std::string key, const std::string value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebServerSetProperty");
+	Request request;
+	Request response;
+	
+	request.SetCommand("WebServerSetProperty");
+	request.SetArg("key", key);
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
 int CameraClient::WebServerRestart()
 {
 	if (m_Client == NULL)

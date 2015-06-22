@@ -18,6 +18,10 @@ class WebServer : private Thread
 		int SetPort(int port);
 		int GetPort();
 		
+		std::string GetProperty(const std::string key);
+		std::string GetProperty(const std::string key, const std::string def);
+		void SetProperty(const std::string key, const std::string value);
+		
 	private:
 		void Run(); //Monitoring Thread
 	
@@ -25,5 +29,6 @@ class WebServer : private Thread
 		bool m_enabled;
 		int m_port;
 		pid_t m_pid;
+		std::map<std::string, std::string> m_props;
 		
 };

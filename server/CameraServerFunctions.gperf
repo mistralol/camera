@@ -46,6 +46,8 @@ WebServerGetPort,	CameraServer::WebServerGetPort
 WebServerSetPort,	CameraServer::WebServerSetPort
 WebServerGetEnabled,	CameraServer::WebServerGetEnabled
 WebServerSetEnabled,	CameraServer::WebServerSetEnabled
+WebServerGetProperty,	CameraServer::WebServerGetProperty
+WebServerSetProperty,	CameraServer::WebServerSetProperty
 WebServerRestart,	CameraServer::WebServerRestart
 #####
 SystemReboot,		System::Reboot

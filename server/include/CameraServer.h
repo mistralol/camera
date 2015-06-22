@@ -43,6 +43,8 @@ class CameraServer : public IServerHandler
 		static int WebServerSetPort(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int WebServerGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int WebServerSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int WebServerGetProperty(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int WebServerSetProperty(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int WebServerRestart(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
 		static int Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
