@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Security;
 
-namespace WebUI.Code
+namespace WebUI.Code.Providers
 {
 	public class CameraRoleProvider : RoleProvider
 	{

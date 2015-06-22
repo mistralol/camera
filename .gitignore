@@ -15,6 +15,10 @@
 .depend
 *.exe
 *.bak
+
+#Ignore certain visual studio files
+*.suo
+
 SWIGTYPE_p_std__string.cs
 SWIGTYPE_p_std__listT_std__string_t.cs
 SWIGTYPE_p_bool.cs

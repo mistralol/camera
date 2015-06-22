@@ -1,7 +1,7 @@
 using System;
 using System.Web.Security;
 
-namespace WebUI.Code
+namespace WebUI.Code.Providers
 {
 	public class CameraMemberShipProvider : System.Web.Security.MembershipProvider
 	{
@@ -16,7 +16,7 @@ namespace WebUI.Code
 		{
 			Camera = new CameraClient();
 			Camera.Connect("unix:/tmp/CameraServer");
-			base.Initialize (name, config);
+			//base.Initialize (name, config);
 		}
 
 		public override string Name {

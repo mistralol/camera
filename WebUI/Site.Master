@@ -1,0 +1,44 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="WebUI.Site1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <asp:Panel runat="server" ID="pnlAdmin">
+            <a href="/Admin/Default.aspx">Admin</a>
+            <ul>
+                <li><a href="/Admin/Users.aspx">Users</a></li>
+                <li>Groups</li>
+                <li>Logs</li>
+            </ul>
+        </asp:Panel>
+
+        <asp:Panel runat="server" ID="pnlConfig">
+            <a href="/Config/Default.aspx">Config</a>
+            <ul>
+                <li><a href="/Config/VideoStream.aspx">Video Streams</a></li>
+                <li><a href="/Config/AudioStream.aspx">Audio Streams</a></li>
+            </ul>
+        </asp:Panel>
+
+        <ul>
+            <li><a href="/Logout.aspx">Logout</a></li>
+        </ul>
+
+    </div>
+
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>
