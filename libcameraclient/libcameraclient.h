@@ -59,6 +59,17 @@ class CameraClient
 
 		int Ping();
 		int Quit();
+		
+		int Log(const std::string Level, const std::string Message);
+		int LogDebug(const std::string Message);
+		int LogInfo(const std::string Message);
+		int LogNotice(const std::string Message);
+		int LogWarning(const std::string Message);
+		int LogError(const std::string Message);
+		int LogCritical(const std::string Message);
+		int LogAlert(const std::string Message);
+		int LogEmergency(const std::string Message);
+		
 
 	private:
 		ClientBase *m_Client;

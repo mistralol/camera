@@ -644,4 +644,59 @@ int CameraClient::Quit()
 	return m_Client->SendRequest(&request, &response);
 }
 
+int CameraClient::Log(const std::string Level, const std::string Message)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("LOG");
+	Request request;
+	Request response;
+	
+	request.SetCommand("LOG");
+	request.SetArg("Level", Level);
+	request.SetArg("Message", Message);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::LogDebug(const std::string Message)
+{
+	return Log("DEBUG", Message);
+}
+
+int CameraClient::LogInfo(const std::string Message)
+{
+	return Log("INFO", Message);
+}
+
+int CameraClient::LogNotice(const std::string Message)
+{
+	return Log("NOTICE", Message);
+}
+
+int CameraClient::LogWarning(const std::string Message)
+{
+	return Log("WARNING", Message);
+}
+
+int CameraClient::LogError(const std::string Message)
+{
+	return Log("ERROR", Message);
+}
+
+int CameraClient::LogCritical(const std::string Message)
+{
+	return Log("CRITICAL", Message);
+}
+
+int CameraClient::LogAlert(const std::string Message)
+{
+	return Log("ALERT", Message);
+}
+
+int CameraClient::LogEmergency(const std::string Message)
+{
+	return Log("EMERGENCY", Message);
+}
+
+
 

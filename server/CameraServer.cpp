@@ -534,6 +534,74 @@ int CameraServer::Quit(CameraHandler *handler, IServerConnection *Connection, Re
 	return 0;
 }
 
+int CameraServer::Log(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Level;
+	std::string Message;
+	if (request->GetString("Level", &Level) == false)
+	{
+		LogError("CameraServer::Log - Missing argument 'Level': %s", request->HasArg("Level") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (request->GetString("Message", &Message) == false)
+	{
+		LogError("CameraServer::Log - Missing argument 'Message': %s", request->HasArg("Message") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (Level == "DEBUG")
+	{
+		LogDebug("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "INFO")
+	{
+		LogInfo("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "NOTICE")
+	{
+		LogNotice("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "WARNING")
+	{
+		LogWarning("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "ERROR")
+	{
+		LogError("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "CRITICAL")
+	{
+		LogCritical("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "ALERT")
+	{
+		LogAlert("%s", Message.c_str());
+		return 0;
+	}
+	
+	if (Level == "EMERGENCY")
+	{
+		LogEmergency("%s", Message.c_str());
+		return 0;
+	}
+	
+	LogError("CameraServer::Log - Unknown Log Level: '%s' Message: %s", Level.c_str(), Message.c_str());
+	return -EINVAL;
+}
+
 void CameraServer::StatsDump()
 {
 	std::list<std::string> Keys = PerfManager::GetKeyList();

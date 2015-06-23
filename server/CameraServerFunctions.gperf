@@ -56,4 +56,5 @@ SystemShutdown,		System::Shutdown
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping
 QUIT,			CameraServer::Quit
+LOG,			CameraServer::Log
 #####
