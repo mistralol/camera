@@ -6,6 +6,7 @@ WebServer::WebServer()
 	m_enabled = true;
 	m_port = 8080;
 	m_pid = -1;
+	m_running = false;
 }
 
 WebServer::~WebServer()
@@ -67,55 +68,16 @@ void WebServer::Start()
 	ScopedLock lock = ScopedLock(&m_mutex);
 	if (m_enabled == false)
 		return;
-	LogInfo("WebServer Starting On Port %d", m_port);
 
-	if (m_pid >= 0)
+	if (Exec() == false)
 	{
-		LogCritical("WebServer::Start() - WebServer already started? aborting....");
-		abort(); //Invalid state tried to start server twice!
-	}
-	
-	//Build string for port for argument passing
-	std::stringstream ss;
-	ss << m_port;
-	std::string sport = ss.str();
-	
-	pid_t pid = fork();
-	if (pid < 0)
-	{
-		LogError("WebServer::Start() - fork() failed '%s'", strerror(errno));
+		LogError("WebServer::Start - Failed. Won't try again!");
 		return;
 	}
-
-	if (pid == 0)
-	{
-		//Child process. Start xsp4 to act as a web server
-		//FIXME: Hardcoded values
-		
-		//Close All fd's
-		for(int i=3;i<1024;i++)
-			close(i);
-		
-		//Restore all signals or mono freak's out!
-		sigset_t all;
-		if (sigfillset(&all) < 0)
-			abort();
-
-		if (sigprocmask(SIG_UNBLOCK, &all, NULL) < 0)
-			abort();
-			
-
-		
-		if (execl("/usr/bin/xsp4", "/usr/bin/xsp4", "--nonstop", "--root", "/home/james/src/camera/WebUI", "--port", sport.c_str(), NULL) < 0)
-		{
-			printf("execl failed: %s\n", strerror(errno));
-			abort();
-		}
-	}
-
+	
 	//Parent Prcoess - Start monitoring thread
-	LogInfo("WebServer Process Has pid %d", pid);
-	m_pid = pid;
+	LogInfo("WebServer process has been started with pid %d", m_pid);
+	m_running = true;
 	Thread::Start();
 	return;
 }
@@ -130,14 +92,26 @@ void WebServer::Stop()
 	{
 		LogError("WebServer::Stop() - Kill failed '%s'", strerror(errno));
 	}
+	m_running = false;
+	lock.Unlock();
 	Thread::Stop(); //Accept that m_pid is set to -1
 }
 
 void WebServer::Restart()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
-	Stop();
-	Start();
+	//Let Auto restart take care of starting it again
+	if (m_pid < 0)
+	{
+		LogError("WebServer::Restart - Refusing restart because pid %d", m_pid);
+		abort();
+	}
+	LogInfo("WebServer::Restart - Restarting WebServer");
+	if (kill(m_pid, 9) < 0)
+	{
+		LogError("WebServer::Stop() - Kill failed '%s'", strerror(errno));
+		abort();
+	}
 }
 
 void WebServer::SetEnabled(bool enabled)
@@ -195,35 +169,101 @@ void WebServer::SetProperty(const std::string key, const std::string value)
 	m_props[key] = value;
 }
 
+bool WebServer::Exec()
+{
+	LogInfo("WebServer Starting On Port %d", m_port);
+	if (m_pid >= 0)
+	{
+		LogCritical("WebServer::Start() - WebServer already started? aborting....");
+		abort(); //Invalid state tried to start server twice!
+	}
+
+	//Build string for port for argument passing
+	std::stringstream ss;
+	ss << m_port;
+	std::string sport = ss.str();
+	
+	pid_t pid = fork();
+	if (pid < 0)
+	{
+		LogError("WebServer::Start() - fork() failed '%s'", strerror(errno));
+		return false;
+	}
+
+	if (pid == 0)
+	{
+		//Child process. Start xsp4 to act as a web server
+		//FIXME: Hardcoded values
+		
+		//Close All fd's
+		for(int i=3;i<1024;i++)
+			close(i);
+		
+		//Restore all signals or mono freak's out!
+		sigset_t all;
+		if (sigfillset(&all) < 0)
+			abort();
+
+		if (sigprocmask(SIG_UNBLOCK, &all, NULL) < 0)
+			abort();
+			
+
+		
+		if (execl("/usr/bin/xsp4", "/usr/bin/xsp4", "--nonstop", "--root", "/home/james/src/camera/WebUI", "--port", sport.c_str(), NULL) < 0)
+		{
+			printf("execl failed: %s\n", strerror(errno));
+			abort();
+		}
+	}
+	m_pid = pid;
+	LogInfo("WebServer has new pid %d", m_pid);
+	return true;
+}
+
 void WebServer::Run()
 {
-	bool running = true;
 	int status = 0;
 
-	while(running)
+	while(1)
 	{
-		pid_t ret = waitpid(m_pid, &status, 0);
-		if (ret < 0)
+		if (m_pid >= 0)
 		{
-			switch(errno)
+			pid_t ret = waitpid(m_pid, &status, 0);
+			if (ret < 0)
 			{
-				case EINTR:
-					return;
-					break;
-				case ECHILD:
-					LogError("WebServer::Run() - waitpid failed '%s'", strerror(errno));
-					return;
-					break;
-				case EINVAL:
-					abort();
-					break;
+				switch(errno)
+				{
+					case EINTR:
+						continue;
+						break;
+					case ECHILD:
+						LogError("WebServer::Run() - waitpid failed '%s'", strerror(errno));
+						return;
+						break;
+					case EINVAL:
+						abort();
+						break;
+				}
+				LogError("WebServer::Run() - waitpid failed '%s'", strerror(errno));
+				continue;
 			}
-			LogError("WebServer::Run() - waitpid failed '%s'", strerror(errno));
-			continue;
 		}
+		ScopedLock lock = ScopedLock(&m_mutex);
 		m_pid = -1;
 		LogWarning("WebServer::Run() - WebServer exited");
-		return;
+		if (m_running == false)
+		{
+			LogDebug("WebServer::Run() - Monitor thread exiting");
+			return;
+		}
+		
+		LogInfo("WebServer::Run() - Restarting WebServer");
+		if (Exec() == false)
+		{
+			LogError("WebServer::Run - Failed to start web server");
+			lock.Unlock();
+			sleep(1);
+		}
 	}
 }
 
