@@ -16,6 +16,20 @@
                 padding: 0;
             }
 
+            #menu {
+                float: left;
+            }
+
+            .menu ul {
+                list-style: none;
+                padding: 10px;
+            }
+
+            .menu li {
+                list-style: none;
+                margin: 15px;
+            }
+
             #header {
                 background-color: #808080;
                 width: 100%;
@@ -25,8 +39,10 @@
                 vertical-align: central;
             }
 
-            #content {
+            #content > * {
                 float: left;
+                padding: 10px;
+                margin: 10px;
             }
 
         </style>
@@ -35,10 +51,10 @@
             Header
         </div>
 
-        <div id="content">
+        <div id="menu">
             <asp:Panel runat="server" ID="pnlAdmin">
                 <a href="/Admin/Default.aspx">Admin</a>
-                <ul>
+                <ul class="menu">
                     <li><a href="/Admin/Users.aspx">Users</a></li>
                     <li>Groups</li>
                     <li>Logs</li>
@@ -46,21 +62,31 @@
             </asp:Panel>
 
             <asp:Panel runat="server" ID="pnlConfig">
-                <a href="/Config/Default.aspx">Config</a>
-                <ul>
+                <a href="/Config/Default.aspx">Streams</a>
+                <ul class="menu">
                     <li><a href="/Config/VideoStream.aspx">Video Streams</a></li>
                     <li><a href="/Config/AudioStream.aspx">Audio Streams</a></li>
                 </ul>
+
+                <a href="/Config/Default.aspx">Network</a>
+                <ul class="menu">
+                    <li><a href="/Config/Network/Interfaces.aspx">Interfaces</a></li>
+                    <li><a href="/Config/Network/WebServer.aspx">Web Server</a></li>
+                    <li><a href="/Config/Network/RTSP.aspx">RTSP Server</a></li>
+                    <li><a href="/Config/Network/NTP.aspx">NTP Client</a></li>
+                </ul>
             </asp:Panel>
 
-            <ul>
+
+            <a href="/Users/Default.aspx">Misc</a>
+            <ul class="menu">
                 <li><a href="/Users/ChangePassword.aspx">Change Password</a></li>
                 <li><a href="/Logout.aspx">Logout</a></li>
             </ul>
 
         </div>
 
-        <div>
+        <div id="content">
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         
             </asp:ContentPlaceHolder>

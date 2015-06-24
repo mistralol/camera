@@ -4,9 +4,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using WebUI.Code;
+
 namespace WebUI.Admin
 {
-    public partial class Users : System.Web.UI.Page
+    public partial class Users : AppPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
