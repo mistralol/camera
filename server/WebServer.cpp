@@ -93,7 +93,7 @@ void WebServer::Stop()
 		LogError("WebServer::Stop() - Kill failed '%s'", strerror(errno));
 	}
 	m_running = false;
-	lock.Unlock();
+	lock.Unlock(); //We must unlock or we will deadlock waiting forever for the thread to exit. This probably has a small race it in
 	Thread::Stop(); //Accept that m_pid is set to -1
 }
 

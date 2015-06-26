@@ -16,7 +16,6 @@ namespace WebUI.Code.Providers
 		{
 			Camera = new CameraClient();
 			Camera.Connect("unix:/tmp/CameraServer");
-			//base.Initialize (name, config);
 		}
 
 		public override string Name {
@@ -44,7 +43,7 @@ namespace WebUI.Code.Providers
 		{
 			int ret = Camera.UserAuth (name, oldPwd);
 			if (ret < 0)
-				throw(new Exception ());
+				throw(new CameraClientException(ret));
 			if (ret == 0)
 				return false;
 			return true;
@@ -57,9 +56,11 @@ namespace WebUI.Code.Providers
 
 		public override MembershipUser CreateUser (string username, string password, string email, string pwdQuestion, string pwdAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
 		{
+            if (Camera.UserExists(username) > 0)
+                throw(new MembershipCreateUserException(MembershipCreateStatus.DuplicateUserName));
 			int ret = Camera.UserCreate (username, password);
 			if (ret < 0)
-				throw(new Exception ());
+				throw(new CameraClientException(ret));
 			status = MembershipCreateStatus.Success;
 			MembershipUser tmp = new MembershipUser (this.Name, username, username, email, "", "", true, false, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.MinValue);
 			return tmp;
@@ -67,8 +68,9 @@ namespace WebUI.Code.Providers
 
 		public override bool DeleteUser (string name, bool deleteAllRelatedData)
 		{
-			if (Camera.UserDelete (name) < 0)
-				throw(new Exception ());
+            int ret = Camera.UserDelete(name);
+			if (ret < 0)
+				throw(new CameraClientException(ret));
 			return true;
 		}
 
@@ -197,7 +199,7 @@ namespace WebUI.Code.Providers
 		{
 			int ret = Camera.UserAuth (name, password);
 			if (ret < 0)
-				throw(new Exception ());
+				throw(new CameraClientException(ret));
 			if (ret == 0)
 				return false;
 			return true;

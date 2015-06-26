@@ -49,6 +49,10 @@
 
         <div id="header">
             Header
+            <div style="float: right; text-align: right;">
+                Username: <asp:Label runat="server" ID="lblUsername"></asp:Label>&nbsp;<br />
+                Version: <asp:Label runat="server" ID="lblVersion"></asp:Label>&nbsp;
+            </div>
         </div>
 
         <div id="menu">

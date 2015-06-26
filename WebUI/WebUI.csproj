@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\Default.aspx" />
+    <Content Include="Admin\UserAdd.aspx" />
     <Content Include="Admin\Users.aspx" />
     <Content Include="Config\Default.aspx" />
     <Content Include="ErrorException.aspx" />
@@ -73,6 +74,13 @@
     </Compile>
     <Compile Include="Admin\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UserAdd.aspx.cs">
+      <DependentUpon>UserAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\UserAdd.aspx.designer.cs">
+      <DependentUpon>UserAdd.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Users.aspx.cs">
       <DependentUpon>Users.aspx</DependentUpon>

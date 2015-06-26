@@ -4,4 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <a href="/Admin/UserAdd.aspx">Add New User</a><br />
+    <br />
+
 </asp:Content>
