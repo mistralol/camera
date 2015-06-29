@@ -26,6 +26,12 @@ bool User::Init()
 	return true;
 }
 
+void User::Destroy()
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	Reset();
+}
+
 bool User::ConfigLoad(Json::Value &json)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);

@@ -3,6 +3,7 @@ class User
 {
 	public:
 		static bool Init();
+		static void Destroy();
 		static bool ConfigLoad(Json::Value &json);
 		static bool ConfigSave(Json::Value &json);
 
