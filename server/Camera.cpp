@@ -140,9 +140,16 @@ int main(int argc, char **argv)
 	}
 
 	//Add Logging
-	if (isatty(fileno(stdout)) == 1 || AlwaysLog == true)
+	if (isatty(fileno(stdout)) == 1)
 	{
-		LogManager::Add(new LogStdout());
+		LogManager::Add(new LogStdoutColor());
+	}
+	else
+	{
+		if (AlwaysLog == true)
+		{
+			LogManager::Add(new LogStdout());
+		}
 	}
 
 	//Setup PID File
