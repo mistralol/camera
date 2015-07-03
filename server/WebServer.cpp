@@ -117,7 +117,39 @@ void WebServer::Restart()
 void WebServer::SetEnabled(bool enabled)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
-	m_enabled = enabled;
+	
+	if (m_enabled == false)
+	{
+		if (enabled == false)
+			return; //Already stopped
+		//Start server
+		m_enabled = enabled;
+		if (Exec() == false)
+		{
+			LogError("WebServer::Start - Failed. Won't try again!");
+			return;
+		}
+	
+		//Parent Prcoess - Start monitoring thread
+		LogInfo("WebServer process has been started with pid %d", m_pid);
+		m_running = true;
+		Thread::Start();
+	}
+	else
+	{
+		if (enabled == true)
+			return; //Already Started
+		//Stop Server
+		m_enabled = enabled;
+		LogInfo("WebServer Stopping");
+		if (kill(m_pid, 9) < 0)
+		{
+			LogError("WebServer::Stop() - Kill failed '%s'", strerror(errno));
+		}
+		m_running = false;
+		lock.Unlock(); //We must unlock or we will deadlock waiting forever for the thread to exit. This probably has a small race it in
+		Thread::Stop(); //Accept that m_pid is set to -1
+	}
 }
 
 bool WebServer::GetEnabled()
