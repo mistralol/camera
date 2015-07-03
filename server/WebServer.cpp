@@ -104,7 +104,7 @@ void WebServer::Restart()
 	if (m_pid < 0)
 	{
 		LogError("WebServer::Restart - Refusing restart because pid %d", m_pid);
-		abort();
+		return;
 	}
 	LogInfo("WebServer::Restart - Restarting WebServer");
 	if (kill(m_pid, 9) < 0)
@@ -168,6 +168,8 @@ int WebServer::SetPort(int port)
 	
 	ScopedLock lock = ScopedLock(&m_mutex);
 	m_port = port;
+	if (m_enabled)
+		Restart();
 	return port;
 }
 
