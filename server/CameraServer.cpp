@@ -645,6 +645,7 @@ void CameraServer::OnDisconnect(IServerConnection *Connection)
 		
 int CameraServer::OnRequest(IServerConnection *Connection, Request *request, Request *response)
 {
+	TimerAbort abrt = TimerAbort(120);
 	std::string Command = request->GetCommand();
 	const TType *tmp = CameraServerFunctions::Lookup(Command.c_str(), Command.length());
 	if (tmp == NULL)
@@ -653,7 +654,10 @@ int CameraServer::OnRequest(IServerConnection *Connection, Request *request, Req
 		return -ENOSYS;
 	}
 	PerfCounter PC(Command.c_str());
-	return tmp->func(m_handler, Connection, request, response);
+	CameraTimers->Add(&abrt);
+	int ret = tmp->func(m_handler, Connection, request, response);
+	CameraTimers->Remove(&abrt);
+	return ret;
 }
 
 int CameraServer::OnCommand(IServerConnection *Connection, Request *request)
