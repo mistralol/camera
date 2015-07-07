@@ -34,6 +34,8 @@ SRCS=Quit.cpp \
 	WebServerGetPort.cpp \
 	WebServerSetPort.cpp \
 	WebServerRestart.cpp \
+	DebugSetEnabled.cpp \
+	DebugGetEnabled.cpp \
 	SystemReboot.cpp \
 	SystemShutdown.cpp
 

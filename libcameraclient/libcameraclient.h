@@ -50,6 +50,9 @@ class CameraClient
 		int WebServerGetProperty(const std::string key, const std::string def, std::string *value);
 		int WebServerSetProperty(const std::string key, const std::string value);
 		int WebServerRestart();
+		
+		int DebugSetEnabled(bool enabled);
+		int DebugGetEnabled(int *enabled);
 
 		int SystemReboot();
 		int SystemShutdown();

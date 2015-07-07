@@ -46,6 +46,9 @@ class CameraServer : public IServerHandler
 		static int WebServerGetProperty(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int WebServerSetProperty(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int WebServerRestart(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		
+		static int DebugGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int DebugSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
 		static int Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Ping(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

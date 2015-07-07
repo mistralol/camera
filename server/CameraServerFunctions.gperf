@@ -53,6 +53,9 @@ WebServerRestart,	CameraServer::WebServerRestart
 SystemReboot,		System::Reboot
 SystemShutdown,		System::Shutdown
 #####
+DebugSetEnabled,	CameraServer::DebugSetEnabled
+DebugGetEnabled,	CameraServer::DebugGetEnabled
+#####
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping
 QUIT,			CameraServer::Quit

@@ -139,6 +139,10 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 	LogDebug("CameraHandler::ConfigLoad");
 	ScopedLock Lock = ScopedLock(&m_ConfigMutex);
 
+	if (json.isMember("debug"))
+		if (Debug::ConfigLoad(json["debug"]) == false)
+			return false;
+
 	if (json.isMember("users"))
 		if (User::ConfigLoad(json["users"]) == false)
 			return false;
@@ -190,6 +194,9 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	ScopedLock Lock = ScopedLock(&m_ConfigMutex);
 
 	json["Version"] = Version::ToString();
+
+	if (Debug::ConfigSave(json["debug"]) == false)
+		return false;
 
 	if (m_Platform->ConfigSave(json["platform"]) == false)
 		return false;

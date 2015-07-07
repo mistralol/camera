@@ -586,6 +586,37 @@ int CameraClient::WebServerRestart()
 	return m_Client->SendRequest(&request, &response);	
 }
 
+int CameraClient::DebugSetEnabled(bool enabled)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("DebugSetEnabled");
+	Request request;
+	Request response;
+	
+	request.SetCommand("DebugSetEnabled");
+	request.SetArg("enabled", enabled);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::DebugGetEnabled(int *enabled)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("DebugGetEnabled");
+	Request request;
+	Request response;
+	
+	request.SetCommand("DebugGetEnabled");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("enabled", enabled) == false)
+		return -EINVAL;
+		
+	return 0;
+}
+
 int CameraClient::SystemReboot()
 {
 	if (m_Client == NULL)

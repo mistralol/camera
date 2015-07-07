@@ -514,6 +514,29 @@ int CameraServer::WebServerRestart(CameraHandler *handler, IServerConnection *Co
 	return 0;
 }
 
+
+int CameraServer::DebugGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	bool enabled = Debug::GetEnabled();
+	response->SetArg("enabled", enabled);
+	return 0;
+}
+
+int CameraServer::DebugSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	bool enabled = false;
+
+	if (request->GetBool("enabled", &enabled) == false)
+	{
+		LogError("CameraServer::WebServerSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	Debug::SetEnabled(enabled);
+	handler->Cfg->Dirty();
+	return 0;
+}
+
 int CameraServer::Version(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	LogDebug("CameraServer::Version");

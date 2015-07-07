@@ -18,7 +18,8 @@ SRCS=	Config.cpp \
 	Platform/PlatformBase.cpp \
 	Platform/Example.cpp \
 	WebServer.cpp \
-	Version.cpp
+	Version.cpp \
+	Debug.cpp
 
 INCS=$(shell find include -type f)	
 

@@ -45,6 +45,8 @@ scripts/WebServerGetPort
 scripts/WebServerRestart
 scripts/WebServerSetEnabled
 scripts/WebServerSetPort
+scripts/DebugSetEnabled
+scripts/DebugGetEnabled
 scripts/SystemReboot
 scripts/SystemShutdown
 build
