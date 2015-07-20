@@ -132,13 +132,6 @@ int main(int argc, char **argv)
 		}
 	}
 
-	//Deal with some annoying signals
-	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
-	{
-		printf("signal() failed: %s\n", strerror(errno));
-		abort();
-	}
-
 	//Add Logging
 	if (isatty(fileno(stdout)) == 1)
 	{
