@@ -34,10 +34,10 @@
     <Reference Include="System" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="CameraClient">
-      <HintPath>..\build\CameraClient.dll</HintPath>
-    </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="CameraClient">
+      <HintPath>..\libcameraclient\CameraClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraClientException.cs" />

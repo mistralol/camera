@@ -28,7 +28,7 @@ libcameraclient_python.cpp: CameraClient.cpp CameraClient.h CameraClient.i
 
 
 all-local:
-	gmcs -t:library *.cs -out:CameraClient.dll
+	gmcs -t:library -debug *.cs -out:CameraClient.dll
 
 clean-local:
 	$(RM) -f CameraClient.dll
