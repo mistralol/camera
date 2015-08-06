@@ -1,6 +1,13 @@
 
 #include <Camera.h>
 
+#include <Example.h>
+
+PlatformBase *Create()
+{
+	return new Example();
+}
+
 Example::Example()
 {
 

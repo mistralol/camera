@@ -19,6 +19,7 @@
 #Ignore certain visual studio files
 *.suo
 
+#Ignore autotools
 Makefile
 Makefile.in
 aclocal.m4
@@ -29,7 +30,8 @@ config/
 configure
 libtool
 m4/
-src/.deps/
+.deps
+.libs
 
 
 SWIGTYPE_p_std__string.cs

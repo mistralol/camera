@@ -74,6 +74,9 @@ PKG_CHECK_MODULES(LIBCLIENTSERVER, [
 	])
 ])
 
+plugindir="\$(libdir)/camera-1.0"
+AC_SUBST(plugindir)
+
 AC_SUBST([AM_CXXFLAGS], ["-Wall -Werror"])
 
 AC_CHECK_HEADER_STDBOOL()
@@ -84,5 +87,5 @@ AC_TYPE_UINT64_T
 AC_CHECK_FUNCS([localtime_r])
 
 
-AC_OUTPUT(Makefile src/Makefile)
+AC_OUTPUT(Makefile src/Makefile platforms/Makefile platforms/example/Makefile libcameraclient/Makefile)
 
