@@ -3,7 +3,7 @@
 using namespace std;
 #include <stdint.h>
 #include <libclientserver.h>
-#include "libcameraclient.h"
+#include "CameraClient.h"
 %}
 
 %include <std_vector.i>
@@ -17,5 +17,5 @@ using namespace std;
 
 %template(StringVector) std::vector<std::string>;
 
-%include libcameraclient.h
+%include CameraClient.h
 
