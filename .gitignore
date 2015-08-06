@@ -19,6 +19,19 @@
 #Ignore certain visual studio files
 *.suo
 
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.log
+config.status
+config/
+configure
+libtool
+m4/
+src/.deps/
+
+
 SWIGTYPE_p_std__string.cs
 SWIGTYPE_p_std__listT_std__string_t.cs
 SWIGTYPE_p_bool.cs
