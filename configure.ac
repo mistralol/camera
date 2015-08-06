@@ -50,6 +50,18 @@ PKG_CHECK_MODULES(JSON, [
 	])
 ])
 
+dnl Check for python
+PKG_CHECK_MODULES(PYTHON, [
+	python >= 2.7
+], [
+	AC_SUBST(PYTHON_CFLGAGS)
+	AC_SUBST(PYTHON_LIBS)
+], [
+	AC_MSG_ERROR([
+		You need to install or upgrade python
+	])
+])
+
 dnl Check for liblogger
 PKG_CHECK_MODULES(LIBLOGGER, [
 	liblogger >= 1.0.0
@@ -73,6 +85,19 @@ PKG_CHECK_MODULES(LIBCLIENTSERVER, [
 		You need to install or upgrade libclientserver
 	])
 ])
+
+dnl Check for swig
+AC_CHECK_PROG(SWIG_CHECK,swig,yes)
+if test x"$SWIG_CHECK" != x"yes" ; then
+    AC_MSG_ERROR([Please install swig before installing.])
+fi
+
+dnl Check for swig
+AC_CHECK_PROG(GMCS_CHECK,gmcs,yes)
+if test x"$SWIG_CHECK" != x"yes" ; then
+    AC_MSG_ERROR([Please install gms before installing. gmcs is mono and the .net framework])
+fi
+
 
 plugindir="\$(libdir)/camera-1.0"
 AC_SUBST(plugindir)

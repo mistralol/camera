@@ -1,7 +1,7 @@
 
 #include <libclientserver.h>
 
-#include <libcameraclient.h>
+#include <CameraClient.h>
 
 CameraClient::CameraClient()
 {

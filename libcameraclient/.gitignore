@@ -1,8 +1,10 @@
-libcameraclient_python.cxx
 CameraClientWrapper.py
 CameraClientWrapper.pyc
-libcameraclient_csharp.cxx
 CameraClientWrapperPINVOKE.cs
 libCameraClientWrapper
 CameraClient.cs
 CameraClientWrapper.cs
+CameraClient.dll
+libcameraclient_csharp.cpp
+libcameraclient_python.cpp
+
