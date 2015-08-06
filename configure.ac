@@ -92,10 +92,16 @@ if test x"$SWIG_CHECK" != x"yes" ; then
     AC_MSG_ERROR([Please install swig before installing.])
 fi
 
-dnl Check for swig
+dnl Check for gmcs
 AC_CHECK_PROG(GMCS_CHECK,gmcs,yes)
-if test x"$SWIG_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install gms before installing. gmcs is mono and the .net framework])
+if test x"$GMCS_CHECK" != x"yes" ; then
+    AC_MSG_ERROR([Please install gmcs before installing. gmcs is part of mono])
+fi
+
+dnl Check for xbuild
+AC_CHECK_PROG(XBUILD_CHECK,xbuild,yes)
+if test x"$XBUILD_CHECK" != x"yes" ; then
+    AC_MSG_ERROR([Please install xbuild before installing. xbuild is part of mono])
 fi
 
 
