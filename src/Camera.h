@@ -38,10 +38,7 @@ using namespace liblogger;
 #include <VideoStreamSupported.h>
 #include <VideoStreamConfig.h>
 
-#include <Platform/PlatformBase.h>
-#include <Platform/Platform.h>
-
-#include <Platform/Example.h>
+#include <PlatformBase.h>
 
 #include <WebServer.h>
 

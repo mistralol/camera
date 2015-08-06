@@ -53,7 +53,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	WServer = new WebServer();
 	RServer = new RTSPServer();
 
-	m_Platform = Platform::Create(Platform);
+//	m_Platform = Platform::Create(Platform);
 	if (m_Platform == NULL)
 	{
 		LogCritical("Fail to load platform: %s", Platform.c_str());
