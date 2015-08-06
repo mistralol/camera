@@ -31,6 +31,11 @@ all-local:
 	gmcs -t:library *.cs -out:CameraClient.dll
 
 clean-local:
-	rm -f CameraClient.dll
+	$(RM) -f CameraClient.dll
+	$(RM) -f libcameraclient_csharp.cpp
+	$(RM) -f libcameraclient_python.cpp
+	$(RM) -f SWIGType*
+	$(RM) -f *.cs *.py
+
 
 
