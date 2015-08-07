@@ -26,6 +26,7 @@ class CameraHandler
 		Config *Cfg;
 
 	private:
+		void *m_dll;
 		Barrier m_QuitBarrier;
 
 		PlatformBase *m_Platform;

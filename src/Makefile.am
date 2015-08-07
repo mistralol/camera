@@ -26,6 +26,6 @@ camera_SOURCES= Camera.cpp \
 		VideoStreamSupported.cpp \
 		WebServer.cpp
 
-camera_LDFLAGS=$(GST_LIBS) $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS)
+camera_LDFLAGS=$(GST_LIBS) $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS) -ldl
 
 

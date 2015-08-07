@@ -1,5 +1,6 @@
 
 #include <Camera.h>
+#include <dlfcn.h>
 
 CameraHandler::CameraHandler()
 {
@@ -12,6 +13,7 @@ CameraHandler::CameraHandler()
 	
 	WServer = NULL;
 	RServer = NULL;
+	m_dll = NULL;
 
 }
 
@@ -39,7 +41,50 @@ CameraHandler::~CameraHandler()
 	delete Cfg;
 	delete m_Platform;
 	delete RServer;
+	
+	if (m_dll)
+		dlclose(m_dll);
+	
 	gst_deinit();
+}
+
+static bool CheckDLL(const std::string *path)
+{
+	struct stat info;
+	LogDebug("Checking DLL '%s'", path->c_str());
+	if (stat(path->c_str(), &info) == 0)
+		return true;
+	return false;
+}
+
+static bool FindDLL(const std::string &Platform, std::string *path)
+{
+	*path = Platform;
+	if (CheckDLL(path))
+		return true;
+	
+	*path = "lib" + Platform + ".so";
+	if (CheckDLL(path))
+		return true;
+		
+	*path = "camera-1.0/lib" + Platform + ".so";
+	if (CheckDLL(path))
+		return true;
+
+	*path = "/usr/lib/camera-1.0/lib" + Platform + ".so";
+	if (CheckDLL(path))
+		return true;
+
+	*path = "/usr/local/lib/camera-1.0/lib" + Platform + ".so";
+	if (CheckDLL(path))
+		return true;
+
+	/* FIXME: This needs removed and replace with proper path + env searchs */		
+	*path = "../platforms/example/.libs/lib" + Platform + ".so";
+	if (CheckDLL(path))
+		return true;
+
+	return false;	
 }
 
 //Init Does not need locking as it should be the only code active in the system during startup
@@ -53,7 +98,34 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	WServer = new WebServer();
 	RServer = new RTSPServer();
 
-//	m_Platform = Platform::Create(Platform);
+	//Search for platform dll
+	std::string dll = "";
+	if (FindDLL(Platform, &dll) == false)
+	{
+		if (FindDLL(String::ToLower(Platform), &dll) == false)
+		{
+			LogCritical("Cannot find dll for platform '%s'", Platform.c_str());
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	m_dll = dlopen(dll.c_str(), RTLD_NOW);
+	if (m_dll == NULL)
+	{
+		LogCritical("Fail to load dll: %s", dll.c_str());
+		LogCritical("Error: %s", dlerror());
+		exit(EXIT_FAILURE);
+	}
+	
+	PlatformBase *(*create)() = (PlatformBase *(*)()) dlsym(m_dll, "Create");
+	if (create == NULL)
+	{
+		LogCritical("DLL '%s' does not contain a symbol for 'Create'", dll.c_str());
+		exit(EXIT_FAILURE);
+	}
+	
+
+	m_Platform = create();
 	if (m_Platform == NULL)
 	{
 		LogCritical("Fail to load platform: %s", Platform.c_str());

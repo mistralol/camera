@@ -4,9 +4,9 @@ SUBDIRS=src platforms libcameraclient
 
 
 all-local:
-	xbuild /nologo WebUI.sln
+	xbuild /nologo /verbosity:quiet WebUI.sln
 
 clean-local:
-	xbuild /nologo /target:clean
+	xbuild /nologo /verbosity:quiet /target:clean WebUI.sln
 
 

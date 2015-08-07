@@ -3,7 +3,9 @@
 class PlatformBase
 {
 	public:
-		virtual ~PlatformBase();
+		virtual ~PlatformBase()
+		{
+		}
 
 		virtual bool Init()
 		{
