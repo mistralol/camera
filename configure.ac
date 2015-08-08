@@ -8,7 +8,13 @@ AM_INIT_AUTOMAKE([foreign])
 
 AC_PROG_CC
 AC_PROG_CXX
-AX_CXX_COMPILE_STDCXX_11(noext, optional)
+
+m4_ifdef([
+	AX_CXX_COMPILE_STDCXX_11
+],[
+	AX_CXX_COMPILE_STDCXX_11(noext, optional)
+])
+
 AC_PROG_LIBTOOL
 
 dnl give error and exit if we don't have pkgconfig
