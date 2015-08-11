@@ -3,7 +3,7 @@
 
 #include <Example.h>
 
-PlatformBase *Create()
+extern "C" PlatformBase *Create()
 {
 	return new Example();
 }
