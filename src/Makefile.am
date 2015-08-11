@@ -1,5 +1,5 @@
 
-AM_CXXFLAGS=$(GST_CFLAGS) $(JSON_CFLAGS) $(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS) -I../platforms/include
+AM_CXXFLAGS=-fPIC $(GST_CFLAGS) $(JSON_CFLAGS) $(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS) -I../platforms/include
 
 bin_PROGRAMS=camera
 
@@ -26,6 +26,6 @@ camera_SOURCES= Camera.cpp \
 		VideoStreamSupported.cpp \
 		WebServer.cpp
 
-camera_LDFLAGS=$(GST_LIBS) $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS) -ldl
+camera_LDFLAGS=-rdynamic $(GST_LIBS) $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS) -ldl
 
 
