@@ -1,9 +1,9 @@
 
-class VideoStreamConfig
+class VideoInputConfig
 {
 	public:
-		VideoStreamConfig();
-		~VideoStreamConfig();
+		VideoInputConfig();
+		~VideoInputConfig();
 
 		std::string ToString() const;
 

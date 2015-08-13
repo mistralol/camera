@@ -22,9 +22,9 @@ RTSPGetMaxClients,	CameraServer::RTSPGetMaxClients
 RTSPSetMaxClients,	CameraServer::RTSPSetMaxClients
 RTSPGetClientCount,	CameraServer::RTSPGetClientCount
 #####
-VideoStreamCount,	CameraServer::VideoStreamCount
-VideoStreamSetEnabled,	CameraServer::VideoStreamSetEnabled
-VideoStreamGetEnabled,	CameraServer::VideoStreamGetEnabled
+VideoInputCount,	CameraServer::VideoInputCount
+VideoInputSetEnabled,	CameraServer::VideoInputSetEnabled
+VideoInputGetEnabled,	CameraServer::VideoInputGetEnabled
 #####
 UserCreate,		CameraServer::UserCreate
 UserAuth,		CameraServer::UserAuth

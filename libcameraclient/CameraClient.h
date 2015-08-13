@@ -21,10 +21,9 @@ class CameraClient
 		int RTSPSetMaxBacklog(int max);
 		int RTSPGetMaxBacklog(int *value);
 
-		int VideoStreamCount(int *value);
-
-		int VideoStreamSetEnabled(unsigned int stream, bool enabled);
-		int VideoStreamGetEnabled(unsigned int stream, int *enabled);
+		int VideoInputCount(int *value);
+		int VideoInputSetEnabled(unsigned int input, bool enabled);
+		int VideoInputGetEnabled(unsigned int input, int *enabled);
 
 
 		int UserCreate(const std::string Username, const std::string Password);

@@ -1,8 +1,12 @@
 
-#include <Camera.h>
+#include <string>
+#include <sstream>
+#include <json/json.h>
+
+#include <VideoInputConfig.h>
 
 
-VideoStreamConfig::VideoStreamConfig()
+VideoInputConfig::VideoInputConfig()
 {
 	m_framerate = 0;
 	m_codec = "";
@@ -10,19 +14,19 @@ VideoStreamConfig::VideoStreamConfig()
 	m_enabled = false;
 }
 
-VideoStreamConfig::~VideoStreamConfig()
+VideoInputConfig::~VideoInputConfig()
 {
 
 }
 
-std::string VideoStreamConfig::ToString() const
+std::string VideoInputConfig::ToString() const
 {
 	std::stringstream ss;
 	ss << m_codec << "/" << m_resolution << " @ " << m_framerate;
 	return ss.str();
 }
 
-bool VideoStreamConfig::ConfigSave(Json::Value &json)
+bool VideoInputConfig::ConfigSave(Json::Value &json)
 {
 	json["framerate"] = m_framerate;
 	json["codec"] = m_codec;
@@ -31,7 +35,7 @@ bool VideoStreamConfig::ConfigSave(Json::Value &json)
 	return true;
 }
 
-bool VideoStreamConfig::ConfigLoad(Json::Value &json)
+bool VideoInputConfig::ConfigLoad(Json::Value &json)
 {
 	if (json.isMember("framerate") && json["framerate"].isNumeric())
 		m_framerate = json["framerate"].asInt();
@@ -48,42 +52,42 @@ bool VideoStreamConfig::ConfigLoad(Json::Value &json)
 	return true;
 }
 
-int VideoStreamConfig::GetFrameRate()
+int VideoInputConfig::GetFrameRate()
 {
 	return m_framerate;
 }
 
-void VideoStreamConfig::SetFrameRate(int fps)
+void VideoInputConfig::SetFrameRate(int fps)
 {
 	m_framerate = fps;
 }
 
-std::string VideoStreamConfig::GetCodec()
+std::string VideoInputConfig::GetCodec()
 {
 	return m_codec;
 }
 
-void VideoStreamConfig::SetCodec(const std::string &str)
+void VideoInputConfig::SetCodec(const std::string &str)
 {
 	m_codec = str;
 }
 
-std::string VideoStreamConfig::GetResolution()
+std::string VideoInputConfig::GetResolution()
 {
 	return m_resolution;
 }
 
-void VideoStreamConfig::SetResolution(const std::string &str)
+void VideoInputConfig::SetResolution(const std::string &str)
 {
 	m_resolution = str;
 }
 
-bool VideoStreamConfig::GetEnabled()
+bool VideoInputConfig::GetEnabled()
 {
 	return m_enabled;
 }
 
-void VideoStreamConfig::SetEnabled(bool enabled)
+void VideoInputConfig::SetEnabled(bool enabled)
 {
 	m_enabled = enabled;
 }

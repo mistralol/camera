@@ -27,65 +27,57 @@ class PlatformBase
 
 		/* Video Stream Specific */
 
-		virtual unsigned int VideoStreamCount()
+		virtual unsigned int VideoInputCount()
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
 			return 0;
 		}
 		
-		virtual bool VideoStreamSupportedInfo(unsigned int stream, VideoStreamSupported *info)
+		virtual bool VideoInputSupportedInfo(unsigned int input, VideoInputSupported *info)
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
 			return false;
 		}
 
-		virtual void VideoStreamDefaultConfig(unsigned int stream, VideoStreamConfig *config)
+		virtual void VideoInputDefaultConfig(unsigned int input, VideoInputConfig *config)
 		{
 			LogCritical("Platform has not implemented function %s", __FUNCTION__);
 			abort();
 		}
 		
 		
-		virtual bool VideoStreamConfigure(unsigned int stream, const VideoStreamConfig *config)
+		virtual bool VideoInputConfigure(unsigned int input, const VideoInputConfig *config)
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
 			return false;
 		}
 
-		virtual bool VideoStreamEnable(unsigned int stream)
+		virtual bool VideoInputEnable(unsigned int input)
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
 			return false;
 		}
 		
-		virtual bool VideoStreamDisable(unsigned int stream)
+		virtual bool VideoInputDisable(unsigned int input)
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
 			return false;
 		}
 		
-		virtual bool VideoStreamRestart(unsigned int stream)
+		virtual bool VideoInputRestart(unsigned int input)
 		{
-			if (VideoStreamDisable(stream) == false)
+			if (VideoInputDisable(input) == false)
 			{
-				LogCritical("PlatformBase::VideoStreamRestart - VideoStreamDisable Failed!!");
+				LogCritical("PlatformBase::VideoInputRestart - VideoInputDisable Failed!!");
 				return false;
 			}
 
-			if (VideoStreamEnable(stream) == false)
+			if (VideoInputEnable(input) == false)
 			{
-				LogCritical("PlatformBase::VideoStreamRestart - VideoStreamDisable Failed!!");
+				LogCritical("PlatformBase::VideoInputRestart - VideoInputDisable Failed!!");
 				return false;
 			}
 			return true;
-		}
-
-		/* Audio Stream Specific */
-
-		virtual unsigned int GetAudioNumStreams()
-		{
-			LogWarning("Platform has not implemented function %s", __FUNCTION__);
-			return 0;
 		}
 
 	protected:

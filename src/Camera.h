@@ -35,8 +35,8 @@ using namespace liblogger;
 
 #include <GstUtil.h>
 
-#include <VideoStreamSupported.h>
-#include <VideoStreamConfig.h>
+#include <VideoInputSupported.h>
+#include <VideoInputConfig.h>
 
 #include <PlatformBase.h>
 

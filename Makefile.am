@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS=-I m4
 
-SUBDIRS=src platforms libcameraclient
+SUBDIRS=libcameracommon src platforms libcameraclient
 
 
 all-local:

@@ -9,13 +9,13 @@ class CameraHandler
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 
-		void VideoStreamCount(int *count);
+		void VideoInputCount(int *count);
 
-		bool VideoStreamSetEnabled(unsigned int stream, bool enabled);
-		bool VideoStreamGetEnabled(unsigned int stream, bool &enabled);
+		bool VideoInputSetEnabled(unsigned int input, bool enabled);
+		bool VideoInputGetEnabled(unsigned int input, bool &enabled);
 
-		bool VideoStreamEnable(unsigned int stream);
-		bool VideoStreamDisable(unsigned int stream);
+		bool VideoInputEnable(unsigned int input);
+		bool VideoInputDisable(unsigned int input);
 
 		void Wait();
 		void Quit();
@@ -35,9 +35,9 @@ class CameraHandler
 		std::string m_CfgFile;
 		Mutex m_ConfigMutex;
 
-		//Video Stuff
-		Mutex m_VideoMutex;
-		std::map<unsigned int, struct VideoStreamConfig *> m_VideoStreams;
+		//Video Input Stuff
+		Mutex m_VideoInputMutex;
+		std::map<unsigned int, struct VideoInputConfig *> m_VideoInputs;
 
 };
 

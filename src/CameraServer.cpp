@@ -123,32 +123,32 @@ int CameraServer::RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *C
 	return 0;
 }
 
-int CameraServer::VideoStreamCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+int CameraServer::VideoInputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	int count = 0;
-	handler->VideoStreamCount(&count);
+	handler->VideoInputCount(&count);
 	response->SetArg("value", count);
 	return 0;
 }
 
-int CameraServer::VideoStreamSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+int CameraServer::VideoInputSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	unsigned int stream = -1;
+	unsigned int input = -1;
 	bool enabled = false;
 
-	if (request->GetUInt("stream", &stream) == false)
+	if (request->GetUInt("input", &input) == false)
 	{
-		LogError("CameraServer::VideoStreamSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
+		LogError("CameraServer::VideoInputSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
 
 	if (request->GetBool("enabled", &enabled) == false)
 	{
-		LogError("CameraServer::VideoStreamSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
+		LogError("CameraServer::VideoInputSetEnabled Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
 
-	if (handler->VideoStreamSetEnabled(stream, enabled))
+	if (handler->VideoInputSetEnabled(input, enabled))
 	{
 		handler->Cfg->Dirty();
 		return 0;
@@ -157,19 +157,19 @@ int CameraServer::VideoStreamSetEnabled(CameraHandler *handler, IServerConnectio
 	return -1;
 }
 
-int CameraServer::VideoStreamGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+int CameraServer::VideoInputGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	unsigned int stream = -1;
+	unsigned int input = -1;
 	bool enabled = false;
 
-	if (request->GetUInt("stream", &stream) == false)
+	if (request->GetUInt("input", &input) == false)
 	{
-		LogError("CameraServer::VideoStreamGetEnabled Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		LogError("CameraServer::VideoInputGetEnabled Failed - exists: %s", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
-	if (handler->VideoStreamGetEnabled(stream, enabled) == false)
+	if (handler->VideoInputGetEnabled(input, enabled) == false)
 	{
-		LogError("CameraServer::VideoStreamGetEnabled(%u, *) - Failed", stream);
+		LogError("CameraServer::VideoInputGGetEnabled(%u, *) - Failed", input);
 		return -EINVAL;
 	}
 	response->SetArg("enabled", enabled);

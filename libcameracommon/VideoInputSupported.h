@@ -1,9 +1,9 @@
 
-class VideoStreamSupported
+class VideoInputSupported
 {
 	public:
-		VideoStreamSupported();
-		~VideoStreamSupported();
+		VideoInputSupported();
+		~VideoInputSupported();
 
 		std::list<std::string> GetCodecs();
 		std::list<std::string> GetCodecResolutions(const std::string &codec);

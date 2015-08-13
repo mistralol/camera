@@ -1,17 +1,27 @@
 
-#include <Camera.h>
+#include <stdlib.h>
+#include <string>
+#include <sstream>
+#include <map>
+#include <list>
 
-VideoStreamSupported::VideoStreamSupported()
+#include <liblogger.h>
+using namespace liblogger;
+
+
+#include <VideoInputSupported.h>
+
+VideoInputSupported::VideoInputSupported()
 {
 
 }
 
-VideoStreamSupported::~VideoStreamSupported()
+VideoInputSupported::~VideoInputSupported()
 {
 
 }
 
-std::list<std::string> VideoStreamSupported::GetCodecs()
+std::list<std::string> VideoInputSupported::GetCodecs()
 {
 	std::list<std::string> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.begin();
@@ -23,7 +33,7 @@ std::list<std::string> VideoStreamSupported::GetCodecs()
 	return lst;
 }
 
-std::list<std::string> VideoStreamSupported::GetCodecResolutions(const std::string &codec)
+std::list<std::string> VideoInputSupported::GetCodecResolutions(const std::string &codec)
 {
 	std::list<std::string> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.find(codec);
@@ -39,7 +49,7 @@ std::list<std::string> VideoStreamSupported::GetCodecResolutions(const std::stri
 	return lst;
 }
 
-std::list<int> VideoStreamSupported::GetCodecFrameRates(const std::string &codec, std::string &res)
+std::list<int> VideoInputSupported::GetCodecFrameRates(const std::string &codec, std::string &res)
 {
 	std::list<int> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.find(codec);
@@ -53,12 +63,12 @@ std::list<int> VideoStreamSupported::GetCodecFrameRates(const std::string &codec
 	return resit->second;
 }
 
-void VideoStreamSupported::AddCodec(const std::string &codec, const std::string &res, int fps)
+void VideoInputSupported::AddCodec(const std::string &codec, const std::string &res, int fps)
 {
 	m_codecs[codec].m_res[res].push_back(fps);
 }
 
-void VideoStreamSupported::AddCodec(const std::string &codec, const std::string &res, int lowfps, int upperfps)
+void VideoInputSupported::AddCodec(const std::string &codec, const std::string &res, int lowfps, int upperfps)
 {
 	if (lowfps > upperfps)
 		abort();
@@ -66,12 +76,12 @@ void VideoStreamSupported::AddCodec(const std::string &codec, const std::string 
 		AddCodec(codec, res, i);
 }
 
-void VideoStreamSupported::Clear()
+void VideoInputSupported::Clear()
 {
 	m_codecs.clear();
 }
 
-void VideoStreamSupported::LogDump()
+void VideoInputSupported::LogDump()
 {
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.begin();
 	while(it != m_codecs.end())

@@ -183,15 +183,15 @@ int CameraClient::Version(std::string *str)
 	return ret;
 }
 
-int CameraClient::VideoStreamCount(int *value)
+int CameraClient::VideoInputCount(int *value)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
-	PerfCounter PC("VideoStreamCount");
+	PerfCounter PC("VideoInputCount");
 	Request request;
 	Request response;
 
-	request.SetCommand("VideoStreamCount");
+	request.SetCommand("VideoInputCount");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
@@ -200,30 +200,30 @@ int CameraClient::VideoStreamCount(int *value)
 	return 0;
 }
 
-int CameraClient::VideoStreamSetEnabled(unsigned int stream, bool enabled)
+int CameraClient::VideoInputSetEnabled(unsigned int input, bool enabled)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
-	PerfCounter PC("VideoStreamSetEnabled");
+	PerfCounter PC("VideoInputSetEnabled");
 	Request request;
 	Request response;
 
-	request.SetCommand("VideoStreamSetEnabled");
-	request.SetArg("stream", stream);
+	request.SetCommand("VideoInputSetEnabled");
+	request.SetArg("input", input);
 	request.SetArg("enabled", enabled);
 	return m_Client->SendRequest(&request, &response);
 }
 
-int CameraClient::VideoStreamGetEnabled(unsigned int stream, int *value)
+int CameraClient::VideoInputGetEnabled(unsigned int input, int *value)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
-	PerfCounter PC("VideoStreamGetEnabled");
+	PerfCounter PC("VideoInputGetEnabled");
 	Request request;
 	Request response;
 
-	request.SetCommand("VideoStreamGetEnabled");
-	request.SetArg("stream", stream);
+	request.SetCommand("VideoInputGetEnabled");
+	request.SetArg("input", input);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;

@@ -10,19 +10,19 @@ class Example : public PlatformBase
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 
-		unsigned int VideoStreamCount();
+		unsigned int VideoInputCount();
 
-		bool VideoStreamSupportedInfo(unsigned int stream, VideoStreamSupported *info);
+		bool VideoInputSupportedInfo(unsigned int stream, VideoInputSupported *info);
 
-		void VideoStreamDefaultConfig(unsigned int stream, VideoStreamConfig *config);
-		bool VideoStreamConfigure(unsigned int stream, const VideoStreamConfig *config);
+		void VideoInputDefaultConfig(unsigned int stream, VideoInputConfig *config);
+		bool VideoInputConfigure(unsigned int stream, const VideoInputConfig *config);
 
-		bool VideoStreamEnable(unsigned int stream);
-		bool VideoStreamDisable(unsigned int stream);
+		bool VideoInputEnable(unsigned int stream);
+		bool VideoInputDisable(unsigned int stream);
 
 	private:
-		std::map<unsigned int, PipelineBasic *> m_videopipelines;
-		std::map<unsigned int, VideoStreamConfig> m_videoconfig;
+		std::map<unsigned int, PipelineBasic *> m_videoinputpipelines;
+		std::map<unsigned int, VideoInputConfig> m_videoinputconfig;
 
 
 };

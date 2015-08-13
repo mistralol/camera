@@ -21,15 +21,15 @@ CameraHandler::~CameraHandler()
 {
 	LogDebug("CameraHandler::~CameraHandler");
 
-	//Cleanup Video Stream's
-	while(m_VideoStreams.size() > 0)
+	//Cleanup Video Inputs's
+	while(m_VideoInputs.size() > 0)
 	{
-		std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
-		int stream = it->first;
-		VideoStreamConfig *config = it->second;
+		std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+		int input = it->first;
+		VideoInputConfig *config = it->second;
 		if (config->GetEnabled())
-			m_Platform->VideoStreamDisable(stream);
-		m_VideoStreams.erase(it);
+			m_Platform->VideoInputDisable(input);
+		m_VideoInputs.erase(it);
 		delete config;
 	}
 
@@ -145,30 +145,30 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	}
 
 	//Dump out some debug info about how many streams we support
-	unsigned int nStreams = m_Platform->VideoStreamCount();
-	LogInfo("Supported Video Streams: %d", nStreams);
-	for(unsigned int i = 0; i < nStreams; i++)
+	unsigned int nInputs = m_Platform->VideoInputCount();
+	LogInfo("Supported Video Inputs: %d", nInputs);
+	for(unsigned int i = 0; i < nInputs; i++)
 	{
-		VideoStreamSupported info;
+		VideoInputSupported info;
 		info.Clear();
-		if (m_Platform->VideoStreamSupportedInfo(i, &info) == false)
+		if (m_Platform->VideoInputSupportedInfo(i, &info) == false)
 		{
-			LogError("Failure to VideoStreamSupportedInfo(%d)", i);
+			LogError("Failure to VideoInputSupportedInfo(%d)", i);
 			exit(EXIT_FAILURE);
 		}
-		LogInfo("Stream %u Supports", i);
+		LogInfo("VideoInput %u Supports", i);
 		info.LogDump();
 	}
 
 	//Load Default Config's. The Config Load can override these later
 	//We also wait until after the config load until we enable the config + enable the streams on the platform.
-	for(unsigned int i = 0; i < nStreams; i++)
+	for(unsigned int i = 0; i < nInputs; i++)
 	{
 		//Load Up Default Configs
-		VideoStreamConfig *config = new VideoStreamConfig();
-		m_Platform->VideoStreamDefaultConfig(i, config);
-		LogInfo("VideoStream %u default Config: '%s'", i, config->ToString().c_str());
-		m_VideoStreams[i] = config;
+		VideoInputConfig *config = new VideoInputConfig();
+		m_Platform->VideoInputDefaultConfig(i, config);
+		LogInfo("VideoInput %u default Config: '%s'", i, config->ToString().c_str());
+		m_VideoInputs[i] = config;
 	}
 
 
@@ -182,20 +182,20 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	}
 
 
-	//Start The Video Streams
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
-	while(it != m_VideoStreams.end())
+	//Start The Video Inputs
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+	while(it != m_VideoInputs.end())
 	{
-		if (m_Platform->VideoStreamConfigure(it->first, it->second) == false)
+		if (m_Platform->VideoInputConfigure(it->first, it->second) == false)
 		{
-			LogError("CameraHandler::Init Failed to Configure Stream %u Config: %s", it->first, it->second->ToString().c_str());
+			LogError("CameraHandler::Init Failed to Configure Input %u Config: %s", it->first, it->second->ToString().c_str());
 			abort();
 		}
 		if (it->second->GetEnabled())
 		{
-			if (VideoStreamEnable(it->first) == false)
+			if (VideoInputEnable(it->first) == false)
 			{
-				LogError("CameraHandler::Init Failed to Enable Stream %u", it->first);
+				LogError("CameraHandler::Init Failed to Enable VideoInput %u", it->first);
 				abort();
 			}
 		}
@@ -235,24 +235,24 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		if (WServer->ConfigLoad(json["webserver"]) == false)
 			return false;
 
-	ScopedLock VideoLock(&m_VideoMutex);
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
-	while(it != m_VideoStreams.end())
+	ScopedLock VideoLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+	while(it != m_VideoInputs.end())
 	{
 		std::stringstream ss;
-		ss << "VideoStreamConfig_" << it->first;
+		ss << "VideoInputConfig_" << it->first;
 		if (json.isMember(ss.str()))
 		{
 			if (it->second->ConfigLoad(json[ss.str()]) == false)
 			{
-				LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video stream '%s'", ss.str().c_str());
+				LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video input '%s'", ss.str().c_str());
 				return false;
 			}
-			LogInfo("VideoStream %u loaded config '%s'", it->first, it->second->ToString().c_str());
+			LogInfo("VideoInput %u loaded config '%s'", it->first, it->second->ToString().c_str());
 		}
 		else
 		{
-			LogWarning("CameraHandler::ConfigLoad - No configuration for video stream '%s'", ss.str().c_str());
+			LogWarning("CameraHandler::ConfigLoad - No configuration for video input '%s'", ss.str().c_str());
 		}
 		it++;
 	}
@@ -276,15 +276,15 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	if (RServer->ConfigSave(json["rtspserver"]) == false)
 		return false;
 
-	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.begin();
-	while(it != m_VideoStreams.end())
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+	while(it != m_VideoInputs.end())
 	{
 		std::stringstream ss;
-		ss << "VideoStreamConfig_" << it->first;
+		ss << "VideoInputConfig_" << it->first;
 		if (it->second->ConfigSave(json[ss.str()]) == false)
 		{
-			LogError("CameraHandler::ConfigSave Failed to log configuration for video stream '%s'", ss.str().c_str());
+			LogError("CameraHandler::ConfigSave Failed to log configuration for video input '%s'", ss.str().c_str());
 			return false;
 		}
 		it++;
@@ -302,109 +302,109 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	return true;
 }
 
-void CameraHandler::VideoStreamCount(int *count)
+void CameraHandler::VideoInputCount(int *count)
 {
-	LogDebug("CameraHandler::VideoStreamCount");
-	*count = m_Platform->VideoStreamCount();
+	LogDebug("CameraHandler::VideoInputCount");
+	*count = m_Platform->VideoInputCount();
 }
 
-bool CameraHandler::VideoStreamSetEnabled(unsigned int stream, bool enabled)
+bool CameraHandler::VideoInputSetEnabled(unsigned int input, bool enabled)
 {
-	LogDebug("CameraHandler::VideoStreamSetEnabled(%u, %s)", stream, enabled ? "True" : "False");
-	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
-	if (it == m_VideoStreams.end())
+	LogDebug("CameraHandler::VideoInputSetEnabled(%u, %s)", input, enabled ? "True" : "False");
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
 	{
-		LogDebug("CameraHandler::VideoStreamSetEnabled(%u, %s) - No such stream", stream, enabled ? "True" : "False");
+		LogDebug("CameraHandler::VideoInputSetEnabled(%u, %s) - No such input", input, enabled ? "True" : "False");
 		return false;
 	}
 
 
-	bool orig = m_VideoStreams[stream]->GetEnabled();
+	bool orig = m_VideoInputs[input]->GetEnabled();
 
 	if (orig == false && enabled == true)
 	{
-		m_VideoStreams[stream]->SetEnabled(true);
-		return VideoStreamEnable(stream);
+		m_VideoInputs[input]->SetEnabled(true);
+		return VideoInputEnable(input);
 	}
 
 	if (orig == true && enabled == false)
 	{
-		m_VideoStreams[stream]->SetEnabled(false);
-		return VideoStreamDisable(stream);
+		m_VideoInputs[input]->SetEnabled(false);
+		return VideoInputDisable(input);
 	}
 
-	LogError("CameraHandler::VideostreamSetEnabled() - Did Nothing - Probably a bug in the client...");
+	LogError("CameraHandler::VideoInputSetEnabled() - Did Nothing - Probably a bug in the client...");
 	return true;
 }
 
-bool CameraHandler::VideoStreamGetEnabled(unsigned int stream, bool &enabled)
+bool CameraHandler::VideoInputGetEnabled(unsigned int input, bool &enabled)
 {
-	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)",stream);
-	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
-	if (it == m_VideoStreams.end())
+	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)", input);
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
 	{
-		LogDebug("CameraHandler::VideoStreamGetEnabled(%u) - No such stream", stream);
+		LogDebug("CameraHandler::VideoInputGetEnabled(%u) - No such input", input);
 		return false;
 	}
 
-	enabled = m_VideoStreams[stream]->GetEnabled();
+	enabled = m_VideoInputs[input]->GetEnabled();
 	return true;
 }
 
-bool CameraHandler::VideoStreamEnable(unsigned int stream)
+bool CameraHandler::VideoInputEnable(unsigned int input)
 {
-	LogDebug("CameraHandler::VideoStreamEnable(%u)", stream);
-	ScopedLock VideoLock = ScopedLock(&m_VideoMutex);
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
-	if (it == m_VideoStreams.end())
+	LogDebug("CameraHandler::VideoInputEnable(%u)", input);
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
 	{
-		LogDebug("CameraHandler::VideoStreamEnable(%u) - No such stream", stream);
+		LogDebug("CameraHandler::VideoInputEnable(%u) - No such input", input);
 		return false;
 	}
 	
 
 	std::stringstream url;
-	url << "/video/" << stream;
+	url << "/video/" << input;
 
-	if (m_Platform->VideoStreamEnable(stream) == false)
+	if (m_Platform->VideoInputEnable(input) == false)
 	{
-		LogError("Platform Failed to enabled video stream %u", stream);
+		LogError("Platform Failed to enabled video input %u", input);
 		return false;
 	}
-	if (m_VideoStreams[stream]->GetCodec() == "H264")
+	if (m_VideoInputs[input]->GetCodec() == "H264")
 	{
 		std::stringstream pipe;
-		pipe << "( internalsrc streamname=video" << stream << " ! rtph264pay name=pay0 pt=96 )";
+		pipe << "( internalsrc streamname=video" << input << " ! rtph264pay name=pay0 pt=96 )";
 
 		RServer->PipelineAdd(url.str().c_str(), pipe.str().c_str());
 	}
 	else
 	{
-		LogCritical("Unknown Codec: %s", m_VideoStreams[stream]->GetCodec().c_str());
+		LogCritical("Unknown Codec: %s", m_VideoInputs[input]->GetCodec().c_str());
 		abort();
 	}
 	return true;
 }
 
-bool CameraHandler::VideoStreamDisable(unsigned int stream)
+bool CameraHandler::VideoInputDisable(unsigned int input)
 {
-	LogDebug("CameraHandler::VideoStreamDisable(%u)", stream);
-	std::map<unsigned int, struct VideoStreamConfig *>::iterator it = m_VideoStreams.find(stream);
-	if (it == m_VideoStreams.end())
+	LogDebug("CameraHandler::VideoInputDisable(%u)", input);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
 	{
-		LogDebug("CameraHandler::VideoStreamDisable(%u) - No such stream", stream);
+		LogDebug("CameraHandler::VideoInputDisable(%u) - No such input", input);
 		return false;
 	}
 
 	std::stringstream url;
-	url << "/video/" << stream;
+	url << "/video/" << input;
 
 	RServer->PipelineRemove(url.str().c_str());
-	if (m_Platform->VideoStreamDisable(stream) == false)
+	if (m_Platform->VideoInputDisable(input) == false)
 	{
-		LogError("Platform Failed to disable video stream %u", stream);
+		LogError("Platform Failed to disable video input %u", input);
 		return false;
 	}
 	return true;
