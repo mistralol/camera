@@ -8,7 +8,6 @@ BUILT_SOURCES = CameraServerFunctions.i
 CameraServerFunctions.i: CameraServerFunctions.gperf
 	gperf -tCG CameraServerFunctions.gperf > CameraServerFunctions.i || rm -f CameraServerFunctions.i
 
-
 camera_SOURCES= Camera.cpp \
 		CameraHandler.cpp \
 		CameraServer.cpp \

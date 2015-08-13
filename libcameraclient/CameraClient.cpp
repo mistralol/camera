@@ -1,5 +1,10 @@
 
+#include <json/json.h>
+
 #include <libclientserver.h>
+
+#include <VideoInputSupported.h>
+#include <VideoInputConfig.h>
 
 #include <CameraClient.h>
 

@@ -8,15 +8,15 @@ lib_LTLIBRARIES=libcameraclient.la \
 		libcameraclient_python.la
 
 libcameraclient_la_SOURCES=CameraClient.cpp
-libcameraclient_la_CXXFLAGS=$(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
-libcameraclient_la_LDFLAGS=$(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS)
-
+libcameraclient_la_CXXFLAGS=-I../libcameracommon $(JSON_CFLAGS) $(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
+libcameraclient_la_LDFLAGS=../libcameracommon/.libs/libcameracommon.a $(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS)
 
 libcameraclient_csharp_la_SOURCES=libcameraclient_csharp.cpp
+libcameraclient_csharp_la_CXXFLAGS=-I../libcameracommon $(JSON_CFLAGS) $(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
 libcameraclient_csharp_la_LDFLAGS=$(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS)
 
 libcameraclient_python_la_SOURCES=libcameraclient_python.cpp
-libcameraclient_python_la_CXXFLAGS=$(PYTHON_CFLAGS) $(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
+libcameraclient_python_la_CXXFLAGS=-I../libcameracommon $(PYTHON_CFLAGS) $(JSON_CFLAGS) $(LIBLOGGER_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
 libcameraclient_python_la_LDFLAGS=$(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS)
 
 
