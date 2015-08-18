@@ -15,6 +15,7 @@ camera_SOURCES= Camera.cpp \
 		Debug.cpp \
 		Group.cpp \
 		GstUtil.cpp \
+		GstLogger.cpp \
 		PipelineBasic.cpp \
 		RTSPServerCleanup.cpp \
 		RTSPServer.cpp \

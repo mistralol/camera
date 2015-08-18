@@ -29,6 +29,8 @@ class CameraHandler
 		void *m_dll;
 		Barrier m_QuitBarrier;
 
+		GstLogger *m_gstlogger;
+
 		PlatformBase *m_Platform;
 	
 		//Config Stuff

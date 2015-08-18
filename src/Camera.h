@@ -34,6 +34,7 @@ using namespace liblogger;
 #include <PipelineBasic.h>
 
 #include <GstUtil.h>
+#include <GstLogger.h>
 
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>

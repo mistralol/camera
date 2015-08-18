@@ -6,6 +6,8 @@ CameraHandler::CameraHandler()
 {
 	LogDebug("CameraHandler::CameraHandler");
 	gst_init (0, NULL);
+	
+	m_gstlogger = new GstLogger();
 
 	guint major, minor, micro, nano;
 	gst_version(&major, &minor, &micro, &nano);
@@ -45,6 +47,7 @@ CameraHandler::~CameraHandler()
 	if (m_dll)
 		dlclose(m_dll);
 	
+	delete m_gstlogger;
 	gst_deinit();
 }
 
