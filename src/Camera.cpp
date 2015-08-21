@@ -192,10 +192,10 @@ int main(int argc, char **argv)
 	CameraTimers = new Timers();
 	CameraTimers->Start();
 
+	Signals.Block(); //Switch off signals during startup
 	//Init Handler (This is the "system" init call)
 	Server = new CameraServer();
 	Manager = new ServerManager(Server);
-	Signals.Block(); //Switch off signals during startup
 	SHandler.SetServer(Server);
 	Server->Init(DefPlatform, CfgFile);
 
