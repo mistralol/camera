@@ -13,6 +13,7 @@ void print_help(FILE *fp, const char *app)
 	fprintf(fp, " -p --pid <filename>    Use the filename as pid file\n");
 	fprintf(fp, " -s --socket <filename> Use the filename as a unix socket file for services\n");
 	fprintf(fp, " -l --log               Always log to stdout\n");
+	fprintf(fp, " -e --platform          Load a specific platform\n");
 	fprintf(fp, "\n");
 	fprintf(fp, "\n");
 }
@@ -200,18 +201,20 @@ int main(int argc, char **argv)
 
 	//Start Our Local Services
 	LogDebug("Service Listen On: %s", LocSocket.c_str());
-	//ServerUnix Unix(LocSocket);
+
 	ServerUnixSelected Unix(LocSocket);
 	Manager->ServerAdd(&Unix);
 	Signals.UnBlock(); //Accept signals again
-	Server->Wait();
-	Manager->ServerRemove(&Unix);
+
+	Server->Wait(); //Run Until told to quit
 
 	LogInfo("Cleanup");
+	Manager->ServerRemove(&Unix);
 
+	//Block signals
 	Signals.Block();
 	SHandler.SetServer(NULL);
-	Signals.UnBlock();
+	Signals.UnBlock(); //Signals are now dead and won't execute any code.
 
 	//Cleanup!
 	delete Server;
