@@ -36,7 +36,7 @@ int WebServer::Port(struct Data *data)
 	int port = 0;
 	if (data->args.size() == 0)
 	{
-		int ret = data->cli->WebServerGetEnabled(&port);
+		int ret = data->cli->WebServerGetPort(&port);
 		if (ret < 0)
 			return ret;
 		return port;
@@ -44,7 +44,7 @@ int WebServer::Port(struct Data *data)
 
 	std::string str = data->args.front();
 	port = atoi(str.c_str());
-	int ret = data->cli->WebServerSetEnabled(port);
+	int ret = data->cli->WebServerSetPort(port);
 	if (ret < 0)
 		return ret;
 	return port;

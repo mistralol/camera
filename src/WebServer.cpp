@@ -166,6 +166,7 @@ int WebServer::SetPort(int port)
 		return -ERANGE;
 	}
 	
+	LogInfo("WebServer::SetPort(%d)", port);
 	ScopedLock lock = ScopedLock(&m_mutex);
 	m_port = port;
 	if (m_enabled)
