@@ -124,5 +124,13 @@ AC_TYPE_UINT64_T
 AC_CHECK_FUNCS([localtime_r])
 
 
-AC_OUTPUT(Makefile src/Makefile platforms/Makefile platforms/example/Makefile libcameraclient/Makefile libcameracommon/Makefile)
+AC_OUTPUT(Makefile 
+	src/Makefile
+	platforms/Makefile
+	platforms/example/Makefile
+	libcameraclient/Makefile
+	libcameracommon/Makefile
+	cameractl/Makefile
+)
+
 

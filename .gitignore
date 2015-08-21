@@ -41,10 +41,11 @@ SWIGTYPE_p_bool.cs
 SWIGTYPE_p_int.cs
 StringVector.cs
 camera
+cameractl/cameractl
 Config.json
-Ping
-Quit
-Version
+scripts/Ping
+scripts/Quit
+scripts/Version
 scripts/RTSPKickAll
 scripts/RTSPGetClientCount
 scripts/RTSPGetMaxBacklog
