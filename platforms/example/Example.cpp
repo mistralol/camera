@@ -120,6 +120,7 @@ bool Example::VideoInputDisable(unsigned int input)
 	}
 	PipelineBasic *pipeline = it->second;
 	m_videoinputpipelines.erase(it);
+	LogInfo("Example::VideoInputDisable - Stopping Input %u", input);
 	pipeline->Stop();
 	delete pipeline;
 	return true;
