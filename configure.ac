@@ -98,6 +98,11 @@ if test x"$SWIG_CHECK" != x"yes" ; then
     AC_MSG_ERROR([Please install swig before installing.])
 fi
 
+AC_CHECK_PROG(GPERF_CHECK,gperf,yes)
+if test x"$GPERF_CHECK" != x"yes" ; then
+    AC_MSG_ERROR([Please install gperf before installing.])
+fi
+
 dnl Check for gmcs
 AC_CHECK_PROG(GMCS_CHECK,gmcs,yes)
 if test x"$GMCS_CHECK" != x"yes" ; then
