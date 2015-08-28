@@ -16,6 +16,7 @@ libcameraclient_csharp.cpp: CameraClient.cpp CameraClient.h CameraClient.i
 	swig -Wall -c++ -I../libcameracommon -o libcameraclient_csharp.cpp -csharp CameraClient.i
 
 CameraClient.dll: *.cs
+	gmcs -t:library -debug *.cs -out:CameraClient.dll
 
 all-local: CameraClient.dll
 	if [ ! -e .libs/libCameraClientWrapper.so ] ; then ln -s libcameraclient_csharp.so.0.0.0 .libs/libCameraClientWrapper.so ; fi
