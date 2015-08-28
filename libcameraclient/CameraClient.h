@@ -24,6 +24,9 @@ class CameraClient
 		int VideoInputCount(int *value);
 		int VideoInputSetEnabled(unsigned int input, bool enabled);
 		int VideoInputGetEnabled(unsigned int input, int *enabled);
+		int VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg);
+		int VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg);
+		int VideoInputGetSupport(unsigned int input, VideoInputSupported *info);
 
 
 		int UserCreate(const std::string Username, const std::string Password);

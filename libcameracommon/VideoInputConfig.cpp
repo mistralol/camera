@@ -92,3 +92,39 @@ void VideoInputConfig::SetEnabled(bool enabled)
 	m_enabled = enabled;
 }
 
+std::string VideoInputConfig::Encode()
+{
+	Json::Value json;
+	
+	json["framerate"] = m_framerate;
+	json["codec"] = m_codec;
+	json["resolution"] = m_resolution;
+	json["enabled"] = m_enabled;
+	
+	std::stringstream ss;
+	Json::StyledWriter styledWriter;
+	ss << styledWriter.write(json);
+	return ss.str();
+}
+
+bool VideoInputConfig::Decode(const std::string str)
+{
+	Json::Value root;
+	Json::Reader reader;
+
+	if (reader.parse(str, root ) == false)
+		return false;
+		
+	try {
+		m_framerate = root["recordingSchedule"].asInt();
+		m_codec = root["codec"].asString();
+		m_resolution = root["resolution"].asString();
+		m_enabled = root["enabled"].asBool();
+	} catch(...)
+	{
+		return false;
+	}
+			
+	return true;		
+}
+

@@ -238,6 +238,62 @@ int CameraClient::VideoInputGetEnabled(unsigned int input, int *value)
 	return ret;
 }
 
+int CameraClient::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("VideoInputGetConfig");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoInputGetConfig");
+	request.SetArg("input", input);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	std::string str = "";
+	if (response.GetString("config", &str) == false)
+		return -EINVAL;
+	if (cfg->Decode(str) == false)
+		return -EINVAL;
+	return ret;
+}
+
+int CameraClient::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("VideoInputGetConfig");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoInputGetConfig");
+	request.SetArg("input", input);
+	request.SetArg("config", cfg->Encode());
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::VideoInputGetSupport(unsigned int input, VideoInputSupported *info)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("VideoInputGetSupport");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoInputGetSupport");
+	request.SetArg("input", input);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	std::string str = "";
+	if (response.GetString("info", &str) == false)
+		return -EINVAL;
+	if (info->Decode(str) == false)
+		return -EINVAL;
+	return ret;
+}
+
 int CameraClient::UserCreate(const std::string Username, const std::string Password)
 {
 	if (m_Client == NULL)

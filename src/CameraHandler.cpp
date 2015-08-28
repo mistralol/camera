@@ -348,12 +348,90 @@ bool CameraHandler::VideoInputGetEnabled(unsigned int input, bool &enabled)
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
-		LogDebug("CameraHandler::VideoInputGetEnabled(%u) - No such input", input);
+		LogError("CameraHandler::VideoInputGetEnabled(%u) - No such input", input);
 		return false;
 	}
 
 	enabled = m_VideoInputs[input]->GetEnabled();
 	return true;
+}
+
+int CameraHandler::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg)
+{
+	LogDebug("CameraHandler::VideoInputSetConfig(%u)", input);
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
+	{
+		LogError("CameraHandler::VideoInputSetConfig(%u) - No such input", input);
+		return -EEXIST;
+	}
+	struct VideoInputConfig *oldcfg = it->second;
+	if (oldcfg->GetEnabled())
+	{
+		if (VideoInputDisable(input) == false)
+		{
+			LogError("CameraHandler::VideoInputSetConfig(%u) - Failed to disable input", input);
+			return -1;
+		}
+	}
+
+	if (m_Platform->VideoInputConfigure(input, cfg) == false)
+	{
+		LogError("CameraHandler::VideoInputSetConfig(%u) - Failed to configure input", input);
+		if (oldcfg->GetEnabled())
+		{
+			LogInfo("CameraHandler::VideoInputSetConfig(%u) - Restoring original config", input);
+			if (VideoInputEnable(input) == false)
+			{
+				LogCritical("CameraHandler::VideoInputSetConfig - Cannot enable video input again this is FATAL");
+				abort();
+			}
+		}
+		return -1;
+	}
+
+	if (cfg->GetEnabled())
+	{
+		if (VideoInputEnable(input) == false)
+		{
+			LogCritical("CameraHandler::VideoInputSetConfig - Cannot enable video input again this is FATAL");
+			abort();
+		}
+	}
+	*oldcfg = *cfg;
+	LogInfo("CameraHandler::VideoInputSetConfig(%u) - Now configured to be '%s'", input, cfg->ToStr().c_str());
+	return -1;
+}
+
+int CameraHandler::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg)
+{
+	LogDebug("CameraHandler::VideoInputGetConfig(%u)", input);
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
+	{
+		LogError("CameraHandler::VideoInputGetConfig(%u) - No such input", input);
+		return -EEXIST;
+	}
+	struct VideoInputConfig *tmp = it->second;
+	*cfg = *tmp;
+	return 0;
+}
+
+int CameraHandler::VideoInputGetSupported(unsigned int input, VideoInputSupported *info)
+{
+	LogDebug("CameraHandler::VideoInputGetSupported(%u)", input);
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	if (it == m_VideoInputs.end())
+	{
+		LogError("CameraHandler::VideoInputGetSupported(%u) - No such input", input);
+		return -EEXIST;
+	}
+	if (m_Platform->VideoInputSupportedInfo(input, info) == false)
+		return -1;
+	return 0;
 }
 
 bool CameraHandler::VideoInputEnable(unsigned int input)

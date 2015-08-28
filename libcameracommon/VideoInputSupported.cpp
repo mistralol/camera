@@ -5,6 +5,8 @@
 #include <map>
 #include <list>
 
+#include <json/json.h>
+
 #include <liblogger.h>
 using namespace liblogger;
 
@@ -105,4 +107,93 @@ void VideoInputSupported::LogDump()
 	}
 }
 
+std::string VideoInputSupported::Encode()
+{
+	Json::Value json;
+
+	json["codecs"] = Json::arrayValue;
+	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.begin();
+	while(it != m_codecs.end())
+	{
+		std::string codec = it->first;
+		struct CodecInfo *info = &it->second;
+		
+		json["codecs"].append(codec);
+				
+		Json::Value res;
+		std::map<std::string, std::list<int> >::iterator it2 = info->m_res.begin();
+		while(it2 != info->m_res.end())
+		{
+			std::string resolution = it2->first;
+			std::list<int> *framerates = &it2->second;
+
+			Json::Value rates = Json::arrayValue;
+			std::list<int>::iterator it3 = framerates->begin();
+			while(it3 != framerates->end())
+			{
+				rates.append(*it3);
+				it3++;
+			}
+			it2++;
+			res[resolution] = rates;
+		}
+		json[codec]["resolution"] = res;
+		it++;
+	}
+	
+	std::stringstream ss;
+	Json::StyledWriter styledWriter;
+	ss << styledWriter.write(json);
+	return ss.str();
+}
+
+bool VideoInputSupported::Decode(const std::string str)
+{
+	Json::Value root;
+	Json::Reader reader;
+
+	Clear();
+
+	if (reader.parse(str, root ) == false)
+		return false;
+
+	if (root.isMember("codecs") == false || root["codecs"].isArray() == false)
+		return false;
+	
+	try {	
+		for(int i =0;i<root["codecs"].size();i++)
+		{
+			LogInfo("Parsing: %s\n", root["codecs"][i].asString().c_str());
+			std::string codec = root["codecs"][i].asString();
+			if (root.isMember(codec) == false)
+				return false;
+	
+			Json::Value jcodec = root[codec];
+			if (jcodec.isMember("resolution") == false)
+				return false;
+
+			std::vector<std::string> lst = jcodec["resolution"].getMemberNames();
+			for(std::vector<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
+			{
+				std::string res = *it;
+			
+				Json::Value arr = jcodec["resolution"][res];
+				if (arr.isArray() == false)
+					return false;
+				for(int j=0;j<arr.size();j++)
+				{
+					if (arr[j].isNumeric() == false)
+						return false;
+					AddCodec(codec, res, arr[j].asInt());
+				}
+			}
+		
+		}
+	} catch(...)
+	{
+		return false;
+	}
+			
+	return true;	
+}
 

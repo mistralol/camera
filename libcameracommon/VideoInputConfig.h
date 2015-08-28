@@ -23,6 +23,10 @@ class VideoInputConfig
 		void SetEnabled(bool enabled);
 
 		//FIXME: Codec Options eg bitrate, maxbitrate, vbr/cbr etc..
+		
+		
+		std::string Encode();
+		bool Decode(const std::string);
 
 	private:
 		int m_framerate;

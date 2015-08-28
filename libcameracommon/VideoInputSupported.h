@@ -15,6 +15,10 @@ class VideoInputSupported
 		void Clear();
 
 		void LogDump(); //Dumps everything supported to log file
+		
+		std::string Encode();
+		bool Decode(const std::string);
+		
 	private:
 		struct CodecInfo
 		{

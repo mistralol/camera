@@ -9,7 +9,7 @@ cameractl_SOURCES=cameractl.cpp \
 			Rtsp.cpp \
 			VideoInput.cpp
 			
-cameractl_CXXFLAGS=-I../libcameraclient -I../libcameracommon $(LIBCLIENTSERVER_CFLAGS)
-cameractl_LDFLAGS=../libcameraclient/libcameraclient.la ../libcameracommon/libcameracommon.la $(LIBCLIENTSERVER_LIBS) -pthread
+cameractl_CXXFLAGS=-I../libcameraclient -I../libcameracommon $(JSON_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
+cameractl_LDFLAGS=../libcameraclient/libcameraclient.la ../libcameracommon/libcameracommon.la $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS) -pthread
 
 

@@ -177,6 +177,73 @@ int CameraServer::VideoInputGetEnabled(CameraHandler *handler, IServerConnection
 	return 0;
 }
 
+int CameraServer::VideoInputGetConfig(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int input = -1;
+	VideoInputConfig cfg;
+
+	if (request->GetUInt("input", &input) == false)
+	{
+		LogError("CameraServer::VideoInputGetConfig Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = handler->VideoInputGetConfig(input, &cfg);
+	if (ret < 0)
+		return ret;
+	
+	response->SetArg("config", cfg.Encode());
+	return ret;
+}
+
+int CameraServer::VideoInputSetConfig(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int input = -1;
+	VideoInputConfig cfg;
+	std::string data;
+	
+	if (request->GetUInt("input", &input) == false)
+	{
+		LogError("CameraServer::VideoInputSetConfig Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (request->GetString("config", &data) == false)
+	{
+		LogError("CameraServer::VideoInputSetConfig Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (cfg.Decode(data) == false)
+	{
+		LogError("CameraServer::VideoInputSetConfig Failed to decode config - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	int ret = handler->VideoInputSetConfig(input, &cfg);
+	handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::VideoInputGetSupported(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int input = -1;
+	VideoInputSupported info;
+
+	if (request->GetUInt("input", &input) == false)
+	{
+		LogError("CameraServer::VideoInputGetSupported Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	int ret = handler->VideoInputGetSupported(input, &info);
+	if (ret < 0)
+		return ret;
+	
+	response->SetArg("info", info.Encode());
+	return ret;
+}
+
 int CameraServer::UserCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	std::string Username = "";

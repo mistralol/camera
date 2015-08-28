@@ -13,6 +13,9 @@ class CameraHandler
 
 		bool VideoInputSetEnabled(unsigned int input, bool enabled);
 		bool VideoInputGetEnabled(unsigned int input, bool &enabled);
+		int VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg);
+		int VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg);
+		int VideoInputGetSupported(unsigned int input, VideoInputSupported *info);
 
 		bool VideoInputEnable(unsigned int input);
 		bool VideoInputDisable(unsigned int input);

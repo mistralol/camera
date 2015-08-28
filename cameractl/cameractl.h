@@ -5,14 +5,19 @@
 #include <string>
 #include <list>
 
+#include <json/json.h>
+
 #include <libclientserver.h>
-#include <CameraClient.h>
 
 #include <Misc.h>
 #include <System.h>
 #include <WebServer.h>
 #include <Rtsp.h>
 #include <VideoInput.h>
+#include <VideoInputConfig.h>
+#include <VideoInputSupported.h>
+
+#include <CameraClient.h>
 
 struct Operations {
 	const char *op;

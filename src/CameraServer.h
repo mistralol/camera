@@ -23,6 +23,9 @@ class CameraServer : public IServerHandler
 
 		static int VideoInputSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int VideoInputGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoInputGetConfig(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoInputSetConfig(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoInputGetSupported(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
 		static int UserCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserAuth(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
