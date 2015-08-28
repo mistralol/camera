@@ -243,6 +243,12 @@ bool WebServer::Exec()
 		if (sigprocmask(SIG_UNBLOCK, &all, NULL) < 0)
 			abort();
 
+		if (chdir(m_WebRoot.c_str()) < 0)
+		{
+			perror("chdir failed");
+			exit(EXIT_FAILURE);
+		}
+
 		if (execl("/usr/bin/xsp4", "/usr/bin/xsp4", "--nonstop", "--root", m_WebRoot.c_str(), "--port", sport.c_str(), NULL) < 0)
 		{
 			printf("execl failed: %s\n", strerror(errno));
