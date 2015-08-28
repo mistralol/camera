@@ -14,6 +14,7 @@ void print_help(FILE *fp, const char *app)
 	fprintf(fp, " -s --socket <filename> Use the filename as a unix socket file for services\n");
 	fprintf(fp, " -l --log               Always log to stdout\n");
 	fprintf(fp, " -e --platform          Load a specific platform\n");
+	fprintf(fp, " -w --webroot           Location of web site\n");
 	fprintf(fp, "\n");
 	fprintf(fp, "\n");
 }
@@ -87,6 +88,7 @@ int main(int argc, char **argv)
 	std::string LocPidFile = "";
 	std::string DefPlatform = "Example";
 	std::string CfgFile = "Config.json";
+	std::string WebRoot = "WebUI";
 	PIDFile *PidFile = NULL;
 	bool AlwaysLog = false;
 	SetUid ProcessPerms;
@@ -102,6 +104,7 @@ int main(int argc, char **argv)
 		{"pid", 1, 0, 'p'},
 		{"socket", 1, 0, 's'},
 		{"log", 0, 0, 'l'},
+		{"webroot", 1, 0, 'w'},
 		{0, 0, 0, 0}
 	};
 
@@ -127,6 +130,9 @@ int main(int argc, char **argv)
 				break;
 			case 's':
 				LocSocket = optarg;
+				break;
+			case 'w':
+				WebRoot = optarg;
 				break;
 			default:
 				break;
@@ -197,7 +203,7 @@ int main(int argc, char **argv)
 	Server = new CameraServer();
 	Manager = new ServerManager(Server);
 	SHandler.SetServer(Server);
-	Server->Init(DefPlatform, CfgFile);
+	Server->Init(WebRoot, DefPlatform, CfgFile);
 
 	//Start Our Local Services
 	LogDebug("Service Listen On: %s", LocSocket.c_str());

@@ -1,8 +1,9 @@
 
 #include <Camera.h>
 
-WebServer::WebServer()
+WebServer::WebServer(const std::string WebRoot)
 {
+	m_WebRoot = WebRoot;
 	m_enabled = true;
 	m_port = 8080;
 	m_pid = -1;
@@ -217,7 +218,7 @@ bool WebServer::Exec()
 	std::stringstream ss;
 	ss << m_port;
 	std::string sport = ss.str();
-	
+	LogInfo("WebRoot: %s", m_WebRoot.c_str());
 	pid_t pid = fork();
 	if (pid < 0)
 	{
@@ -242,7 +243,7 @@ bool WebServer::Exec()
 		if (sigprocmask(SIG_UNBLOCK, &all, NULL) < 0)
 			abort();
 
-		if (execl("/usr/bin/xsp4", "/usr/bin/xsp4", "--nonstop", "--root", "/home/james/src/camera/WebUI", "--port", sport.c_str(), NULL) < 0)
+		if (execl("/usr/bin/xsp4", "/usr/bin/xsp4", "--nonstop", "--root", m_WebRoot.c_str(), "--port", sport.c_str(), NULL) < 0)
 		{
 			printf("execl failed: %s\n", strerror(errno));
 			abort();

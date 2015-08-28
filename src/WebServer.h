@@ -2,7 +2,7 @@
 class WebServer : private Thread
 {
 	public:
-		WebServer();
+		WebServer(const std::string root);
 		~WebServer();
 		
 		bool ConfigLoad(Json::Value &);
@@ -32,5 +32,6 @@ class WebServer : private Thread
 		int m_port;
 		pid_t m_pid;
 		std::map<std::string, std::string> m_props;
+		std::string m_WebRoot;
 		
 };

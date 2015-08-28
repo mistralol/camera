@@ -13,10 +13,10 @@ CameraServer::~CameraServer()
 	delete m_handler;
 }
 
-void CameraServer::Init(const std::string Platform, const std::string CfgFile)
+void CameraServer::Init(const std::string WebRoot, const std::string Platform, const std::string CfgFile)
 {
 	m_handler = new CameraHandler();
-	m_handler->Init(Platform, CfgFile);
+	m_handler->Init(WebRoot, Platform, CfgFile);
 }
 
 void CameraServer::Wait()

@@ -5,7 +5,7 @@ class CameraHandler
 		CameraHandler();
 		~CameraHandler();
 
-		void Init(const std::string Platform, const std::string CfgFile);
+		void Init(const std::string WebRoot, const std::string Platform, const std::string CfgFile);
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 

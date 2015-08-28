@@ -5,7 +5,7 @@ class CameraServer : public IServerHandler
 		CameraServer();
 		~CameraServer();
 
-		void Init(const std::string Platform, const std::string CfgFile);
+		void Init(const std::string WebRoot, const std::string Platform, const std::string CfgFile);
 
 		void Wait();
 		void Quit();

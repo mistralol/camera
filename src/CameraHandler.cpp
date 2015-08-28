@@ -91,14 +91,14 @@ static bool FindDLL(const std::string &Platform, std::string *path)
 }
 
 //Init Does not need locking as it should be the only code active in the system during startup
-void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
+void CameraHandler::Init(const std::string WebRoot, const std::string Platform, const std::string CfgFile)
 {
 	LogInfo("Version: %s", Version::ToString().c_str());
 	LogDebug("CameraHandler::Init(\"%s\", \"%s\")", Platform.c_str(), CfgFile.c_str());
 	m_CfgFile = CfgFile;
 
 	//Start Various Services
-	WServer = new WebServer();
+	WServer = new WebServer(WebRoot);
 	RServer = new RTSPServer();
 
 	//Search for platform dll
