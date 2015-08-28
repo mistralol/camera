@@ -83,8 +83,9 @@ void VideoInputSupported::Clear()
 	m_codecs.clear();
 }
 
-void VideoInputSupported::LogDump()
+std::list<std::string> VideoInputSupported::ToStrV()
 {
+	std::list<std::string> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.begin();
 	while(it != m_codecs.end())
 	{
@@ -100,11 +101,14 @@ void VideoInputSupported::LogDump()
 				if (fpsit != resit->second.end())
 					ss << ", ";
 			}
-			LogInfo("Codec: %s Res: %s FPS: %s", it->first.c_str(), resit->first.c_str(), ss.str().c_str());
+			std::stringstream line;
+			line << "Codec: " << it->first << " Res: " << resit->first << " FPS: " << ss.str();
+			lst.push_back(line.str());
 			resit++;
 		}
 		it++;
 	}
+	return lst;
 }
 
 std::string VideoInputSupported::Encode()
@@ -163,7 +167,6 @@ bool VideoInputSupported::Decode(const std::string str)
 	try {	
 		for(int i =0;i<root["codecs"].size();i++)
 		{
-			LogInfo("Parsing: %s\n", root["codecs"][i].asString().c_str());
 			std::string codec = root["codecs"][i].asString();
 			if (root.isMember(codec) == false)
 				return false;

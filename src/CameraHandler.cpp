@@ -160,7 +160,13 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 			exit(EXIT_FAILURE);
 		}
 		LogInfo("VideoInput %u Supports", i);
-		info.LogDump();
+
+		std::list<std::string> lst = info.ToStrV();
+		for(std::list<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
+		{
+			std::string tmp = *it;
+			LogInfo("%s", tmp.c_str());
+		}
 	}
 
 	//Load Default Config's. The Config Load can override these later
