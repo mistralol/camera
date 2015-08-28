@@ -14,7 +14,7 @@ namespace WebUI
 		{
             if (User.Identity.IsAuthenticated)
             {
-                Response.Redirect("/Users/DEfault.aspx");
+                Response.Redirect("/Users/Default.aspx");
             }
             else
             {
