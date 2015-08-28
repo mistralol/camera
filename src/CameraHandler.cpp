@@ -83,9 +83,9 @@ static bool FindDLL(const std::string &Platform, std::string *path)
 		return true;
 
 	/* FIXME: This needs removed and replace with proper path + env searchs */		
-	*path = "../platforms/example/.libs/lib" + Platform + ".so";
+	*path = "./platforms/example/.libs/lib" + Platform + ".so";
 	if (CheckDLL(path))
-		return true;
+		return true;		
 
 	return false;	
 }
@@ -170,7 +170,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 		//Load Up Default Configs
 		VideoInputConfig *config = new VideoInputConfig();
 		m_Platform->VideoInputDefaultConfig(i, config);
-		LogInfo("VideoInput %u default Config: '%s'", i, config->ToString().c_str());
+		LogInfo("VideoInput %u default Config: '%s'", i, config->ToStr().c_str());
 		m_VideoInputs[i] = config;
 	}
 
@@ -191,7 +191,7 @@ void CameraHandler::Init(const std::string Platform, const std::string CfgFile)
 	{
 		if (m_Platform->VideoInputConfigure(it->first, it->second) == false)
 		{
-			LogError("CameraHandler::Init Failed to Configure Input %u Config: %s", it->first, it->second->ToString().c_str());
+			LogError("CameraHandler::Init Failed to Configure Input %u Config: %s", it->first, it->second->ToStr().c_str());
 			abort();
 		}
 		if (it->second->GetEnabled())
@@ -251,7 +251,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 				LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video input '%s'", ss.str().c_str());
 				return false;
 			}
-			LogInfo("VideoInput %u loaded config '%s'", it->first, it->second->ToString().c_str());
+			LogInfo("VideoInput %u loaded config '%s'", it->first, it->second->ToStr().c_str());
 		}
 		else
 		{

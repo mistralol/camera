@@ -19,7 +19,7 @@ VideoInputConfig::~VideoInputConfig()
 
 }
 
-std::string VideoInputConfig::ToString() const
+std::string VideoInputConfig::ToStr() const
 {
 	std::stringstream ss;
 	ss << m_codec << "/" << m_resolution << " @ " << m_framerate;

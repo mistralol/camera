@@ -1,10 +1,4 @@
-CameraClientWrapper.py
-CameraClientWrapper.pyc
-CameraClientWrapperPINVOKE.cs
-libCameraClientWrapper
-CameraClient.cs
-CameraClientWrapper.cs
-CameraClient.dll
 libcameraclient_csharp.cpp
-libcameraclient_python.cpp
-
+SWIGTYPE*
+*.cs
+*.dll

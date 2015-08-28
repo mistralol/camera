@@ -66,7 +66,7 @@ void Example::VideoInputDefaultConfig(unsigned int input, VideoInputConfig *conf
 
 bool Example::VideoInputConfigure(unsigned int input, const VideoInputConfig *config)
 {
-	LogDebug("Example::VideoInputConfigure(%u, \"%s\")", input, config->ToString().c_str());
+	LogDebug("Example::VideoInputConfigure(%u, \"%s\")", input, config->ToStr().c_str());
 	m_videoinputconfig[input] = *config; //Take a copy
 	return true;
 }

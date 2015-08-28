@@ -5,7 +5,7 @@ class VideoInputConfig
 		VideoInputConfig();
 		~VideoInputConfig();
 
-		std::string ToString() const;
+		std::string ToStr() const;
 
 		bool ConfigSave(Json::Value &json);
 		bool ConfigLoad(Json::Value &json);

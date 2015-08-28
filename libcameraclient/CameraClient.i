@@ -22,4 +22,6 @@ using namespace std;
 %template(StringVector) std::vector<std::string>;
 
 %include CameraClient.h
+%include VideoInputSupported.h
+%include VideoInputConfig.h
 
