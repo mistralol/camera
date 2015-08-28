@@ -12,10 +12,9 @@ namespace WebUI
 	{
 		protected override void OnLoad (EventArgs e)
 		{
-
             if (User.Identity.IsAuthenticated)
             {
-
+                Response.Redirect("/Users/DEfault.aspx");
             }
             else
             {
@@ -24,5 +23,3 @@ namespace WebUI
 		}
 	}
 }
-
-
