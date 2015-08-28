@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 	bool AlwaysLog = false;
 	SetUid ProcessPerms;
 
-	const char *opts = "h";
+	const char *opts = "hc:e:p:s:lw:";
 	int longindex = 0;
 	int c = 0;
 	struct option loptions[]
