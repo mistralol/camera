@@ -11,11 +11,11 @@ namespace WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["ErrorText"] == null)
-                Response.Redirect("/ErrorUnknown.aspx");
-
             try
             {
+                if (Session["ErrorText"] == null)
+                    Response.Redirect("/ErrorUnknown.aspx");
+
                 string txt = HttpUtility.HtmlEncode((string)Session["ErrorText"]);
                 txt = txt.Replace("\n", "<br/>");
                 lblError.Text = txt;
