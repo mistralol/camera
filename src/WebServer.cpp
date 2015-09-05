@@ -166,8 +166,14 @@ int WebServer::SetPort(int port)
 		LogError("WebServer::SetPort(%d) - Invalid Port", port);
 		return -ERANGE;
 	}
-	
 	LogInfo("WebServer::SetPort(%d)", port);
+
+	if (port == m_port)
+	{
+		LogDebug("WebServer::SetPort Ignored because new port is same as old port");
+		return port;
+	}
+
 	ScopedLock lock = ScopedLock(&m_mutex);
 	m_port = port;
 	if (m_enabled)
