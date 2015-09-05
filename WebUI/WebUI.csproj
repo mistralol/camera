@@ -64,6 +64,9 @@
     <Content Include="Admin\UserAdd.aspx" />
     <Content Include="Admin\Users.aspx" />
     <Content Include="Config\Default.aspx" />
+    <Content Include="Config\Network\Default.aspx" />
+    <Content Include="Config\Network\RTSP.aspx" />
+    <Content Include="Config\Network\WebServer.aspx" />
     <Content Include="ErrorException.aspx" />
     <Content Include="ErrorUnknown.aspx" />
     <Content Include="Global.asax" />
@@ -102,6 +105,27 @@
     </Compile>
     <Compile Include="Config\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Network\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Network\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Network\RTSP.aspx.cs">
+      <DependentUpon>RTSP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Network\RTSP.aspx.designer.cs">
+      <DependentUpon>RTSP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Network\WebServer.aspx.cs">
+      <DependentUpon>WebServer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Network\WebServer.aspx.designer.cs">
+      <DependentUpon>WebServer.aspx</DependentUpon>
     </Compile>
     <Compile Include="ErrorException.aspx.cs">
       <DependentUpon>ErrorException.aspx</DependentUpon>

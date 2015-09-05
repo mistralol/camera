@@ -103,7 +103,18 @@ namespace WebUI.Code.Providers
 		{
 			MembershipUserCollection col = new MembershipUserCollection ();
 
-			throw new NotImplementedException ();
+            StringVector lst = new StringVector();
+            int ret = Camera.UserList(lst);
+            if (ret < 0)
+                throw new CameraClientException(ret);
+
+            for (int i = 0; i < lst.Count; i++)
+            {
+                string user = lst[i];
+                MembershipUser mu = GetUser(user, false);
+                col.Add(mu);
+            }
+            totalRecords = lst.Count;
 			return col;
 		}
 
@@ -124,7 +135,12 @@ namespace WebUI.Code.Providers
 
 		public override MembershipUser GetUser (string name, bool userIsOnline)
 		{
-			throw new NotImplementedException ();
+            int ret = Camera.UserExists(name);
+            if (ret < 0)
+                throw (new CameraClientException(ret));
+
+            MembershipUser mu = new MembershipUser(Name, name, name, string.Empty, string.Empty, string.Empty, true, false, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow);
+            return mu;
 		}
 
 		public override string GetUserNameByEmail (string email)
