@@ -515,7 +515,7 @@ int CameraClient::UserList(std::vector<std::string> &lst)
 	if (ret < 0)
 		return ret;
 	if (response.GetVectorString("value", &lst) == false)
-		return -1;
+		return -6;
 	return lst.size();
 }
 

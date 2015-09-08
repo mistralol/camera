@@ -454,7 +454,7 @@ int CameraServer::UserInfo(CameraHandler *handler, IServerConnection *Connection
 
 int CameraServer::UserList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	std::list<std::string> lst = User::List();
+	std::vector<std::string> lst = User::List();
 	response->SetArg("value", &lst);
 	return lst.size();
 }

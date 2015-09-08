@@ -23,7 +23,7 @@ class User
 
 		static int UserInfo(const std::string User, struct UserItem *);
 
-		static std::list<std::string> List();
+		static std::vector<std::string> List();
 
 		static void Lock();
 		static void Unlock();

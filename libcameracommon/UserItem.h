@@ -16,7 +16,7 @@ struct UserItem
 	bool IsLockedOut;
 	bool IsOnline;
 	
-	unsigned int FailedPasswordAttempts;
+	int FailedPasswordAttempts;
 
 	void Init()
 	{
@@ -34,6 +34,8 @@ struct UserItem
 		IsApproved = false;
 		IsLockedOut = false;
 		IsOnline = false;
+		
+		FailedPasswordAttempts = 0;
 	}
 	
 	bool ConfigLoad(Json::Value &json)
@@ -88,7 +90,7 @@ struct UserItem
 		
 		FailedPasswordAttempts = 0;
 		if (json.isMember("FailedPasswordAttempts") == true)
-			FailedPasswordAttempts= json["LastPasswordChange"].asInt();
+			FailedPasswordAttempts = json["LastPasswordChange"].asInt();
 
 		return true;
 	}

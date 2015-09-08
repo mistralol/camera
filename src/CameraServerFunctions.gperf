@@ -40,7 +40,7 @@ UserIsApproved,		CameraServer::UserIsApproved
 UserIsOnline,		CameraServer::UserIsOnline
 UserSetLockedOut,	CameraServer::UserSetLockedOut
 UserSetApproved,	CameraServer::UserSetApproved
-UserUserInfo,		CameraServer::UserInfo
+UserInfo,		CameraServer::UserInfo
 UserList,		CameraServer::UserList
 #####
 GroupCreate,		CameraServer::GroupCreate

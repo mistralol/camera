@@ -8,6 +8,7 @@ static struct Operations Ops[] = {
 	{"version", Misc::Version, "Returns version of the camera server"},
 	{"rtsp", Rtsp::Process, "Process rtsp commands"},
 	{"system", System::Process, "Process sytem wide commands use system help for more information"},
+	{"user", User::Process, "Process comands for the user database"},
 	{"videoinput", VideoInput::Process, "Process video input commands"},
 	{"webserver", WebServer::Process, "Process webserver commands"},
 	{"quit", Misc::Quit, "Tells camera server to quit and exit"},

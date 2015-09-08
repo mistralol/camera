@@ -16,6 +16,9 @@
 #include <VideoInput.h>
 #include <VideoInputConfig.h>
 #include <VideoInputSupported.h>
+#include <UserItem.h>
+#include <User.h>
+
 
 #include <CameraClient.h>
 

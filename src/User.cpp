@@ -7,6 +7,7 @@ std::map<std::string, struct UserItem *> User::m_map;
 bool User::Init()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Init()");
 	if (m_map.empty() == false)
 		abort();
 	Create("admin", "admin", "");
@@ -29,13 +30,14 @@ bool User::Init()
 void User::Destroy()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Destroy()");
 	Reset();
 }
 
 bool User::ConfigLoad(Json::Value &json)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
-	LogDebug("User::ConfigLoad");
+	LogDebug("User::ConfigLoad()");
 	Reset();
 	std::vector<std::string> lst = json.getMemberNames();
 	std::vector<std::string>::iterator it = lst.begin();
@@ -58,7 +60,7 @@ bool User::ConfigSave(Json::Value &json)
 {
 	bool fail = false;
 	ScopedLock lock = ScopedLock(&m_mutex);
-	LogDebug("User::ConfigSave");
+	LogDebug("User::ConfigSave()");
 	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
@@ -78,6 +80,7 @@ int User::Create(const std::string User, const std::string Password, const std::
 {
 	const std::string passchar = "!\"£$%^&*()_+=#~{}[],./\?:;";
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Create('%s', '', '%s')", User.c_str(), EMail.c_str());
 	if (m_map.find(User) != m_map.end())
 	{
 		LogError("User::Create - Username '%s' already exists", User.c_str());
@@ -127,6 +130,7 @@ int User::Create(const std::string User, const std::string Password, const std::
 bool User::Auth(const std::string User, const std::string Password)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Auth('%s')", User.c_str());
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -185,6 +189,7 @@ bool User::Auth(const std::string User, const std::string Password)
 int User::Delete(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Auth('%s')", User.c_str());
 	if (User == "admin")
 	{
 		LogError("User::Delete - Attempted to delete admin user");
@@ -206,6 +211,7 @@ int User::Delete(const std::string User)
 int User::Exists(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Auth('%s')", User.c_str());
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
 	if (it == m_map.end())
 		return 0;
@@ -215,6 +221,7 @@ int User::Exists(const std::string User)
 int User::SetPassword(const std::string User, const std::string Password)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::SetPassword('%s')", User.c_str());
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -231,6 +238,7 @@ int User::SetPassword(const std::string User, const std::string Password)
 int User::Touch(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::Touch('%s')", User.c_str());
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -247,6 +255,7 @@ int User::Touch(const std::string User)
 int User::IsLockedOut(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::IsLockedOut('%s')", User.c_str());
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -263,6 +272,7 @@ int User::IsLockedOut(const std::string User)
 int User::IsApproved(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::IsApproved('%s')", User.c_str());
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -279,6 +289,7 @@ int User::IsApproved(const std::string User)
 int User::IsOnline(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::IsOnline('%s')", User.c_str());
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -295,6 +306,7 @@ int User::IsOnline(const std::string User)
 int User::SetLockedOut(const std::string User, bool value)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::SetLockedOut('%s', %s)", User.c_str(), value ? "true" : "false");
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -310,6 +322,7 @@ int User::SetLockedOut(const std::string User, bool value)
 int User::SetApproved(const std::string User, bool value)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::SetApproved('%s', %s)", User.c_str(), value ? "true" : "false");
 	struct timespec now;
 	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
@@ -326,6 +339,7 @@ int User::SetApproved(const std::string User, bool value)
 int User::UserInfo(const std::string User, struct UserItem *item)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::UserInfo('%s')", User.c_str());
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
 	if (it == m_map.end())
 	{
@@ -336,10 +350,11 @@ int User::UserInfo(const std::string User, struct UserItem *item)
 	return 0;
 }
 
-std::list<std::string> User::List()
+std::vector<std::string> User::List()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
-	std::list<std::string> lst;
+	LogDebug("User::List()");
+	std::vector<std::string> lst;
 	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
@@ -352,15 +367,18 @@ std::list<std::string> User::List()
 void User::Lock()
 {
 	m_mutex.Lock();
+	LogDebug("User::Lock()");
 }
 
 void User::Unlock()
 {
+	LogDebug("User::Unlock()");
 	m_mutex.Unlock();
 }
 
 void User::Reset()
 {
+	LogDebug("User::Reset()");
 #ifdef DEBUG
 	if (m_mutex.IsOwner == false)
 		abort(); //Must be called locked
