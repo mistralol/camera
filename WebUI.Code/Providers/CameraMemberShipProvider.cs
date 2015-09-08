@@ -58,9 +58,10 @@ namespace WebUI.Code.Providers
 		{
             if (Camera.UserExists(username) > 0)
                 throw(new MembershipCreateUserException(MembershipCreateStatus.DuplicateUserName));
-			int ret = Camera.UserCreate (username, password);
+			int ret = Camera.UserCreate (username, password, email);
 			if (ret < 0)
 				throw(new CameraClientException(ret));
+			//FIXME: Set Approved
 			status = MembershipCreateStatus.Success;
 			MembershipUser tmp = new MembershipUser (this.Name, username, username, email, "", "", true, false, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.MinValue);
 			return tmp;

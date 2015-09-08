@@ -5,6 +5,7 @@
 
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
+#include <UserItem.h>
 
 #include <CameraClient.h>
 
@@ -294,7 +295,7 @@ int CameraClient::VideoInputGetSupport(unsigned int input, VideoInputSupported *
 	return ret;
 }
 
-int CameraClient::UserCreate(const std::string Username, const std::string Password)
+int CameraClient::UserCreate(const std::string Username, const std::string Password, const std::string EMail)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -305,6 +306,7 @@ int CameraClient::UserCreate(const std::string Username, const std::string Passw
 	request.SetCommand("UserCreate");
 	request.SetArg("Username", Username);
 	request.SetArg("Password", Password);
+	request.SetArg("EMail", EMail);
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
@@ -364,6 +366,102 @@ int CameraClient::UserExists(const std::string Username)
 	return ret;
 }
 
+int CameraClient::UserTouch(const std::string Username)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserTouch");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserTouch");
+	request.SetArg("Username", Username);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserIsLockedOut(const std::string Username)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserIsLockedOut");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserIsLockedOut");
+	request.SetArg("Username", Username);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserIsApproved(const std::string Username)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserIsApproved");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserIsApproved");
+	request.SetArg("Username", Username);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserIsOnline(const std::string Username)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserIsOnline");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserIsOnline");
+	request.SetArg("Username", Username);
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	return ret;
+}
+
+int CameraClient::UserSetLockedOut(const std::string Username, bool value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserSetLockedOut");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserSetLockedOut");
+	request.SetArg("Username", Username);
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::UserSetApproved(const std::string Username, bool value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserSetApproved");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserSetApproved");
+	request.SetArg("Username", Username);
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
 int CameraClient::UserSetPassword(const std::string Username, const std::string Password)
 {
 	if (m_Client == NULL)
@@ -379,6 +477,27 @@ int CameraClient::UserSetPassword(const std::string Username, const std::string 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
+	return ret;
+}
+
+int CameraClient::UserInfo(const std::string Username, struct UserItem *info)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserInfo");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserInfo");
+	request.SetArg("Username", Username);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	std::string str;
+	if (response.GetString("info", &str) == false)
+		return -EINVAL;
+	if (info->Decode(str) == false)
+		return -EINVAL;
 	return ret;
 }
 

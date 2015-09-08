@@ -248,6 +248,7 @@ int CameraServer::UserCreate(CameraHandler *handler, IServerConnection *Connecti
 {
 	std::string Username = "";
 	std::string Password = "";
+	std::string EMail = "";
 
 	if (request->GetString("Username", &Username) == false)
 	{
@@ -260,8 +261,14 @@ int CameraServer::UserCreate(CameraHandler *handler, IServerConnection *Connecti
 		LogError("CameraServer::UserCreate Failed - Password exists: %s", request->HasArg("Password") ? "true" : "false");
 		return -EINVAL;
 	}
+	
+	if (request->GetString("EMail", &EMail) == false)
+	{
+		LogError("CameraServer::UserCreate Failed - EMail exists: %s", request->HasArg("Password") ? "true" : "false");
+		return -EINVAL;
+	}
 
-	int ret = User::Create(Username, Password);
+	int ret = User::Create(Username, Password, EMail);
 	if (ret >= 0)
 		handler->Cfg->Dirty();
 	return ret;
@@ -340,6 +347,109 @@ int CameraServer::UserSetPassword(CameraHandler *handler, IServerConnection *Con
 	if (ret >= 0)
 		handler->Cfg->Dirty();
 	return ret;
+}
+
+int CameraServer::UserTouch(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserTouch Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	return User::Touch(Username);
+}
+
+int CameraServer::UserIsLockedOut(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserIsLockedOut Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	return User::IsLockedOut(Username);
+}
+
+int CameraServer::UserIsApproved(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserIsApproved Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	return User::IsApproved(Username);
+}
+
+int CameraServer::UserIsOnline(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserIsOnline Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	return User::IsOnline(Username);
+}
+
+int CameraServer::UserSetLockedOut(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+	bool value = false;
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserSetLockedOut Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (request->GetBool("value", &value) == false)
+	{
+		LogError("CameraServer::UserSetLockedOut Failed - value exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	return User::SetLockedOut(Username, value);
+}
+
+int CameraServer::UserSetApproved(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+	bool value = false;
+
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserSetApproved Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (request->GetBool("value", &value) == false)
+	{
+		LogError("CameraServer::UserSetApproved Failed - value exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	return User::SetApproved(Username, value);
+}
+
+int CameraServer::UserInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Username = "";
+	struct UserItem info;
+	info.Init();
+	if (request->GetString("Username", &Username) == false)
+	{
+		LogError("CameraServer::UserSetApproved Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	int ret = User::UserInfo(Username, &info);
+	if (ret < 0)
+		return ret;
+	response->SetArg("info", info.Encode());
+	return 0;
 }
 
 int CameraServer::UserList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)

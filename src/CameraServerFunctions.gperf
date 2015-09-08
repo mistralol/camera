@@ -34,6 +34,13 @@ UserAuth,		CameraServer::UserAuth
 UserDelete,		CameraServer::UserDelete
 UserExists,		CameraServer::UserExists
 UserSetPassword,	CameraServer::UserSetPassword
+UserTouch,		CameraServer::UserTouch
+UserIsLockedOut,	CameraServer::UserIsLockedOut
+UserIsApproved,		CameraServer::UserIsApproved
+UserIsOnline,		CameraServer::UserIsOnline
+UserSetLockedOut,	CameraServer::UserSetLockedOut
+UserSetApproved,	CameraServer::UserSetApproved
+UserUserInfo,		CameraServer::UserInfo
 UserList,		CameraServer::UserList
 #####
 GroupCreate,		CameraServer::GroupCreate

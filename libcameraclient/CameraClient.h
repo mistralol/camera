@@ -29,11 +29,18 @@ class CameraClient
 		int VideoInputGetSupport(unsigned int input, VideoInputSupported *info);
 
 
-		int UserCreate(const std::string Username, const std::string Password);
+		int UserCreate(const std::string Username, const std::string Password, const std::string EMail);
 		int UserAuth(const std::string Username, const std::string Password);
 		int UserDelete(const std::string Username);
 		int UserExists(const std::string Username);
+		int UserTouch(const std::string Username);
+		int UserIsLockedOut(const std::string Username);
+		int UserIsApproved(const std::string Username);
+		int UserIsOnline(const std::string Username);
+		int UserSetLockedOut(const std::string Username, bool value);
+		int UserSetApproved(const std::string Username, bool value);
 		int UserSetPassword(const std::string Username, const std::string Password);
+		int UserInfo(const std::string Username, struct UserItem *);
 		int UserList(std::vector<std::string> &lst);
 
 		int GroupCreate(const std::string Group);

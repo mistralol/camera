@@ -35,7 +35,7 @@ struct UserItem
 		IsLockedOut = false;
 		IsOnline = false;
 	}
-
+	
 	bool ConfigLoad(Json::Value &json)
 	{
 		if (json.isMember("Key") == false)
@@ -82,8 +82,13 @@ struct UserItem
 		if (json.isMember("IsLockedOut") == true)
 			IsLockedOut = json["IsLockedOut"].asBool();
 
-		IsOnline = false; //Note stored in config
-		FailedPasswordAttempts = 0; //Not stored in config
+		IsOnline = false;
+		if (json.isMember("IsOnline") == true)
+			IsLockedOut = json["IsOnline"].asBool();		
+		
+		FailedPasswordAttempts = 0;
+		if (json.isMember("FailedPasswordAttempts") == true)
+			FailedPasswordAttempts= json["LastPasswordChange"].asInt();
 
 		return true;
 	}
@@ -103,7 +108,38 @@ struct UserItem
 		json["IsApproved"] = IsApproved;
 		json["IsLockedOut"] = IsLockedOut;
 		json["IsOnline"] = IsOnline;
+		json["FailedPasswordAttempts"] = FailedPasswordAttempts;
 
+		return true;
+	}
+	
+	std::string Encode()
+	{
+		Json::Value json;
+		ConfigSave(json);
+		std::stringstream ss;
+		Json::StyledWriter styledWriter;
+		ss << styledWriter.write(json);
+		return ss.str();
+	}
+	
+	bool Decode(const std::string str)
+	{
+		Json::Value root;
+                Json::Reader reader;
+
+                if (reader.parse(str, root ) == false)
+                        return false;
+                
+                try
+                {
+                	if (ConfigLoad(root) == false)
+                		return false;
+                }
+                catch(...)
+                {
+                	return false;
+                }
 		return true;
 	}
 };

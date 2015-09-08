@@ -31,8 +31,16 @@ class CameraServer : public IServerHandler
 		static int UserAuth(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserDelete(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserTouch(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserIsLockedOut(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserIsApproved(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserIsOnline(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserSetLockedOut(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserSetApproved(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserSetPassword(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		
 		static int GroupCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int GroupDelete(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int GroupExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
