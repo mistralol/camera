@@ -33,6 +33,7 @@ class RTSPServer : Thread
 		int m_port;
 		GMainLoop *m_loop;
 		GstRTSPServer *m_server;
+		GstRTSPAuth *m_auth;
 		Barrier m_startbar;
 		Mutex m_mutex;
 		std::map<std::string, std::string> m_urls;

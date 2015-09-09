@@ -6,6 +6,7 @@ RTSPServer::RTSPServer()
 	LogDebug("RTSPServer::RTSPServer");
 	m_loop = NULL;
 	m_server = NULL;
+	m_auth = NULL;
 	m_port = 8554;
 	Thread::Start();
 	m_startbar.Wait();
@@ -33,6 +34,10 @@ void RTSPServer::PipelineAdd(const std::string url, const std::string pipeline)
 
 	GstRTSPMountPoints *mounts = gst_rtsp_server_get_mount_points (m_server);
 	GstRTSPMediaFactory *factory = gst_rtsp_media_factory_new ();
+
+	gst_rtsp_media_factory_add_role (factory, "RTSP",
+		GST_RTSP_PERM_MEDIA_FACTORY_ACCESS, G_TYPE_BOOLEAN, TRUE,
+		GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT, G_TYPE_BOOLEAN, TRUE, NULL);
 
 	gst_rtsp_media_factory_set_launch (factory, pipeline.c_str());
 	gst_rtsp_media_factory_set_shared (factory, TRUE);
@@ -237,12 +242,74 @@ bool RTSPServer::ConfigSave(Json::Value &json)
 	return true;
 }
 
+static gboolean Authenticate(GstRTSPAuth *auth, GstRTSPContext *ctx)
+{
+	LogInfo("RTSPServer::Authenticate");
+	gchar *info;
+	if (gst_rtsp_message_get_header (ctx->request, GST_RTSP_HDR_AUTHORIZATION, &info, 0) < 0)
+	{
+		LogDebug("RTSPServer::Authenticate - No Header");
+		return TRUE;
+	}
+
+	if (g_ascii_strncasecmp (info, "basic ", 6) == 0) {
+		gsize len = 0;
+		g_base64_decode_inplace(&info[6], &len);
+		info[len + 6] = 0;
+
+		std::string str = &info[6];
+		std::string Username = "";
+		std::string Password = "";
+		if (String::SplitOne(&str, &Username, &Password, ":") == false)
+		{
+			LogWarning("RTSPServer::Authenticate - Failed to parse username / password");
+			return FALSE;
+		}
+		if (User::Auth(Username, Password) == false)
+		{
+			LogWarning("RTSPServer::Authenticate - Failed to auth");
+			return FALSE;
+		}
+
+		if (Group::IsUserInGroup("RTSP", Username) == false)
+		{
+			LogWarning("RTSPServer::Authenticate - Failed to auth user '%s' is not in group '%s'", Username.c_str(), "RTSP");
+			return false;
+		}
+		LogInfo("RTSPServer::Authenticate - Success");
+		
+		GstRTSPToken *token = gst_rtsp_token_new(GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE, G_TYPE_STRING, "RTSP", NULL);
+		ctx->token = token;
+		
+		return TRUE;
+	} else if(g_ascii_strncasecmp (info, "digest ", 7) == 0)
+	{
+		LogWarning("RTSPServer::Authenticate - Unknown Auth Mode 'digest'");
+		return FALSE;
+	}
+	else
+	{
+		LogWarning("RTSPServer::Authenticate - Unknown Auth Mode '%s'", info);
+		return FALSE;
+	}
+	
+
+	return FALSE;
+}
+
 void RTSPServer::Run()
 {
 	RTSPServerCleanup PoolCleaner;
 
 	m_loop = g_main_loop_new (NULL, FALSE);
 	m_server = gst_rtsp_server_new ();
+	m_auth = gst_rtsp_auth_new ();
+	gst_rtsp_server_set_auth (m_server, m_auth);
+	
+	if (GST_IS_RTSP_AUTH(m_auth) == false)
+		abort();
+	GST_RTSP_AUTH_GET_CLASS(m_auth)->authenticate = Authenticate;
+
 
 	if (m_port != 0)
 	{
@@ -282,8 +349,10 @@ void RTSPServer::Run()
 	}
 
 	g_object_unref(m_server);
+	g_object_unref (m_auth);
 	g_main_loop_unref(m_loop);
 	m_server = NULL;
+	m_auth = NULL;	
 	m_loop = NULL;
 }
 
