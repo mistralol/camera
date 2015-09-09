@@ -145,7 +145,7 @@ bool User::Auth(const std::string User, const std::string Password)
 		LogInfo("User::Auth - Auth denied for user '%s' because account not approved", User.c_str());
 		return false;
 	}
-	if (user->IsLockedOut == false)
+	if (user->IsLockedOut == true)
 	{
 		LogInfo("User::Auth - Auth denied for user '%s' because account is locked out", User.c_str());
 		return false;
