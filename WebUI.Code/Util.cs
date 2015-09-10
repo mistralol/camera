@@ -18,5 +18,11 @@ namespace WebUI.Code
                 e = e.InnerException;
             }
         }
+
+        public static DateTime FromUnixTimeStamp(int seconds)
+        {
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return epoch.AddSeconds(seconds);
+        }
     }
 }

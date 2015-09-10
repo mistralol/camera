@@ -41,7 +41,7 @@ namespace WebUI.Code.Providers
 
 		public override bool ChangePassword (string name, string oldPwd, string newPwd)
 		{
-			int ret = Camera.UserAuth (name, oldPwd);
+            int ret = Camera.UserSetPassword(name, newPwd);
 			if (ret < 0)
 				throw(new CameraClientException(ret));
 			if (ret == 0)
@@ -61,10 +61,11 @@ namespace WebUI.Code.Providers
 			int ret = Camera.UserCreate (username, password, email);
 			if (ret < 0)
 				throw(new CameraClientException(ret));
-			//FIXME: Set Approved
+            ret = Camera.UserSetApproved(username, true);
+            if (ret < 0)
+                throw (new CameraClientException(ret));
 			status = MembershipCreateStatus.Success;
-			MembershipUser tmp = new MembershipUser (this.Name, username, username, email, "", "", true, false, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.MinValue);
-			return tmp;
+            return GetUser(username, false);
 		}
 
 		public override bool DeleteUser (string name, bool deleteAllRelatedData)
@@ -139,8 +140,16 @@ namespace WebUI.Code.Providers
             int ret = Camera.UserExists(name);
             if (ret < 0)
                 throw (new CameraClientException(ret));
+            UserItem info = new UserItem();
+            ret = Camera.UserInfo(name, info);
+            if (ret < 0)
+                throw (new CameraClientException(ret));
 
-            MembershipUser mu = new MembershipUser(Name, name, name, string.Empty, string.Empty, string.Empty, true, false, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow, DateTime.UtcNow);
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
+            MembershipUser mu = new MembershipUser(Name, info.Username, info.Key, info.EMail, string.Empty, string.Empty, info.IsApproved, info.IsLockedOut,
+                Util.FromUnixTimeStamp(info.Created), Util.FromUnixTimeStamp(info.LastLoginDate), Util.FromUnixTimeStamp(info.LastActivityDate),
+                Util.FromUnixTimeStamp(info.LastPasswordChange), Util.FromUnixTimeStamp(info.LastLockoutDate));
+            info.Dispose();
             return mu;
 		}
 
@@ -204,12 +213,24 @@ namespace WebUI.Code.Providers
 
 		public override bool UnlockUser (string userName)
 		{
-			throw(new NotSupportedException ());
+            int ret = Camera.UserSetLockedOut(userName, false);
+            if (ret < 0)
+                throw (new CameraClientException(ret));
+            return true;
 		}
 
 		public override void UpdateUser (MembershipUser user)
 		{
-			throw(new NotSupportedException ());
+            int ret = Camera.UserSetApproved(user.UserName, user.IsApproved);
+            if (ret < 0)
+                throw (new CameraClientException(ret));
+            ret = Camera.UserSetLockedOut(user.UserName, user.IsLockedOut);
+            if (ret < 0)
+                throw (new CameraClientException(ret));
+            if (user.IsOnline)
+            {
+                Camera.UserTouch(user.UserName);
+            }
 		}
 
 		public override bool ValidateUser (string name, string password)

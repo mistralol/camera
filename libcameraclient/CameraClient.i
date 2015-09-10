@@ -19,6 +19,7 @@ using namespace std;
 %include <stl.i>
 
 %apply int *OUTPUT { int *};
+%apply long { time_t };
 
 %apply int { time_t };
 

@@ -62,6 +62,7 @@
   <ItemGroup>
     <Content Include="Admin\Default.aspx" />
     <Content Include="Admin\UserAdd.aspx" />
+    <Content Include="Admin\UserEdit.aspx" />
     <Content Include="Admin\Users.aspx" />
     <Content Include="Config\Default.aspx" />
     <Content Include="Config\Network\Default.aspx" />
@@ -91,6 +92,13 @@
     </Compile>
     <Compile Include="Admin\UserAdd.aspx.designer.cs">
       <DependentUpon>UserAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UserEdit.aspx.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\UserEdit.aspx.designer.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Users.aspx.cs">
       <DependentUpon>Users.aspx</DependentUpon>
