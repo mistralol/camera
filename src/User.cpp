@@ -44,7 +44,6 @@ bool User::ConfigLoad(Json::Value &json)
 	while(it != lst.end())
 	{
 		struct UserItem *item = new UserItem();
-		item->Init();
 		if (item->ConfigLoad(json[*it]) == false)
 		{
 			delete item;
@@ -109,7 +108,6 @@ int User::Create(const std::string User, const std::string Password, const std::
 	struct timespec Now;
 	Uuid uuid;
 	Time::UTCNow(&Now);
-	item->Init();
 	item->Key = uuid.ToString();
 	item->Username = User;
 	item->Password = Password;

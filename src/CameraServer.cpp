@@ -439,7 +439,6 @@ int CameraServer::UserInfo(CameraHandler *handler, IServerConnection *Connection
 {
 	std::string Username = "";
 	struct UserItem info;
-	info.Init();
 	if (request->GetString("Username", &Username) == false)
 	{
 		LogError("CameraServer::UserSetApproved Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");

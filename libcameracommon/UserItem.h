@@ -18,7 +18,7 @@ struct UserItem
 	
 	int FailedPasswordAttempts;
 
-	void Init()
+	UserItem()
 	{
 		Uuid uuid = Uuid();
 		Key = uuid.ToString();
