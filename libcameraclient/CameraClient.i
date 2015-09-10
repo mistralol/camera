@@ -6,6 +6,7 @@ using namespace std;
 #include <libclientserver.h>
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
+#include <UserItem.h>
 
 #include "CameraClient.h"
 %}
@@ -19,9 +20,12 @@ using namespace std;
 
 %apply int *OUTPUT { int *};
 
+%apply int { time_t };
+
 %template(StringVector) std::vector<std::string>;
 
 %include CameraClient.h
 %include VideoInputSupported.h
 %include VideoInputConfig.h
+%include UserItem.h
 
