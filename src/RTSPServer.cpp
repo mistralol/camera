@@ -271,9 +271,10 @@ static gboolean Authenticate(GstRTSPAuth *auth, GstRTSPContext *ctx)
 			return FALSE;
 		}
 
-		if (Group::IsUserInGroup("RTSP", Username) == false)
+		if (Group::IsUserInGroup("RTSP", Username) == false && 
+			Group::IsUserInGroup("admin", Username) == false)
 		{
-			LogWarning("RTSPServer::Authenticate - Failed to auth user '%s' is not in group '%s'", Username.c_str(), "RTSP");
+			LogWarning("RTSPServer::Authenticate - Failed to auth user '%s' is not in group RTSP,admin", Username.c_str());
 			return false;
 		}
 		LogInfo("RTSPServer::Authenticate - Success");
