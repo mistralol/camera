@@ -6,11 +6,17 @@ lib_LTLIBRARIES=libcameraclient.la \
 
 libcameraclient_la_SOURCES=CameraClient.cpp
 libcameraclient_la_CXXFLAGS=-fPIC -I../libcameracommon $(JSON_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
-libcameraclient_la_LDFLAGS=$(LIBCLIENTSERVER_LIBS)
+libcameraclient_la_LDFLAGS=-Wl,-z,defs -L../libcameracommon/.libs -lcameracommon \
+		$(JSON_LIBS) \
+		$(LIBCLIENTSERVER_LIBS)
 
 libcameraclient_csharp_la_SOURCES=libcameraclient_csharp.cpp
 libcameraclient_csharp_la_CXXFLAGS=-ggdb -fPIC -I../libcameracommon $(JSON_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
-libcameraclient_csharp_la_LDFLAGS=-L.libs -lcameraclient $(LIBCLIENTSERVER_LIBS)
+
+libcameraclient_csharp_la_LDFLAGS=-Wl,-z,defs -L.libs -lcameraclient \
+		-L../libcameracommon/.libs -lcameracommon \
+		$(JSON_LIBS) \
+		$(LIBCLIENTSERVER_LIBS)
 
 libcameraclient_csharp.cpp: CameraClient.cpp CameraClient.h CameraClient.i
 	swig -Wall -c++ -I../libcameracommon -o libcameraclient_csharp.cpp -csharp CameraClient.i

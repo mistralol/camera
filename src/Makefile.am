@@ -24,6 +24,11 @@ camera_SOURCES= Camera.cpp \
 		Version.cpp \
 		WebServer.cpp
 
-camera_LDFLAGS=-rdynamic -L../libcameracommon/.libs/ -lcameracommon $(GST_LIBS) -lgstrtsp-1.0 $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS) $(LIBLOGGER_LIBS) -ldl
+camera_LDFLAGS=-rdynamic -Wl,-z,defs -L../libcameracommon/.libs/ -lcameracommon \
+	$(GST_LIBS) -lgstrtsp-1.0 \
+	$(JSON_LIBS) \
+	$(LIBCLIENTSERVER_LIBS) \
+	$(LIBLOGGER_LIBS) \
+	-ldl
 
 
