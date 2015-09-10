@@ -51,6 +51,7 @@ bool Group::ConfigSave(Json::Value &json)
 int Group::Create(const std::string Group)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::Create('%s')", Group.c_str());
 	if (Exists(Group))
 	{
 		LogError("Group::Create - Cannot add group '%s' because group already exists", Group.c_str());
@@ -71,6 +72,7 @@ int Group::Create(const std::string Group)
 int Group::Delete(const std::string Group)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::Delete('%s')", Group.c_str());
 	if (Group == "Admin")
 	{
 		LogCritical("Group::Delete - Rejecting attempt to delete group '%s'", Group.c_str());
@@ -94,6 +96,7 @@ int Group::Delete(const std::string Group)
 int Group::Exists(const std::string Group)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::Exists('%s')", Group.c_str());
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
@@ -107,6 +110,7 @@ int Group::Exists(const std::string Group)
 int Group::IsUserInGroup(const std::string Group, const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::IsUserInGroup('%s', '%s')", Group.c_str(), User.c_str());
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
@@ -138,6 +142,7 @@ int Group::UserAdd(const std::string Group, const std::string User)
 		return -EINVAL;
 	}
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::UserAdd('%s', '%s')", Group.c_str(), User.c_str());
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
@@ -168,6 +173,7 @@ int Group::UserAdd(const std::string Group, const std::string User)
 int Group::UserRemove(const std::string Group, const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::UserRemove('%s', '%s')", Group.c_str(), User.c_str());
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	if (Group == "admin" && User == "admin")
 	{
@@ -201,6 +207,7 @@ int Group::UserRemove(const std::string Group, const std::string User)
 void Group::UserRemoveFromAll(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::UserRemoveFromAll('%s')", User.c_str());
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
@@ -222,6 +229,7 @@ void Group::UserRemoveFromAll(const std::string User)
 std::list<std::string> Group::List()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::List()");
 	std::list<std::string> lst;
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
@@ -235,6 +243,7 @@ std::list<std::string> Group::List()
 std::list<std::string> Group::ListUsers(const std::string Group)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("Group::ListUsers('%s')", Group.c_str());
 	std::list<std::string> lst;
 	std::map<std::string, std::list<std::string> >::iterator it = m_map.begin();
 	while(it != m_map.end())
