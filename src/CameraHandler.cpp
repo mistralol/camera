@@ -460,18 +460,28 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 		LogError("Platform Failed to enabled video input %u", input);
 		return false;
 	}
-	if (m_VideoInputs[input]->GetCodec() == "H264")
-	{
-		std::stringstream pipe;
-		pipe << "( internalsrc streamname=video" << input << " ! rtph264pay name=pay0 pt=96 )";
 
-		RServer->PipelineAdd(url.str().c_str(), pipe.str().c_str());
-	}
+	std::stringstream pipe;
+	if (m_VideoInputs[input]->GetCodec() == "H264")
+		pipe << "( internalsrc streamname=video" << input << " ! rtph264pay name=pay0 pt=96 )";
+	else if (m_VideoInputs[input]->GetCodec() == "H263")
+		pipe << "( internalsrc streamname=video" << input << " ! rtph263pay name=pay0 pt=96 )";
+	else if (m_VideoInputs[input]->GetCodec() == "MJPG")
+		pipe << "( internalsrc streamname=video" << input << " ! rtpjpegpay name=pay0 pt=96 )";
+	else if (m_VideoInputs[input]->GetCodec() == "JP2K")
+		pipe << "( internalsrc streamname=video" << input << " ! rtpj2kpay name=pay0 pt=96 )";
+	else if (m_VideoInputs[input]->GetCodec() == "JP2K")
+		pipe << "( internalsrc streamname=video" << input << " ! rtpmp4vpay name=pay0 pt=96 )";
+	else if (m_VideoInputs[input]->GetCodec() == "THEORA")
+		pipe << "( internalsrc streamname=video" << input << " ! rtptheorapay name=pay0 pt=96 )";
+	else if (m_VideoInputs[input]->GetCodec() == "VP8")
+		pipe << "( internalsrc streamname=video" << input << " ! rtpvp8pay name=pay0 pt=96 )";
 	else
 	{
 		LogCritical("Unknown Codec: %s", m_VideoInputs[input]->GetCodec().c_str());
 		abort();
 	}
+	RServer->PipelineAdd(url.str().c_str(), pipe.str().c_str());
 	return true;
 }
 
