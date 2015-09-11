@@ -413,7 +413,9 @@ int CameraServer::UserSetLockedOut(CameraHandler *handler, IServerConnection *Co
 		LogError("CameraServer::UserSetLockedOut Failed - value exists: %s", request->HasArg("Username") ? "true" : "false");
 		return -EINVAL;
 	}
-	return User::SetLockedOut(Username, value);
+	int ret = User::SetLockedOut(Username, value);
+	handler->Cfg->Dirty();
+	return ret;
 }
 
 int CameraServer::UserSetApproved(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
@@ -432,7 +434,9 @@ int CameraServer::UserSetApproved(CameraHandler *handler, IServerConnection *Con
 		LogError("CameraServer::UserSetApproved Failed - value exists: %s", request->HasArg("Username") ? "true" : "false");
 		return -EINVAL;
 	}
-	return User::SetApproved(Username, value);
+	int ret = User::SetApproved(Username, value);
+	handler->Cfg->Dirty();
+	return ret;
 }
 
 int CameraServer::UserInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
