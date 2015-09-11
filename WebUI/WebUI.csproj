@@ -241,6 +241,15 @@
   <ItemGroup>
     <Folder Include="App_Themes\Default\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Admin\web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Users\web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\web.config" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 </Project>
