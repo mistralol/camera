@@ -86,7 +86,7 @@ struct UserItem
 
 		IsOnline = false;
 		if (json.isMember("IsOnline") == true)
-			IsLockedOut = json["IsOnline"].asBool();		
+			IsOnline = json["IsOnline"].asBool();		
 		
 		FailedPasswordAttempts = 0;
 		if (json.isMember("FailedPasswordAttempts") == true)
