@@ -480,6 +480,81 @@ int CameraClient::UserSetPassword(const std::string Username, const std::string 
 	return ret;
 }
 
+int CameraClient::UserGetLockoutDuration()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserGetLockoutDuration");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserGetLockoutDuration");
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::UserSetLockoutDuration(int value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserSetLockoutDuration");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserSetLockoutDuration");
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::UserGetMaxFailedAttempts()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserGetMaxFailedAttempts");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserGetMaxFailedAttempts");
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::UserSetMaxFailedAttempts(int value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserSetMaxFailedAttempts");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserSetMaxFailedAttempts");
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::UserGetAutoLogOff()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserGetAutoLogOff");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserGetAutoLogOff");
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::UserSetAutoLogOff(int value)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserSetAutoLogOff");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserSetAutoLogOff");
+	request.SetArg("value", value);
+	return m_Client->SendRequest(&request, &response);
+}
+
 int CameraClient::UserInfo(const std::string Username, struct UserItem *info)
 {
 	if (m_Client == NULL)
@@ -517,6 +592,24 @@ int CameraClient::UserList(std::vector<std::string> &lst)
 	if (response.GetVectorString("value", &lst) == false)
 		return -6;
 	return lst.size();
+}
+
+int CameraClient::UserGetUserFromKey(const std::string Key, std::string *User)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserGetUserFromKey");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserGetUserFromKey");
+	request.SetArg("Key", Key);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetString("Username", User) == false)
+		return -6;
+	return ret;
 }
 
 int CameraClient::GroupCreate(const std::string Group)

@@ -15,6 +15,11 @@ class User
 		static int Password(struct Data *data);
 		static int Info(struct Data *data);
 		
+		static int UserFromKey(struct Data *data);
+		static int LockoutDuration(struct Data *data);
+		static int MaxFailedAttempts(struct Data *data);
+		static int AutoLogOff(struct Data *data);
+		
 		static int Help(struct Data *data);
 		static int Process(struct Data *data);
 };

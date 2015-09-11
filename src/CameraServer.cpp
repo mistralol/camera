@@ -439,6 +439,60 @@ int CameraServer::UserSetApproved(CameraHandler *handler, IServerConnection *Con
 	return ret;
 }
 
+int CameraServer::UserGetLockoutDuration(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return User::GetLockoutDuration();
+}
+
+int CameraServer::UserSetLockoutDuration(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int value = 0;
+	if (request->GetInt("value", &value) == false)
+	{
+		LogError("CameraServer::UserSetLockoutDuration Failed - value exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	int ret = User::SetLockoutDuration(value);
+	handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::UserGetMaxFailedAttempts(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return User::GetMaxFailedAttempts();
+}
+
+int CameraServer::UserSetMaxFailedAttempts(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int value = 0;
+	if (request->GetInt("value", &value) == false)
+	{
+		LogError("CameraServer::UserSetMaxFailedAttempts Failed - value exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	int ret = User::SetMaxFailedAttempts(value);
+	handler->Cfg->Dirty();
+	return ret;
+}
+
+int CameraServer::UserGetAutoLogOff(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return User::GetAutoLogOff();
+}
+
+int CameraServer::UserSetAutoLogOff(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int value = 0;
+	if (request->GetInt("value", &value) == false)
+	{
+		LogError("CameraServer::UserSetAutoLogOff Failed - value exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	int ret = User::SetAutoLogOff(value);
+	handler->Cfg->Dirty();
+	return ret;
+}
+
 int CameraServer::UserInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	std::string Username = "";
@@ -460,6 +514,23 @@ int CameraServer::UserList(CameraHandler *handler, IServerConnection *Connection
 	std::vector<std::string> lst = User::List();
 	response->SetArg("value", &lst);
 	return lst.size();
+}
+
+int CameraServer::UserGetFromKey(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string Key = "";
+	std::string Username = "";
+	struct UserItem info;
+	if (request->GetString("Key", &Key) == false)
+	{
+		LogError("CameraServer::UserGetFromKey Failed - Key exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	int ret = User::GetUserFromKey(Key, &Username);
+	if (ret < 0)
+		return ret;
+	response->SetArg("Username", Username);
+	return ret;
 }
 
 int CameraServer::GroupCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)

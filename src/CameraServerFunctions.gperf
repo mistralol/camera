@@ -40,8 +40,15 @@ UserIsApproved,		CameraServer::UserIsApproved
 UserIsOnline,		CameraServer::UserIsOnline
 UserSetLockedOut,	CameraServer::UserSetLockedOut
 UserSetApproved,	CameraServer::UserSetApproved
+UserGetLockoutDuration,	CameraServer::UserGetLockoutDuration
+UserSetLockoutDuration,	CameraServer::UserSetLockoutDuration
+UserGetMaxFailedAttempts,CameraServer::UserGetMaxFailedAttempts
+UserSetMaxFailedAttempts,CameraServer::UserSetMaxFailedAttempts
+UserGetAutoLogOff,	CameraServer::UserGetAutoLogOff
+UserSetAutoLogOff,	CameraServer::UserSetAutoLogOff
 UserInfo,		CameraServer::UserInfo
 UserList,		CameraServer::UserList
+UserGetFromKey,		CameraServer::UserGetFromKey
 #####
 GroupCreate,		CameraServer::GroupCreate
 GroupDelete,		CameraServer::GroupDelete

@@ -20,21 +20,40 @@ class User
 		
 		static int SetLockedOut(const std::string User, bool value);
 		static int SetApproved(const std::string User, bool value);
+		
+		static int GetLockoutDuration();
+		static int SetLockoutDuration(int value);
+		
+		static int GetMaxFailedAttempts();
+		static int SetMaxFailedAttempts(int value);
+		
+		static int GetAutoLogOff();
+		static int SetAutoLogOff(int value);
 
+		static int GetUserFromKey(const std::string Key, std::string *User);
+		
 		static int UserInfo(const std::string User, struct UserItem *);
 
 		static std::vector<std::string> List();
 
 		static void Lock();
 		static void Unlock();
-
+		
 	protected:
 		static void Reset();
+		static void ProcessUnlock(void *);
+		static void ProcessLogoff(void *);
 
 
 	private:
 		static Mutex m_mutex;
 		static std::map<std::string, struct UserItem *> m_map;
+		static int m_lockoutduration;
+		static int m_maxattempts;
+		static int m_autologoff;
+		
+		static TimerFunc *m_TmrLockout;
+		static TimerFunc *m_TmrLogOff;
 
 };
 

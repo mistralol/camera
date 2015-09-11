@@ -14,6 +14,10 @@ static struct Operations Ops[] = {
 	{"password", User::Password, "set a password for a user"},
 	{"info", User::Info, "dump all information for a user"},
 	{"list", User::List, "Shows a list of users"},
+	{"userfromkey", User::UserFromKey, "Get username from key"},
+	{"lockoutduration", User::LockoutDuration, "Get / Set lockout duration"},
+	{"maxfailedattempts", User::MaxFailedAttempts, "Get / Set max failed attempts"},
+	{"autologoff", User::AutoLogOff, "Get / Set Auto logoff timeout"},
 	{NULL, NULL, NULL }
 };
 
@@ -197,6 +201,71 @@ int User::Info(struct Data *data)
 	printf("FailedPasswordAttempts: %d\n", info.FailedPasswordAttempts);
 	
 	return ret;
+}
+
+int User::UserFromKey(struct Data *data)
+{
+	if (data->args.size() != 1)
+	{
+		printf("Error need key as paramater\n");
+		return -1;
+	}
+	
+	std::string username;
+	std::string key = data->args.front();
+	data->args.pop_front();
+	return data->cli->UserGetUserFromKey(key, &username);
+}
+
+int User::LockoutDuration(struct Data *data)
+{
+	if (data->args.size() == 0)
+		return data->cli->UserGetLockoutDuration();
+
+	if (data->args.size() == 1)
+	{
+		std::string str = data->args.front();
+		data->args.pop_front();
+		int value = atoi(str.c_str());
+		return data->cli->UserSetLockoutDuration(value);
+	}
+
+	printf("Invalid number of paramaters\n");
+	return -1;
+}
+
+int User::MaxFailedAttempts(struct Data *data)
+{
+	if (data->args.size() == 0)
+		return data->cli->UserGetMaxFailedAttempts();
+
+	if (data->args.size() == 1)
+	{
+		std::string str = data->args.front();
+		data->args.pop_front();
+		int value = atoi(str.c_str());
+		return data->cli->UserSetMaxFailedAttempts(value);
+	}
+
+	printf("Invalid number of paramaters\n");
+	return -1;
+}
+
+int User::AutoLogOff(struct Data *data)
+{
+	if (data->args.size() == 0)
+		return data->cli->UserGetAutoLogOff();
+
+	if (data->args.size() == 1)
+	{
+		std::string str = data->args.front();
+		data->args.pop_front();
+		int value = atoi(str.c_str());
+		return data->cli->UserSetAutoLogOff(value);
+	}
+
+	printf("Invalid number of paramaters\n");
+	return -1;
 }
 
 int User::List(struct Data *data)

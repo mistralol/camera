@@ -40,9 +40,19 @@ class CameraClient
 		int UserSetLockedOut(const std::string Username, bool value);
 		int UserSetApproved(const std::string Username, bool value);
 		int UserSetPassword(const std::string Username, const std::string Password);
+		int UserGetLockoutDuration();
+		int UserSetLockoutDuration(int value);
+		int UserGetMaxFailedAttempts();
+		int UserSetMaxFailedAttempts(int value);
+		int UserGetAutoLogOff();
+		int UserSetAutoLogOff(int value);
 		int UserInfo(const std::string Username, struct UserItem *);
 		int UserList(std::vector<std::string> &lst);
+		int UserGetUserFromKey(const std::string Key, std::string *User);
 
+
+		
+		
 		int GroupCreate(const std::string Group);
 		int GroupDelete(const std::string Group);
 		int GroupExists(const std::string Group);

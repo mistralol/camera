@@ -3,6 +3,11 @@
 
 Mutex User::m_mutex;
 std::map<std::string, struct UserItem *> User::m_map;
+int User::m_lockoutduration = 60 * 10; //10 Minutes
+int User::m_maxattempts = 10;
+int User::m_autologoff = 60 * 5; //5 Minutes
+TimerFunc *User::m_TmrLockout = NULL;
+TimerFunc *User::m_TmrLogOff = NULL;
 
 bool User::Init()
 {
@@ -24,12 +29,26 @@ bool User::Init()
 		LogCritical("User::Init - GroupUserAdd Failed");
 		return false;
 	}
+	
+	m_TmrLockout = new TimerFunc(60, ProcessUnlock, NULL);
+	CameraTimers->Add(m_TmrLockout);
+	
+	m_TmrLogOff = new TimerFunc(60, ProcessLogoff, NULL);
+	CameraTimers->Add(m_TmrLogOff);
+
 	return true;
 }
 
 void User::Destroy()
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
+	
+	CameraTimers->Remove(m_TmrLockout);
+	delete m_TmrLockout;
+	
+	CameraTimers->Remove(m_TmrLogOff);
+	delete m_TmrLogOff;
+		
 	LogDebug("User::Destroy()");
 	Reset();
 }
@@ -39,18 +58,32 @@ bool User::ConfigLoad(Json::Value &json)
 	ScopedLock lock = ScopedLock(&m_mutex);
 	LogDebug("User::ConfigLoad()");
 	Reset();
-	std::vector<std::string> lst = json.getMemberNames();
-	std::vector<std::string>::iterator it = lst.begin();
-	while(it != lst.end())
+	
+	if (json.isMember("lockoutduration"))
+		m_lockoutduration = json["lockoutduration"].asInt();
+	if (json.isMember("maxattempts"))
+		m_maxattempts = json["maxattempts"].asInt();
+	if (json.isMember("autologoff"))
+		m_autologoff = json["autologoff"].asInt();
+	
+	if (json.isMember("users"))
 	{
-		struct UserItem *item = new UserItem();
-		if (item->ConfigLoad(json[*it]) == false)
+		Json::Value users = json["users"];
+	
+		std::vector<std::string> lst = users.getMemberNames();
+		std::vector<std::string>::iterator it = lst.begin();
+		while(it != lst.end())
 		{
-			delete item;
-			return false;
+			struct UserItem *item = new UserItem();
+			if (item->ConfigLoad(users[*it]) == false)
+			{
+				delete item;
+				LogError("User::ConfigLoad() Failed to load user '%s'", (*it).c_str());
+				return false;
+			}
+			m_map[*it] = item;
+			it++;
 		}
-		m_map[*it] = item;
-		it++;
 	}
 	return true;
 }
@@ -60,10 +93,16 @@ bool User::ConfigSave(Json::Value &json)
 	bool fail = false;
 	ScopedLock lock = ScopedLock(&m_mutex);
 	LogDebug("User::ConfigSave()");
+	
+	json["lockoutduration"] = m_lockoutduration;
+	json["maxattempts"] = m_maxattempts;
+	json["autologoff"] = m_autologoff;
+	
+	Json::Value users;
 	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
 	while(it != m_map.end())
 	{
-		fail = it->second->ConfigSave(json[it->first]);
+		fail = it->second->ConfigSave(users[it->first]);
 		if (fail == false)
 		{
 			LogCritical("User::ConfigSave - Failed to save user '%s'", it->first.c_str());
@@ -71,6 +110,7 @@ bool User::ConfigSave(Json::Value &json)
 		}
 		it++;
 	}
+	json["users"] = users;
 
 	return true;
 }
@@ -237,15 +277,13 @@ int User::Touch(const std::string User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
 	LogDebug("User::Touch('%s')", User.c_str());
-	struct timespec now;
-	Time::UTCNow(&now);
 	std::map<std::string, struct UserItem *>::iterator it = m_map.find(User);
 	if (it == m_map.end())
 	{
 		LogError("User::Touch - No such user '%s'", User.c_str());
 		return -ENOLINK;
 	}
-	it->second->LastActivityDate = now.tv_sec;
+	it->second->LastActivityDate = time(NULL);
 	it->second->IsOnline = true;
 	return 0;
 }
@@ -313,6 +351,8 @@ int User::SetLockedOut(const std::string User, bool value)
 		LogError("User::SetLockedOut - No such user '%s'", User.c_str());
 		return -ENOLINK;
 	}
+	if (value)
+		it->second->LastLockoutDate = time(NULL);
 	it->second->IsLockedOut = value;
 	return 0;
 }
@@ -333,6 +373,69 @@ int User::SetApproved(const std::string User, bool value)
 	return 0;
 }
 
+int User::GetLockoutDuration()
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::GetLockoutDuration()");
+	return m_lockoutduration;
+}
+
+int User::SetLockoutDuration(int value)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::SetLockoutDuration(%d)", value);
+	m_lockoutduration = value;
+	return m_lockoutduration;
+}
+
+int User::GetMaxFailedAttempts()
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::GetMaxFailedAttempts()");
+	return m_maxattempts;
+}
+
+int User::SetMaxFailedAttempts(int value)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::SetMaxFailedAttempts(%d)", value);
+	m_maxattempts = value;
+	return m_maxattempts;
+}
+
+int User::GetAutoLogOff()
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::GetAutoLogoff()");
+	return m_autologoff;
+}
+
+int User::SetAutoLogOff(int value)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::SetAutoLogoff(%d)", value);
+	m_autologoff = value;
+	return m_autologoff;
+}
+
+int User::GetUserFromKey(const std::string Key, std::string *User)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::GetUserFromKey(%s)", Key.c_str());
+	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
+	while(it != m_map.end())
+	{
+		struct UserItem *user = it->second;
+		if (user->Key == Key)
+		{
+			*User = user->Username;
+			return 1;
+		}
+		it++;
+	}
+	LogError("User::GetUserFromKey - No such user with key '%s'", Key.c_str());
+	return -ENOLINK;
+}
 
 int User::UserInfo(const std::string User, struct UserItem *item)
 {
@@ -390,4 +493,47 @@ void User::Reset()
 	m_map.clear();
 }
 
+void User::ProcessUnlock(void *)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::ProcessUnlock()");
+	time_t now = time_t(NULL);
+	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
+	while(it != m_map.end())
+	{
+		struct UserItem *user = it->second;
+		if (user->IsLockedOut)
+		{
+			if (user->LastLockoutDate + m_lockoutduration > now)
+			{
+				LogInfo("User::ProcessUnlock() - Auto Unlocked user '%s'", user->Username.c_str());
+				user->IsLockedOut = false;
+			}
+		}
+		it++;
+	}	
+	CameraTimers->Add(m_TmrLockout);
+}
+
+void User::ProcessLogoff(void *)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::ProcessLogoff()");
+	time_t now = time_t(NULL);
+	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
+	while(it != m_map.end())
+	{
+		struct UserItem *user = it->second;
+		if (user->IsOnline)
+		{
+			if (user->LastActivityDate + m_autologoff > now)
+			{
+				LogDebug("User::ProcessLogoff() - Auto Offline for user '%s'", user->Username.c_str());
+				user->IsOnline = false;
+			}
+		}
+		it++;
+	}
+	CameraTimers->Add(m_TmrLogOff);
+}
 
