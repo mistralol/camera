@@ -68,7 +68,7 @@
             <asp:Panel runat="server" ID="pnlConfig">
                 <a href="/Config/Default.aspx">Streams</a>
                 <ul class="menu">
-                    <li><a href="/Config/VideoStream.aspx">Video Streams</a></li>
+                    <li><a href="/Config/VideoInput/Default.aspx">Video Inputs</a></li>
                     <li><a href="/Config/AudioStream.aspx">Audio Streams</a></li>
                 </ul>
 
