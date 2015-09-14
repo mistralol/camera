@@ -68,6 +68,8 @@
     <Content Include="Config\Network\Default.aspx" />
     <Content Include="Config\Network\RTSP.aspx" />
     <Content Include="Config\Network\WebServer.aspx" />
+    <Content Include="Config\VideoInput\Default.aspx" />
+    <Content Include="Config\VideoInput\NoInputs.aspx" />
     <Content Include="ErrorException.aspx" />
     <Content Include="ErrorUnknown.aspx" />
     <Content Include="Global.asax" />
@@ -134,6 +136,20 @@
     </Compile>
     <Compile Include="Config\Network\WebServer.aspx.designer.cs">
       <DependentUpon>WebServer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\VideoInput\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\VideoInput\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\VideoInput\NoInputs.aspx.cs">
+      <DependentUpon>NoInputs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\VideoInput\NoInputs.aspx.designer.cs">
+      <DependentUpon>NoInputs.aspx</DependentUpon>
     </Compile>
     <Compile Include="ErrorException.aspx.cs">
       <DependentUpon>ErrorException.aspx</DependentUpon>
@@ -242,7 +258,9 @@
     <Folder Include="App_Themes\Default\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Admin\web.config" />
+    <Content Include="Admin\web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Users\web.config" />
