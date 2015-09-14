@@ -13,7 +13,10 @@ namespace WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Page.User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/Users/Default.aspx");
+            }
         }
     }
 }
