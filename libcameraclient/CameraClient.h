@@ -22,11 +22,11 @@ class CameraClient
 		int RTSPGetMaxBacklog(int *value);
 
 		int VideoInputCount(int *value);
-		int VideoInputSetEnabled(unsigned int input, bool enabled);
-		int VideoInputGetEnabled(unsigned int input, int *enabled);
-		int VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg);
-		int VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg);
-		int VideoInputGetSupport(unsigned int input, VideoInputSupported *info);
+		int VideoInputSetEnabled(int input, bool enabled);
+		int VideoInputGetEnabled(int input, int *enabled);
+		int VideoInputGetConfig(int input, VideoInputConfig *cfg);
+		int VideoInputSetConfig(int input, VideoInputConfig *cfg);
+		int VideoInputGetSupport(int input, VideoInputSupported *info);
 
 
 		int UserCreate(const std::string Username, const std::string Password, const std::string EMail);

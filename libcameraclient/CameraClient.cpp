@@ -206,7 +206,7 @@ int CameraClient::VideoInputCount(int *value)
 	return 0;
 }
 
-int CameraClient::VideoInputSetEnabled(unsigned int input, bool enabled)
+int CameraClient::VideoInputSetEnabled(int input, bool enabled)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -220,7 +220,7 @@ int CameraClient::VideoInputSetEnabled(unsigned int input, bool enabled)
 	return m_Client->SendRequest(&request, &response);
 }
 
-int CameraClient::VideoInputGetEnabled(unsigned int input, int *value)
+int CameraClient::VideoInputGetEnabled(int input, int *value)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -239,7 +239,7 @@ int CameraClient::VideoInputGetEnabled(unsigned int input, int *value)
 	return ret;
 }
 
-int CameraClient::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg)
+int CameraClient::VideoInputGetConfig(int input, VideoInputConfig *cfg)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -260,7 +260,7 @@ int CameraClient::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg)
 	return ret;
 }
 
-int CameraClient::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg)
+int CameraClient::VideoInputSetConfig(int input, VideoInputConfig *cfg)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -274,7 +274,7 @@ int CameraClient::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg)
 	return m_Client->SendRequest(&request, &response);
 }
 
-int CameraClient::VideoInputGetSupport(unsigned int input, VideoInputSupported *info)
+int CameraClient::VideoInputGetSupport(int input, VideoInputSupported *info)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
