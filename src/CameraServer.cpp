@@ -79,9 +79,9 @@ int CameraServer::RTSPSetMaxClients(CameraHandler *handler, IServerConnection *C
 		LogError("CameraServer:RTSPSetMaxClients Failed - Paramater '%s' is missing", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
-	if (value <= 0)
+	if (value < 0)
 	{
-		LogError("CameraServer:RTSPSetMaxClients Failed - value <= 0 value: %d", value);
+		LogError("CameraServer:RTSPSetMaxClients Failed - value < 0 value: %d", value);
 		return -EINVAL;
 	}
 	handler->RServer->SessionsSetMax(value);
@@ -765,6 +765,19 @@ int CameraServer::WebServerRestart(CameraHandler *handler, IServerConnection *Co
 	return 0;
 }
 
+int CameraServer::WebStreamStart(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string str;
+	WebStreamOptions options;
+
+	if (request->GetString("options", &str) == false)
+	{
+		LogError("CameraServer::WebServerRestart Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	return handler->WStream->StartVideoInput(&options);
+}
 
 int CameraServer::DebugGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {

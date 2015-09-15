@@ -4,6 +4,8 @@ using namespace std;
 #include <stdint.h>
 #include <json/json.h>
 #include <libclientserver.h>
+#include <WebStreamType.h>
+#include <WebStreamOptions.h>
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
 #include <UserItem.h>
@@ -29,4 +31,6 @@ using namespace std;
 %include VideoInputSupported.h
 %include VideoInputConfig.h
 %include UserItem.h
+%include WebStreamType.h
+%include WebStreamOptions.h
 

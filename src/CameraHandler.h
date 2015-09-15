@@ -25,6 +25,7 @@ class CameraHandler
 
 
 		WebServer *WServer;
+		WebStream *WStream;
 		RTSPServer *RServer;
 		Config *Cfg;
 

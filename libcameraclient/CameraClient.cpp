@@ -3,6 +3,8 @@
 
 #include <libclientserver.h>
 
+#include <WebStreamType.h>
+#include <WebStreamOptions.h>
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
 #include <UserItem.h>
@@ -857,6 +859,21 @@ int CameraClient::WebServerRestart()
 	
 	request.SetCommand("WebServerRestart");
 	return m_Client->SendRequest(&request, &response);	
+}
+
+int CameraClient::WebStreamStart(WebStreamOptions *options)
+{
+	std::string str;
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("WebStreamStart");
+	Request request;
+	Request response;
+	request.SetCommand("WebStreamStart");
+	if (options->Encode(str) == false)
+		return -EINVAL;
+	request.SetArg("options", str);
+	return m_Client->SendRequest(&request, &response);
 }
 
 int CameraClient::DebugSetEnabled(bool enabled)

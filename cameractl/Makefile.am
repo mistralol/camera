@@ -6,6 +6,7 @@ cameractl_SOURCES=cameractl.cpp \
 			Misc.cpp \
 			System.cpp \
 			WebServer.cpp \
+			WebStream.cpp \
 			Rtsp.cpp \
 			VideoInput.cpp \
 			User.cpp

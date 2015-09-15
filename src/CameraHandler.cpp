@@ -14,6 +14,7 @@ CameraHandler::CameraHandler()
 	LogInfo("Gstreamer Version: %u.%u.%u.%u", major, minor, micro, nano);
 	
 	WServer = NULL;
+	WStream = NULL;
 	RServer = NULL;
 	m_dll = NULL;
 
@@ -37,6 +38,8 @@ CameraHandler::~CameraHandler()
 
 	WServer->Stop();
 	delete WServer;
+	
+	delete WStream;
 
 	User::Destroy();
 
@@ -99,6 +102,7 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 
 	//Start Various Services
 	WServer = new WebServer(WebRoot);
+	WStream = new WebStream();
 	RServer = new RTSPServer();
 
 	//Search for platform dll

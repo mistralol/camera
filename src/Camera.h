@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <getopt.h>
 
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
 #include <list>
 #include <map>
 #include <string>
@@ -41,6 +45,10 @@ using namespace liblogger;
 
 #include <PlatformBase.h>
 
+#include <WebStreamType.h>
+#include <WebStreamOptions.h>
+#include <WebStreamPipeline.h>
+#include <WebStream.h>
 #include <WebServer.h>
 
 #include <Config.h>

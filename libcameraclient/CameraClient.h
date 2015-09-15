@@ -27,8 +27,7 @@ class CameraClient
 		int VideoInputGetConfig(int input, VideoInputConfig *cfg);
 		int VideoInputSetConfig(int input, VideoInputConfig *cfg);
 		int VideoInputGetSupport(int input, VideoInputSupported *info);
-
-
+		
 		int UserCreate(const std::string Username, const std::string Password, const std::string EMail);
 		int UserAuth(const std::string Username, const std::string Password);
 		int UserDelete(const std::string Username);
@@ -50,9 +49,6 @@ class CameraClient
 		int UserList(std::vector<std::string> &lst);
 		int UserGetUserFromKey(const std::string Key, std::string *User);
 
-
-		
-		
 		int GroupCreate(const std::string Group);
 		int GroupDelete(const std::string Group);
 		int GroupExists(const std::string Group);
@@ -69,6 +65,8 @@ class CameraClient
 		int WebServerGetProperty(const std::string key, const std::string def, std::string *value);
 		int WebServerSetProperty(const std::string key, const std::string value);
 		int WebServerRestart();
+		
+		int WebStreamStart(WebStreamOptions *);
 		
 		int DebugSetEnabled(bool enabled);
 		int DebugGetEnabled(int *enabled);

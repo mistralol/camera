@@ -67,6 +67,8 @@ WebServerGetProperty,	CameraServer::WebServerGetProperty
 WebServerSetProperty,	CameraServer::WebServerSetProperty
 WebServerRestart,	CameraServer::WebServerRestart
 #####
+WebStreamStart,		CameraServer::WebStreamStart
+#####
 SystemReboot,		System::Reboot
 SystemShutdown,		System::Shutdown
 #####

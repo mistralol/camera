@@ -22,7 +22,9 @@ camera_SOURCES= Camera.cpp \
 		System.cpp \
 		User.cpp \
 		Version.cpp \
-		WebServer.cpp
+		WebServer.cpp \
+		WebStream.cpp \
+		WebStreamPipeline.cpp
 
 camera_LDFLAGS=-rdynamic -Wl,-z,defs -L../libcameracommon/.libs/ -lcameracommon \
 	$(GST_LIBS) -lgstrtsp-1.0 \

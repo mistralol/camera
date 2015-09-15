@@ -12,10 +12,13 @@
 #include <Misc.h>
 #include <System.h>
 #include <WebServer.h>
+#include <WebStream.h>
 #include <Rtsp.h>
 #include <VideoInput.h>
 #include <VideoInputConfig.h>
 #include <VideoInputSupported.h>
+#include <WebStreamType.h>
+#include <WebStreamOptions.h>
 #include <UserItem.h>
 #include <User.h>
 
