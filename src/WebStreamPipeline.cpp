@@ -61,6 +61,16 @@ int WebStreamPipeline::Start()
 		m_fd = -1;
 		return -EADDRINUSE;
 	}
+	
+	int ret = listen(m_fd, 1);
+	if (ret < 0)
+	{
+		LogError("WebStreamPipeline::Start - Unable to listen on port '%d' error '%s'", port, strerror(errno));
+		if (close(m_fd) < 0)
+			abort();
+		m_fd = -1;
+		return -1;
+	}
 
 	Thread::Start();
 	return port;
