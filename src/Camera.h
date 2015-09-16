@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <errno.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <time.h>
 
 #include <arpa/inet.h>
 #include <sys/socket.h>

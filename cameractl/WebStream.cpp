@@ -19,6 +19,7 @@ int WebStream::Start(struct Data *data)
 	std::string str = data->args.front();
 	WebStreamOptions options;
 	options.vinput = atoi(str.c_str());
+	options.type = MP4;
 	return data->cli->WebStreamStart(&options);
 }
 

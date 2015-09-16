@@ -15,8 +15,8 @@ class WebStreamPipeline : private Thread
 	
 	private:
 		WebStreamOptions m_options;
-		std::string m_strpipe;
 		volatile bool m_finished;
+		volatile bool m_running;
 		int m_fd;
 
 };

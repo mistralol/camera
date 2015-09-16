@@ -42,7 +42,7 @@ int WebStream::StartVideoInput(WebStreamOptions *options)
 void WebStream::Cleanup(void *arg)
 {
 	WebStream *self = (WebStream *) arg;
-	LogDebug("WebStream::Cleanup(%p)", arg);
+	LogDebug("WebStream::Cleanup()");
 	
 restart:
 	self->m_mutex.Lock();

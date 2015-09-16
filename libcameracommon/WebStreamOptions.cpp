@@ -3,6 +3,8 @@
 #include <sstream>
 #include <json/json.h>
 
+#include <stdio.h>
+
 #include <WebStreamType.h>
 #include <WebStreamOptions.h>
 

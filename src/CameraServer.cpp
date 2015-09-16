@@ -775,6 +775,11 @@ int CameraServer::WebStreamStart(CameraHandler *handler, IServerConnection *Conn
 		LogError("CameraServer::WebServerRestart Failed - exists: %s", request->HasArg("value") ? "true" : "false");
 		return -EINVAL;
 	}
+	if (options.Decode(str) == false)
+	{
+		LogError("CameraServer::WebStreamStart - Faield to decode options");
+		return -EINVAL;
+	}
 
 	return handler->WStream->StartVideoInput(&options);
 }
