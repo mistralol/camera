@@ -90,10 +90,13 @@ bool Example::VideoInputEnable(unsigned int input)
 	}
 	if (m_videoinputconfig[input].GetCodec() == "H264")
 	{
-		pipe << "videotestsrc horizontal-speed=5 is-live=true ! " <<
-			"capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << m_videoinputconfig[input].GetFrameRate() << "/1, width=" << width << " , height=" << height << "\" ! " <<
-			"x264enc key-int-max=30 byte-stream=true ! " <<
-			"internalsink streamname=video" << input;
+		pipe << "videotestsrc horizontal-speed=5 is-live=true ! ";
+		pipe << "capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << m_videoinputconfig[input].GetFrameRate() << "/1";
+		pipe << ", width=" << width << " , height=" << height << "\" ! ";
+		pipe << "x264enc key-int-max=30 ! ";
+		pipe << "video/x-h264, stream-format=avc, alignment=au ! ";
+		pipe << "internalsink streamname=video" << input;
+		
 		LogDebug("Example::VideoInputEnable - Pipeline %s", pipe.str().c_str());
 		LogInfo("Example::VideoInputEnable - Starting Input %u", input);
 		PipelineBasic *pipeline = new PipelineBasic(pipe.str());
