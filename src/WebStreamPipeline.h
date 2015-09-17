@@ -12,7 +12,6 @@ class WebStreamPipeline : private Thread
 	private:
 		void Run();
 	
-	
 	private:
 		WebStreamOptions m_options;
 		volatile bool m_finished;

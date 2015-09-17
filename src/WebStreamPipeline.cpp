@@ -152,7 +152,7 @@ restart_accept:
 			break;
 		case MP4:
 			ss << "internalsrc streamname=video" << m_options.vinput << " ! ";
-			ss << "dumpcaps silent=false ! ";
+//			ss << "dumpcaps silent=false ! ";
 			ss << "identity silent=false ! ";
 			ss << "qtmux streamable=true ! ";
 			ss << "fdsink fd=" << fd;
@@ -180,6 +180,8 @@ restart_accept:
 			LogError("Parse error: %s", error->message);
 			goto cleanup;
 		}
+		
+		g_signal_connect(pipeline, "deep-notify", G_CALLBACK (gst_object_default_deep_notify), NULL);
 
 		LogInfo("Starting Pipeline: '%s'", pipe.c_str());	
 		if (GstUtil::SetState(pipeline, GST_STATE_PLAYING) == true)
@@ -208,5 +210,6 @@ cleanup:
 		close(fd);
 	m_finished = true;
 }
+
 
 
