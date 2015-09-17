@@ -93,7 +93,7 @@ bool Example::VideoInputEnable(unsigned int input)
 		pipe << "videotestsrc horizontal-speed=5 is-live=true ! ";
 		pipe << "capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << m_videoinputconfig[input].GetFrameRate() << "/1";
 		pipe << ", width=" << width << " , height=" << height << "\" ! ";
-		pipe << "x264enc key-int-max=30 ! ";
+		pipe << "x264enc key-int-max=" << m_videoinputconfig[input].GetFrameRate() << " ! ";
 		pipe << "video/x-h264, stream-format=avc, alignment=au ! ";
 		pipe << "internalsink streamname=video" << input;
 		
