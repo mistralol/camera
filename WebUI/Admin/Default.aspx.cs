@@ -12,7 +12,7 @@ namespace WebUI.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Response.Redirect("Users.aspx");
         }
     }
 }

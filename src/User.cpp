@@ -117,7 +117,7 @@ bool User::ConfigSave(Json::Value &json)
 
 int User::Create(const std::string User, const std::string Password, const std::string EMail)
 {
-	const std::string passchar = "!\"£$%^&*()_+=#~{}[],./\?:;";
+	const std::string passchar = "!\"£$%^&*()_+=#~{}[],./\?:;@";
 	ScopedLock lock = ScopedLock(&m_mutex);
 	LogDebug("User::Create('%s', '', '%s')", User.c_str(), EMail.c_str());
 	if (m_map.find(User) != m_map.end())
@@ -526,7 +526,7 @@ void User::ProcessLogoff(void *)
 		struct UserItem *user = it->second;
 		if (user->IsOnline)
 		{
-			if (user->LastActivityDate + m_autologoff > now)
+			if (user->LastActivityDate + m_autologoff < now)
 			{
 				LogDebug("User::ProcessLogoff() - Auto Offline for user '%s'", user->Username.c_str());
 				user->IsOnline = false;

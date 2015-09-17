@@ -17,6 +17,13 @@
                 </td>
             </tr>
             <tr>
+                <td>EMail</td>
+                <td><asp:TextBox runat="server" ID="txtEMail"></asp:TextBox></td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
                 <td>Password</td>
                 <td><asp:TextBox runat="server" ID="txtPassword" TextMode="Password"></asp:TextBox></td>
                 <td>

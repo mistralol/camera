@@ -23,7 +23,7 @@ namespace WebUI.Admin
 
             try
             {
-                Membership.CreateUser(txtUsername.Text, txtPassword.Text);
+                Membership.CreateUser(txtUsername.Text, txtPassword.Text, txtEMail.Text);
 
                 pnlCreate.Visible = false;
                 pnlDone.Visible = true;
