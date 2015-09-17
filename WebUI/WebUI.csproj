@@ -77,7 +77,9 @@
     <Content Include="Logout.aspx" />
     <Content Include="Users\ChangePassword.aspx" />
     <Content Include="Users\Default.aspx" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Default.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -266,7 +268,9 @@
     <Content Include="Users\web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\web.config" />
+    <Content Include="Config\web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
