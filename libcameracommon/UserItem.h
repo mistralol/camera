@@ -90,7 +90,7 @@ struct UserItem
 		
 		FailedPasswordAttempts = 0;
 		if (json.isMember("FailedPasswordAttempts") == true)
-			FailedPasswordAttempts = json["LastPasswordChange"].asInt();
+			FailedPasswordAttempts = json["FailedPasswordAttempts"].asInt();
 
 		return true;
 	}
