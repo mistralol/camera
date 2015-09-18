@@ -467,7 +467,7 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 
 	std::stringstream pipe;
 	if (m_VideoInputs[input]->GetCodec() == "H264")
-		pipe << "( internalsrc streamname=video" << input << " ! rtph264pay name=pay0 pt=96 )";
+		pipe << "( internalsrc streamname=video" << input << " ! h264parse ! rtph264pay name=pay0 pt=96 )";
 	else if (m_VideoInputs[input]->GetCodec() == "H263")
 		pipe << "( internalsrc streamname=video" << input << " ! rtph263pay name=pay0 pt=96 )";
 	else if (m_VideoInputs[input]->GetCodec() == "MJPG")
