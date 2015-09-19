@@ -14,6 +14,16 @@ namespace WebUI.Admin
         protected void Page_Load(object sender, EventArgs e)
         {
             lblError.Text = "";
+
+            if (IsPostBack == false)
+            {
+                string[] lst = Roles.GetAllRoles();
+                chklstRoles.Items.Clear();
+                for(int i =0;i<lst.Length;i++)
+                {
+                    chklstRoles.Items.Add(new ListItem(lst[i], lst[i]));
+                }
+            }
         }
 
         protected void btnCreate_Click(object sender, EventArgs e)
@@ -24,6 +34,11 @@ namespace WebUI.Admin
             try
             {
                 Membership.CreateUser(txtUsername.Text, txtPassword.Text, txtEMail.Text);
+
+                for (int i = 0; i < chklstRoles.Items.Count;i++ )
+                {
+                    Roles.AddUserToRole(txtUsername.Text, chklstRoles.Items[i].Value);
+                }
 
                 pnlCreate.Visible = false;
                 pnlDone.Visible = true;

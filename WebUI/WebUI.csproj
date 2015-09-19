@@ -64,6 +64,8 @@
     <Content Include="Admin\UserAdd.aspx" />
     <Content Include="Admin\UserEdit.aspx" />
     <Content Include="Admin\Users.aspx" />
+    <Content Include="Admin\UserView.aspx" />
+    <Content Include="App_Themes\Default\StyleSheet.css" />
     <Content Include="Config\Default.aspx" />
     <Content Include="Config\Network\Default.aspx" />
     <Content Include="Config\Network\RTSP.aspx" />
@@ -110,6 +112,13 @@
     </Compile>
     <Compile Include="Admin\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UserView.aspx.cs">
+      <DependentUpon>UserView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\UserView.aspx.designer.cs">
+      <DependentUpon>UserView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -257,7 +266,7 @@
     <Content Include="Site.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Themes\Default\" />
+    <Content Include="App_Themes\Default\Skin.skin" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\web.config">

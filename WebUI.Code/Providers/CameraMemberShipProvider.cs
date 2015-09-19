@@ -132,7 +132,7 @@ namespace WebUI.Code.Providers
 
 		public override MembershipUser GetUser (object providerUserKey, bool userIsOnline)
 		{
-			throw new NotImplementedException ();
+            throw (new NotSupportedException());
 		}
 
 		public override MembershipUser GetUser (string name, bool userIsOnline)

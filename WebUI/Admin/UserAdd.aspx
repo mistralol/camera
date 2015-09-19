@@ -38,6 +38,13 @@
                     <asp:CompareValidator runat="server" ID="txtPassword22" ValidationGroup="Create" ControlToValidate="txtPassword2" ControlToCompare="txtPassword" ErrorMessage="* Password do not match"></asp:CompareValidator>
                 </td>
             </tr>
+            <tr>
+                <td>Roles</td>
+                <td>
+                    <asp:CheckBoxList runat="server" ID="chklstRoles"></asp:CheckBoxList>
+                </td>
+                <td></td>
+            </tr>
 
             <tr>
                 <td></td>

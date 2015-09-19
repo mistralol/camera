@@ -7,33 +7,6 @@
     <title>Login</title>
 </head>
 <body>
-    <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        #header {
-            background-color: #808080;
-            width: 100%;
-            height: 50px;
-            text-align: center;
-            vertical-align: central;
-        }
-
-        #spacer {
-            width: 100%;
-            height: 50px;
-        }
-
-        #middle {
-            width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-    </style>
-
     <form id="form1" runat="server" autocomplete="off">
     <div id="header">
         Header

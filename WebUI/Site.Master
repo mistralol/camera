@@ -10,45 +10,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <style type="text/css">
-            * {
-                margin: 0;
-                padding: 0;
-            }
-
-            #menu {
-                float: left;
-            }
-
-            .menu ul {
-                list-style: none;
-                padding: 10px;
-            }
-
-            .menu li {
-                list-style: none;
-                margin: 15px;
-            }
-
-            #header {
-                background-color: #808080;
-                width: 100%;
-                height: 50px;
-                margin-bottom: 15px;
-                text-align: center;
-                vertical-align: central;
-            }
-
-            #content > * {
-                float: left;
-                padding: 10px;
-                margin: 10px;
-            }
-
-        </style>
-
         <div id="header">
-            Header
             <div style="float: right; text-align: right;">
                 Username: <asp:Label runat="server" ID="lblUsername"></asp:Label>&nbsp;<br />
                 Version: <asp:Label runat="server" ID="lblVersion"></asp:Label>&nbsp;
@@ -60,7 +22,6 @@
                 <a href="/Admin/Default.aspx">Admin</a>
                 <ul class="menu">
                     <li><a href="/Admin/Users.aspx">Users</a></li>
-                    <li>Groups</li>
                     <li>Logs</li>
                 </ul>
             </asp:Panel>
@@ -69,20 +30,17 @@
                 <a href="/Config/Default.aspx">Streams</a>
                 <ul class="menu">
                     <li><a href="/Config/VideoInput/Default.aspx">Video Inputs</a></li>
-                    <li><a href="/Config/AudioStream.aspx">Audio Streams</a></li>
                 </ul>
 
                 <a href="/Config/Default.aspx">Network</a>
                 <ul class="menu">
-                    <li><a href="/Config/Network/Interfaces.aspx">Interfaces</a></li>
                     <li><a href="/Config/Network/WebServer.aspx">Web Server</a></li>
                     <li><a href="/Config/Network/RTSP.aspx">RTSP Server</a></li>
-                    <li><a href="/Config/Network/NTP.aspx">NTP Client</a></li>
                 </ul>
             </asp:Panel>
 
 
-            <a href="/Users/Default.aspx">Misc</a>
+            <a href="/Users/Default.aspx">Your Account</a>
             <ul class="menu">
                 <li><a href="/Users/ChangePassword.aspx">Change Password</a></li>
                 <li><a href="/Logout.aspx">Logout</a></li>

@@ -15,9 +15,50 @@ namespace WebUI.Admin
         {
             if (IsPostBack == false)
             {
-                MembershipUserCollection Users = Membership.GetAllUsers();
-                lstusers.DataSource = Users;
-                lstusers.DataBind();
+                Bind();
+            }
+            pnlError.Visible = false;
+        }
+
+        void Bind()
+        {
+            MembershipUserCollection Users = Membership.GetAllUsers();
+            lstUsers.DataSource = Users;
+            lstUsers.DataBind();
+        }
+
+        protected void lstUsers_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            Camera.LogInfo(string.Format("Command {0} {1}", e.CommandName, e.CommandArgument.ToString()));
+
+            try
+            {
+                int RowID = int.Parse(e.CommandArgument.ToString());
+                string UserID = lstUsers.DataKeys[RowID].Value.ToString();
+                switch (e.CommandName)
+                {
+                    case "DoView":
+                        Response.Redirect(string.Format("UserView.aspx?UserID={0}", UserID));
+                        break;
+                    case "DoEdit":
+                        Response.Redirect(string.Format("UserEdit.aspx?UserID={0}", UserID));
+                        break;
+                    case "DoDelete":
+                        MembershipUser mu = Membership.GetUser((object)UserID);
+                        Camera.LogInfo(string.Format("Requested to delete user '{0}' by user '{1}'", mu.UserName, User.Identity.Name));
+                        Membership.DeleteUser(mu.UserName);
+                        Bind();
+                        break;
+                    default:
+                        pnlError.Visible = true;
+                        lblError.Text = "Command not supported";
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                pnlError.Visible = true;
+                lblError.Text = string.Format("Unexpected Error: {0}", HttpUtility.HtmlEncode(ex.Message));
             }
         }
     }

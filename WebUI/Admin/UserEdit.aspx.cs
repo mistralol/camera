@@ -4,9 +4,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using WebUI.Code;
+
 namespace WebUI.Admin
 {
-    public partial class UserEdit : System.Web.UI.Page
+    public partial class UserEdit : AppPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
