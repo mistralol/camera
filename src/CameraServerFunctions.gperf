@@ -78,6 +78,8 @@ DebugGetEnabled,	CameraServer::DebugGetEnabled
 #####
 StatsList,		CameraServer::StatsList
 StatsInfo,		CameraServer::StatsInfo
+StatsDump,		CameraServer::StatsDump
+StatsReset,		CameraServer::StatsReset
 #####
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping

@@ -941,6 +941,19 @@ int CameraServer::StatsInfo(CameraHandler *handler, IServerConnection *Connectio
 	return 0;
 }
 
+int CameraServer::StatsDump(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	LogDebug("CameraServer::StatsDump");
+	StatsDump();
+}
+
+int CameraServer::StatsReset(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	LogDebug("CameraServer::StatsReset");
+	StatsReset();
+}
+
+
 void CameraServer::StatsDump()
 {
 	std::list<std::string> Keys = PerfManager::GetKeyList();

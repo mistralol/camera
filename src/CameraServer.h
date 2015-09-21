@@ -78,6 +78,8 @@ class CameraServer : public IServerHandler
 
 		static int StatsList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int StatsInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int StatsDump(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int StatsReset(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		
 		static void StatsDump();
 		static void StatsReset();

@@ -1110,3 +1110,25 @@ int CameraClient::StatsInfo(const std::string key, struct StatsInfo *info)
 	return ret;
 }
 
+int CameraClient::StatsDump()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("StatsDump");
+	Request request;
+	Request response;
+	
+	return m_Client->SendRequest(&request, &response);
+}
+
+int CameraClient::StatsReset()
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("StatsReset");
+	Request request;
+	Request response;
+	
+	return m_Client->SendRequest(&request, &response);
+}
+

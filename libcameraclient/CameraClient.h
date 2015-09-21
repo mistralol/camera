@@ -99,6 +99,8 @@ class CameraClient
 		
 		int StatsList(std::vector<std::string> &lst);
 		int StatsInfo(const std::string key, struct StatsInfo *);
+		int StatsDump();
+		int StatsReset();
 
 	private:
 		ClientBase *m_Client;
