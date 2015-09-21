@@ -1,4 +1,6 @@
 
+#include <StatsInfo.h>
+
 class CameraClient
 {
 	public:
@@ -95,6 +97,8 @@ class CameraClient
 		int LogAlert(const std::string Message);
 		int LogEmergency(const std::string Message);
 		
+		int StatsList(std::vector<std::string> &lst);
+		int StatsInfo(const std::string key, struct StatsInfo *);
 
 	private:
 		ClientBase *m_Client;

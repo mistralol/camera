@@ -76,6 +76,9 @@ class CameraServer : public IServerHandler
 		static int Quit(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int Log(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
+		static int StatsList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int StatsInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		
 		static void StatsDump();
 		static void StatsReset();
 

@@ -76,6 +76,9 @@ SystemShutdown,		System::Shutdown
 DebugSetEnabled,	CameraServer::DebugSetEnabled
 DebugGetEnabled,	CameraServer::DebugGetEnabled
 #####
+StatsList,		CameraServer::StatsList
+StatsInfo,		CameraServer::StatsInfo
+#####
 VERSION,		CameraServer::Version
 PING,			CameraServer::Ping
 QUIT,			CameraServer::Quit

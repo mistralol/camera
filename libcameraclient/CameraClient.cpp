@@ -1070,5 +1070,43 @@ int CameraClient::LogEmergency(const std::string Message)
 	return Log("EMERGENCY", Message);
 }
 
+int CameraClient::StatsList(std::vector<std::string> &lst)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("StatsList");
+	Request request;
+	Request response;
 
+	request.SetCommand("StatsList");
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetVectorString("list", &lst) == false)
+		return -6;
+	return lst.size();
+}
+
+int CameraClient::StatsInfo(const std::string key, struct StatsInfo *info)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("StatsInfo");
+	Request request;
+	Request response;
+	
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetInt("TotalTime", &info->TotalTime) == false)
+		return -6;
+	if (response.GetInt("WorstTime", &info->WorstTime) == false)
+		return -7;
+	if (response.GetInt("BestTime", &info->BestTime) == false)
+		return -8;
+	if (response.GetInt("Count", &info->Count) == false)
+		return -9;
+	return ret;
+}
 

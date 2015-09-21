@@ -911,12 +911,42 @@ int CameraServer::Log(CameraHandler *handler, IServerConnection *Connection, Req
 	return -EINVAL;
 }
 
+int CameraServer::StatsList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	LogDebug("CameraServer::StatsList");
+	std::list<std::string> Keys = PerfManager::GetKeyList();
+	response->SetArg("list", &Keys);
+	return Keys.size();
+}
+
+int CameraServer::StatsInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	LogDebug("CameraServer::StatsInfo");
+	std::string Key = "";
+	struct PerfDetails_t info;
+	
+	if (request->GetString("key", &Key) == false)
+	{
+		LogError("CameraServer::StatsInfo - Missing argument 'key': %s", request->HasArg("key") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	if (PerfManager::GetInfo(Key, &info) < 0)
+		return -ENOLINK;
+		
+	response->SetArg("TotalTime", (int) Time::Microseconds(&info.TotalTime));
+	response->SetArg("WorstTime", (int) Time::Microseconds(&info.WorstTime));
+	response->SetArg("BestTime", (int) Time::Microseconds(&info.BestTime));
+	response->SetArg("Count", info.Count);
+	return 0;
+}
+
 void CameraServer::StatsDump()
 {
 	std::list<std::string> Keys = PerfManager::GetKeyList();
 	struct PerfDetails_t info;
 
-	LogInfo("Dumping Stats");
+	LogInfo("CameraServer::Dumping Stats");
 	for(std::list<std::string>::iterator it = Keys.begin(); it != Keys.end(); it++)
 	{
 		if (PerfManager::GetInfo(*it, &info) < 0)
@@ -928,12 +958,12 @@ void CameraServer::StatsDump()
 				info.TotalTime.tv_sec / info.Count,
 				info.TotalTime.tv_nsec / 1000 / info.Count);
 	}
-	LogInfo("Finished Dumping stats");
+	LogInfo("CameraServer::Finished Dumping stats");
 }
 
 void CameraServer::StatsReset()
 {
-	LogInfo("Resetting Stats");
+	LogInfo("CameraServer::Resetting Stats");
 	PerfManager::Clear();
 }
 
