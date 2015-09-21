@@ -596,7 +596,7 @@ int CameraClient::UserList(std::vector<std::string> &lst)
 	return lst.size();
 }
 
-int CameraClient::UserGetUserFromKey(const std::string Key, std::string *User)
+int CameraClient::UserGetUserFromKey(const std::string Key, std::string &User)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -609,8 +609,19 @@ int CameraClient::UserGetUserFromKey(const std::string Key, std::string *User)
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
-	if (response.GetString("Username", User) == false)
+	if (response.GetString("Username", &User) == false)
 		return -6;
+	return ret;
+}
+
+int CameraClient::UserGetUserFromKey(const std::string Key, std::vector<std::string> &User)
+{
+	std::string username = "";
+	int ret = UserGetUserFromKey(Key, username);
+	User.clear();
+	if (ret < 0)
+		return ret;
+	User.push_back(username);
 	return ret;
 }
 
@@ -818,7 +829,7 @@ int CameraClient::WebServerSetEnabled(bool enabled)
 	return m_Client->SendRequest(&request, &response);
 }
 
-int CameraClient::WebServerGetProperty(const std::string key, const std::string def, std::string *value)
+int CameraClient::WebServerGetProperty(const std::string key, const std::string def, std::string &value)
 {
 	if (m_Client == NULL)
 		return -ENOTCONN;
@@ -830,9 +841,20 @@ int CameraClient::WebServerGetProperty(const std::string key, const std::string 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
-	if (response.GetString("value", value) == false)
+	if (response.GetString("value", &value) == false)
 		return -EINVAL;
 	return 0;
+}
+
+int CameraClient::WebServerGetProperty(const std::string key, const std::string def, std::vector<std::string> &value)
+{
+	std::string prop = "";
+	int ret = WebServerGetProperty(key, def, prop);
+	value.clear();
+	if (ret < 0)
+		return ret;
+	value.push_back(prop);
+	return ret;
 }
 
 int CameraClient::WebServerSetProperty(const std::string key, const std::string value)

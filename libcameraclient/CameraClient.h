@@ -47,7 +47,9 @@ class CameraClient
 		int UserSetAutoLogOff(int value);
 		int UserInfo(const std::string Username, struct UserItem *);
 		int UserList(std::vector<std::string> &lst);
-		int UserGetUserFromKey(const std::string Key, std::string *User);
+		int UserGetUserFromKey(const std::string Key, std::string &User);
+		int UserGetUserFromKey(const std::string Key, std::vector<std::string> &User);
+		
 
 		int GroupCreate(const std::string Group);
 		int GroupDelete(const std::string Group);
@@ -62,7 +64,8 @@ class CameraClient
 		int WebServerSetPort(int port);
 		int WebServerGetEnabled(int *enabled);
 		int WebServerSetEnabled(bool enabled);
-		int WebServerGetProperty(const std::string key, const std::string def, std::string *value);
+		int WebServerGetProperty(const std::string key, const std::string def, std::string &value);
+		int WebServerGetProperty(const std::string key, const std::string def, std::vector<std::string> &value);
 		int WebServerSetProperty(const std::string key, const std::string value);
 		int WebServerRestart();
 		

@@ -214,7 +214,11 @@ int User::UserFromKey(struct Data *data)
 	std::string username;
 	std::string key = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserGetUserFromKey(key, &username);
+	int ret = data->cli->UserGetUserFromKey(key, username);
+	if (ret < 0)
+		return ret;
+	printf("%s\n", username.c_str());
+	return ret;
 }
 
 int User::LockoutDuration(struct Data *data)

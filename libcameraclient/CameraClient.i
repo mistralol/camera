@@ -25,8 +25,6 @@ using namespace std;
 
 %apply int { time_t };
 
-%apply string *OUTPUT { string *};
-
 %template(StringVector) std::vector<std::string>;
 
 %include CameraClient.h
