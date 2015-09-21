@@ -516,6 +516,23 @@ int CameraServer::UserList(CameraHandler *handler, IServerConnection *Connection
 	return lst.size();
 }
 
+int CameraServer::UserGetFromEMail(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	std::string EMail = "";
+	std::string Username = "";
+	struct UserItem info;
+	if (request->GetString("EMail", &EMail) == false)
+	{
+		LogError("CameraServer::UserGetFromEMail Failed - Key exists: %s", request->HasArg("Username") ? "true" : "false");
+		return -EINVAL;
+	}
+	int ret = User::GetUserFromEMail(EMail, &Username);
+	if (ret < 0)
+		return ret;
+	response->SetArg("Username", Username);
+	return ret;
+}
+
 int CameraServer::UserGetFromKey(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	std::string Key = "";

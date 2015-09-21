@@ -15,6 +15,7 @@ static struct Operations Ops[] = {
 	{"info", User::Info, "dump all information for a user"},
 	{"list", User::List, "Shows a list of users"},
 	{"userfromkey", User::UserFromKey, "Get username from key"},
+	{"userfromemail", User::UserFromEMail, "Get username from email"},
 	{"lockoutduration", User::LockoutDuration, "Get / Set lockout duration"},
 	{"maxfailedattempts", User::MaxFailedAttempts, "Get / Set max failed attempts"},
 	{"autologoff", User::AutoLogOff, "Get / Set Auto logoff timeout"},
@@ -200,6 +201,24 @@ int User::Info(struct Data *data)
 	printf("IsOnline: %s\n", info.IsOnline ? "true" : "false");
 	printf("FailedPasswordAttempts: %d\n", info.FailedPasswordAttempts);
 	
+	return ret;
+}
+
+int User::UserFromEMail(struct Data *data)
+{
+	if (data->args.size() != 1)
+	{
+		printf("Error need key as paramater\n");
+		return -1;
+	}
+	
+	std::string username;
+	std::string email = data->args.front();
+	data->args.pop_front();
+	int ret = data->cli->UserGetUserFromEMail(email, username);
+	if (ret < 0)
+		return ret;
+	printf("%s\n", username.c_str());
 	return ret;
 }
 

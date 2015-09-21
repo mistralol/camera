@@ -418,6 +418,25 @@ int User::SetAutoLogOff(int value)
 	return m_autologoff;
 }
 
+int User::GetUserFromEMail(const std::string EMail, std::string *User)
+{
+	ScopedLock lock = ScopedLock(&m_mutex);
+	LogDebug("User::GetUserFromEMail(%s)", EMail.c_str());
+	std::map<std::string, struct UserItem *>::iterator it = m_map.begin();
+	while(it != m_map.end())
+	{
+		struct UserItem *user = it->second;
+		if (user->EMail == EMail)
+		{
+			*User = user->Username;
+			return 1;
+		}
+		it++;
+	}
+	LogError("User::GetUserFromEMail - No such user with email '%s'", EMail.c_str());
+	return -ENOLINK;
+}
+
 int User::GetUserFromKey(const std::string Key, std::string *User)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);

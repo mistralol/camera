@@ -46,6 +46,7 @@ class CameraServer : public IServerHandler
 		static int UserSetAutoLogOff(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int UserGetFromEMail(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int UserGetFromKey(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		
 		static int GroupCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

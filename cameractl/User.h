@@ -14,7 +14,8 @@ class User
 		static int Online(struct Data *data);
 		static int Password(struct Data *data);
 		static int Info(struct Data *data);
-		
+
+		static int UserFromEMail(struct Data *data);		
 		static int UserFromKey(struct Data *data);
 		static int LockoutDuration(struct Data *data);
 		static int MaxFailedAttempts(struct Data *data);

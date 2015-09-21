@@ -596,6 +596,35 @@ int CameraClient::UserList(std::vector<std::string> &lst)
 	return lst.size();
 }
 
+int CameraClient::UserGetUserFromEMail(const std::string EMail, std::string &User)
+{
+	if (m_Client == NULL)
+		return -ENOTCONN;
+	PerfCounter PC("UserGetUserFromEMail");
+	Request request;
+	Request response;
+
+	request.SetCommand("UserGetUserFromEMail");
+	request.SetArg("EMail", EMail);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		return ret;
+	if (response.GetString("Username", &User) == false)
+		return -6;
+	return ret;
+}
+
+int CameraClient::UserGetUserFromEMail(const std::string EMail, std::vector<std::string> &User)
+{
+	std::string username = "";
+	int ret = UserGetUserFromEMail(EMail, username);
+	User.clear();
+	if (ret < 0)
+		return ret;
+	User.push_back(username);
+	return ret;
+}
+
 int CameraClient::UserGetUserFromKey(const std::string Key, std::string &User)
 {
 	if (m_Client == NULL)

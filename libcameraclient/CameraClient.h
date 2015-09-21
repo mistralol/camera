@@ -47,6 +47,8 @@ class CameraClient
 		int UserSetAutoLogOff(int value);
 		int UserInfo(const std::string Username, struct UserItem *);
 		int UserList(std::vector<std::string> &lst);
+		int UserGetUserFromEMail(const std::string EMail, std::string &User);
+		int UserGetUserFromEMail(const std::string EMail, std::vector<std::string> &User);
 		int UserGetUserFromKey(const std::string Key, std::string &User);
 		int UserGetUserFromKey(const std::string Key, std::vector<std::string> &User);
 		

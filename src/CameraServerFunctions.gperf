@@ -48,6 +48,7 @@ UserGetAutoLogOff,	CameraServer::UserGetAutoLogOff
 UserSetAutoLogOff,	CameraServer::UserSetAutoLogOff
 UserInfo,		CameraServer::UserInfo
 UserList,		CameraServer::UserList
+UserGetFromEMail,	CameraServer::UserGetFromEMail
 UserGetFromKey,		CameraServer::UserGetFromKey
 #####
 GroupCreate,		CameraServer::GroupCreate

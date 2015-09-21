@@ -30,6 +30,7 @@ class User
 		static int GetAutoLogOff();
 		static int SetAutoLogOff(int value);
 
+		static int GetUserFromEMail(const std::string EMail, std::string *User);
 		static int GetUserFromKey(const std::string Key, std::string *User);
 		
 		static int UserInfo(const std::string User, struct UserItem *);
