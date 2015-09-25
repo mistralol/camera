@@ -79,7 +79,6 @@ class SigHandler : public ISignalHandler
 
 int main(int argc, char **argv)
 {
-	LogManager::Init();
 	CameraServer *Server = NULL;
 	SigHandler SHandler;
 	SignalHandler Signals = SignalHandler(&SHandler);
@@ -228,7 +227,7 @@ int main(int argc, char **argv)
 	CameraTimers->Stop();
 	delete CameraTimers;
 	delete PidFile;
-	LogManager::RemoveAll(true);
+	LogManager::RemoveAll();
 	return 0;
 }
 

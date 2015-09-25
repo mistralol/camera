@@ -9,11 +9,7 @@ AM_INIT_AUTOMAKE([foreign])
 AC_PROG_CC
 AC_PROG_CXX
 
-m4_ifdef([
-	AX_CXX_COMPILE_STDCXX_11
-],[
-	AX_CXX_COMPILE_STDCXX_11(noext, optional)
-])
+AX_CXX_COMPILE_STDCXX_11(noext, optional)
 
 AC_PROG_LIBTOOL
 
