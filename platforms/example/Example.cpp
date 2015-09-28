@@ -38,7 +38,7 @@ bool Example::ConfigSave(Json::Value &json)
 unsigned int Example::VideoInputCount()
 {
 	LogDebug("Example::VideoInputCount");
-	return 1;
+	return 2;
 }
 
 bool Example::VideoInputSupportedInfo(unsigned int input, VideoInputSupported *info)
@@ -53,15 +53,36 @@ bool Example::VideoInputSupportedInfo(unsigned int input, VideoInputSupported *i
 	info->AddCodec("H264", "704x576", 1, 30);
 	info->AddCodec("H264", "720x480", 1, 30);
 	info->AddCodec("H264", "1280x1080", 1, 30);
+	
+	info->AddCodec("MJPEG", "128x96", 1, 30);
+	info->AddCodec("MJPEG", "176x144", 1, 30);
+	info->AddCodec("MJPEG", "320x280", 1, 30);
+	info->AddCodec("MJPEG", "352x288", 1, 30);
+	info->AddCodec("MJPEG", "640x400", 1, 30);
+	info->AddCodec("MJPEG", "704x576", 1, 30);
+	info->AddCodec("MJPEG", "720x480", 1, 30);
+	info->AddCodec("MJPEG", "1280x1080", 1, 30);
+	
 	return true;
 }
 
 void Example::VideoInputDefaultConfig(unsigned int input, VideoInputConfig *config)
 {
-	config->SetCodec("H264");
-	config->SetResolution("640x400");
-	config->SetFrameRate(30);
-	config->SetEnabled(true);
+	switch(input)
+	{
+		case 1:
+			config->SetCodec("MJPEG");
+			config->SetResolution("640x400");
+			config->SetFrameRate(30);
+			config->SetEnabled(false);
+			break;
+		default:
+			config->SetCodec("H264");
+			config->SetResolution("640x400");
+			config->SetFrameRate(30);
+			config->SetEnabled(true);
+			break;
+	}
 }
 
 bool Example::VideoInputConfigure(unsigned int input, const VideoInputConfig *config)
@@ -95,6 +116,20 @@ bool Example::VideoInputEnable(unsigned int input)
 		pipe << ", width=" << width << " , height=" << height << "\" ! ";
 		pipe << "x264enc key-int-max=" << m_videoinputconfig[input].GetFrameRate() << " threads=1 ! ";
 		pipe << "video/x-h264, stream-format=avc, alignment=au ! ";
+		pipe << "internalsink streamname=video" << input;
+		
+		LogDebug("Example::VideoInputEnable - Pipeline %s", pipe.str().c_str());
+		LogInfo("Example::VideoInputEnable - Starting Input %u", input);
+		PipelineBasic *pipeline = new PipelineBasic(pipe.str());
+		m_videoinputpipelines[input] = pipeline;
+		m_videoinputpipelines[input]->Start();
+		return true;
+	} else if (m_videoinputconfig[input].GetCodec() == "MJPEG")
+	{
+		pipe << "videotestsrc horizontal-speed=5 is-live=true ! ";
+		pipe << "capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << m_videoinputconfig[input].GetFrameRate() << "/1";
+		pipe << ", width=" << width << " , height=" << height << "\" ! ";
+		pipe << "jpegenc ! ";
 		pipe << "internalsink streamname=video" << input;
 		
 		LogDebug("Example::VideoInputEnable - Pipeline %s", pipe.str().c_str());

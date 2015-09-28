@@ -470,7 +470,7 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 		pipe << "( internalsrc streamname=video" << input << " ! h264parse ! rtph264pay name=pay0 pt=96 )";
 	else if (m_VideoInputs[input]->GetCodec() == "H263")
 		pipe << "( internalsrc streamname=video" << input << " ! rtph263pay name=pay0 pt=96 )";
-	else if (m_VideoInputs[input]->GetCodec() == "MJPG")
+	else if (m_VideoInputs[input]->GetCodec() == "MJPEG")
 		pipe << "( internalsrc streamname=video" << input << " ! rtpjpegpay name=pay0 pt=96 )";
 	else if (m_VideoInputs[input]->GetCodec() == "JP2K")
 		pipe << "( internalsrc streamname=video" << input << " ! rtpj2kpay name=pay0 pt=96 )";
