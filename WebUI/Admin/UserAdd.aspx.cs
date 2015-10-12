@@ -55,5 +55,10 @@ namespace WebUI.Admin
             Response.Redirect("/Admin/Users.aspx");
         }
 
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Admin/Users.aspx");
+        }
+
     }
 }

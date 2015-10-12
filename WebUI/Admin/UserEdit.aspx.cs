@@ -14,5 +14,21 @@ namespace WebUI.Admin
         {
 
         }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            pnlEdit.Visible = false;
+            pnlContinue.Visible = true;
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Admin/Users.aspx");
+        }
+
+        protected void btnContinue_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Admin/Users.aspx");
+        }
     }
 }

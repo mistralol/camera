@@ -29,8 +29,6 @@ namespace WebUI.Admin
 
         protected void lstUsers_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            Camera.LogInfo(string.Format("Command {0} {1}", e.CommandName, e.CommandArgument.ToString()));
-
             try
             {
                 int RowID = int.Parse(e.CommandArgument.ToString());

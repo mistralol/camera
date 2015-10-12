@@ -48,7 +48,11 @@
 
             <tr>
                 <td></td>
-                <td><asp:Button runat="server" ID="btnCreate" Text="Create User" ValidationGroup="Create" OnClick="btnCreate_Click" /></td>
+                <td>
+                    <asp:Button runat="server" ID="btnCreate" Text="Create User" ValidationGroup="Create" OnClick="btnCreate_Click" />
+                    <asp:Button runat="server" ID="btnCancel" Text="Cancel" 
+                        CausesValidation="false" onclick="btnCancel_Click" />
+                </td>
                 <td></td>
             </tr>
         </table>
