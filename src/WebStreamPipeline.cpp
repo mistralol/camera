@@ -151,15 +151,26 @@ restart_accept:
 			goto cleanup;
 			break;
 		case MP4:
-			ss << "internalsrc streamname=video" << m_options.vinput << " ! ";
-			ss << "h264parse !";
-			ss << "qtmux streamable=true fragment-duration=250 ! ";
-			ss << "fdsink fd=" << fd;
+			ss << "internalsrc streamname=video" << m_options.vinput << " !";
+			ss << " h264parse !";
+			ss << " qtmux streamable=true fragment-duration=250 !";
+			ss << " fdsink fd=" << fd;
+			break;
+		case MKV:
+			ss << "internalsrc streamname=video" << m_options.vinput << " !";
+			ss << " h264parse !";
+			ss << " matroskamux streamable=true !";
+			ss << " fdsink fd=" << fd;
+			break;
+		case WEBM:
+			ss << "internalsrc streamname=video" << m_options.vinput << " !";
+			ss << " webmmux streamable=true !";
+			ss << " fdsink fd=" << fd;
 			break;
 		case FLV:
-			ss << "internalsrc streamname=video" << m_options.vinput << " ! ";
-			ss << "flvmux streamable=true ! ";
-			ss << "fdsink fd=" << fd;
+			ss << "internalsrc streamname=video" << m_options.vinput << " !";
+			ss << " flvmux streamable=true !";
+			ss << " fdsink fd=" << fd;
 			break;
 		default:
 			LogCritical("WebStreamPipeline::Run() - Bad value or unsuported type");
