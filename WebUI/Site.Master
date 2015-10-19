@@ -18,6 +18,11 @@
         </div>
 
         <div id="menu">
+            <asp:Panel runat="server" ID="pnlLiveView">
+                <a href="/Users/LiveView.aspx">Live View</a><br />
+                <br />
+            </asp:Panel>
+
             <asp:Panel runat="server" ID="pnlAdmin">
                 <a href="/Admin/Default.aspx">Admin</a>
                 <ul class="menu">

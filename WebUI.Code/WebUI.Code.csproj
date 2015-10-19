@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppHandler.cs" />
     <Compile Include="CameraClientException.cs" />
     <Compile Include="JScript.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -72,6 +72,8 @@
     <Content Include="Config\Network\WebServer.aspx" />
     <Content Include="Config\VideoInput\Default.aspx" />
     <Content Include="Config\VideoInput\NoInputs.aspx" />
+    <Content Include="Controls\Default.aspx" />
+    <Content Include="Controls\VideoView.ascx" />
     <Content Include="ErrorException.aspx" />
     <Content Include="ErrorUnknown.aspx" />
     <Content Include="Global.asax" />
@@ -79,6 +81,7 @@
     <Content Include="Logout.aspx" />
     <Content Include="Users\ChangePassword.aspx" />
     <Content Include="Users\Default.aspx" />
+    <Content Include="Users\LiveView.aspx" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -162,6 +165,20 @@
     <Compile Include="Config\VideoInput\NoInputs.aspx.designer.cs">
       <DependentUpon>NoInputs.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\VideoView.ascx.cs">
+      <DependentUpon>VideoView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\VideoView.ascx.designer.cs">
+      <DependentUpon>VideoView.ascx</DependentUpon>
+    </Compile>
     <Compile Include="ErrorException.aspx.cs">
       <DependentUpon>ErrorException.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -220,6 +237,16 @@
     </Compile>
     <Compile Include="Users\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Users\LiveView.aspx.cs">
+      <DependentUpon>LiveView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Users\LiveView.aspx.designer.cs">
+      <DependentUpon>LiveView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Users\VideoStream.ashx.cs">
+      <DependentUpon>VideoStream.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
   <PropertyGroup>
@@ -280,6 +307,9 @@
     <Content Include="Config\web.config">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Users\VideoStream.ashx" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
