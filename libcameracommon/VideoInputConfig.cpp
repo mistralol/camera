@@ -82,6 +82,24 @@ void VideoInputConfig::SetResolution(const std::string &str)
 	m_resolution = str;
 }
 
+int VideoInputConfig::GetWidth()
+{
+	size_t pos = m_resolution.find_first_of('x');
+	if (pos == std::string::npos)
+		return 0;
+	std::string left = m_resolution.substr(0, pos);
+	return atoi(left.c_str()); //FIXME: Proper parsing?
+}
+
+int VideoInputConfig::GetHeight()
+{
+	size_t pos = m_resolution.find_first_of('x');
+	if (pos == std::string::npos)
+		return 0;
+	std::string right = m_resolution.substr(pos, m_resolution.length() - pos);
+	return atoi(right.c_str()); //FIXME: Proper parsing?
+}
+
 bool VideoInputConfig::GetEnabled()
 {
 	return m_enabled;

@@ -19,6 +19,9 @@ class VideoInputConfig
 		std::string GetResolution();
 		void SetResolution(const std::string &str);
 
+		int GetWidth();
+		int GetHeight();
+
 		bool GetEnabled();
 		void SetEnabled(bool enabled);
 
