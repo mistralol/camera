@@ -20,12 +20,18 @@ using namespace std;
 %include <typemaps.i>
 %include <stl.i>
 
-%apply int *OUTPUT { int *};
 %apply long { time_t };
-
 %apply int { time_t };
 
 %template(StringVector) std::vector<std::string>;
+
+%exception {
+try {
+	$action
+} catch (std::exception e) {
+	SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, e.what());
+}
+}
 
 %include CameraClient.h
 %include VideoInputSupported.h

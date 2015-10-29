@@ -21,12 +21,7 @@ namespace WebUI.Config.Network
 
         protected void Bind()
         {
-            int port = 0;
-            
-            int ret = Camera.WebServerGetPort(out port);
-            if (ret < 0)
-                throw(new CameraClientException(ret));
-
+            int port = Camera.WebServerGetPort();
             txtPort.Text = port.ToString();
         }
 
@@ -35,8 +30,15 @@ namespace WebUI.Config.Network
             bool success = true;
             int port = Convert.ToInt16(txtPort.Text);
 
-            if (Camera.WebServerSetPort(port) < 0)
+            try
+            {
+                Camera.WebServerSetPort(port);
+            }
+            catch (Exception ex)
+            {
+                Camera.LogError(ex.Message);
                 success = false;
+            }
 
             if (success)
             {

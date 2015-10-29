@@ -53,18 +53,17 @@ namespace WebUI.Code.Providers
 
 		public override void CreateRole (string rolename)
 		{
-			if (Camera.GroupCreate (rolename) < 0)
-				throw(new Exception ());
+            Camera.GroupCreate(rolename);
 		}
 
 		public override bool DeleteRole (string rolename, bool throwOnPopulatedRole)
 		{
 			if (throwOnPopulatedRole) {
-				throw(new NotImplementedException ());
+				if (Camera.GroupListUsers(rolename).Count > 0)
+                    throw(new Exception("Role not empty"));
 			}
 
-			if (Camera.GroupDelete (rolename) < 0)
-				throw(new Exception ());
+            Camera.GroupDelete(rolename);
 			return true;
 		}
 
@@ -73,8 +72,7 @@ namespace WebUI.Code.Providers
 			List<string> result = new List<string>();
 			StringVector lst = new StringVector ();
 			try {
-				if (Camera.GroupListUsers (roleName, lst) < 0)
-					throw(new Exception ());
+                lst = Camera.GroupListUsers(roleName);
 
 				for (int i =0; i<lst.Count; i++) {
 					if (lst [i].Contains (usernameToMatch))
@@ -95,15 +93,11 @@ namespace WebUI.Code.Providers
 			List<string> result = new List<string> ();
 			StringVector lst = new StringVector ();
 			try {
-				if (Camera.GroupList (lst) < 0)
-					throw(new Exception());
+                lst = Camera.GroupList();
 
 				for(int i =0;i<lst.Count;i++)
 				{
-					int value = 0;
-					if (Camera.GroupIsUserInGroup(lst[i], username, out value) < 0)
-						throw(new Exception());
-					if (value == 1)
+					if (Camera.GroupIsUserInGroup(lst[i], username))
 						result.Add(lst[i]);
 				}
 			} catch(Exception ex) {
@@ -119,8 +113,7 @@ namespace WebUI.Code.Providers
 			List<string> result = new List<string> ();
 			StringVector lst = new StringVector ();
 			try {
-				if (Camera.GroupListUsers(rolename, lst) < 0)
-					throw(new Exception());
+                lst = Camera.GroupListUsers(rolename);
 
 				for(int i =0;i<lst.Count;i++)
 					result.Add(lst[i]);
@@ -135,12 +128,7 @@ namespace WebUI.Code.Providers
 
 		public override bool IsUserInRole (string username, string rolename)
 		{
-			int value = 0;
-			if (Camera.GroupIsUserInGroup(rolename, username, out value) < 0)
-				throw(new Exception());
-			if (value == 1)
-				return true;
-			return false;
+            return Camera.GroupIsUserInGroup(rolename, username);
 		}
 
 		public override void RemoveUsersFromRoles (string[] usernames, string[] rolenames)
@@ -148,20 +136,14 @@ namespace WebUI.Code.Providers
 			foreach (string user in usernames)
 			{
 				foreach (string group in rolenames) {
-					if (Camera.GroupUserRemove (user, group) < 0)
-						throw(new Exception ());
+                    Camera.GroupUserRemove(user, group);
 				}
 			}
 		}
 
 		public override bool RoleExists (string rolename)
 		{
-			int ret = Camera.GroupExists (rolename);
-			if (ret < 0)
-				throw(new Exception ());
-			if (ret == 0)
-				return false;
-			return true;
+			return Camera.GroupExists (rolename);
 		}
 
 		public override string[] GetAllRoles ()
@@ -169,8 +151,7 @@ namespace WebUI.Code.Providers
 			List<string> results = new List<string> ();
 			StringVector lst = new StringVector ();
 			try {
-				if (Camera.GroupList(lst) < 0)
-					throw(new Exception());
+                lst = Camera.GroupList();
 				for(int i =0;i<lst.Count;i++)
 					results.Add(lst[i]);
 			} catch(Exception ex){

@@ -27,7 +27,7 @@
 
 struct Operations {
 	const char *op;
-	int (*func) (struct Data *data);
+	void (*func) (struct Data *data);
 	const char *desc;
 };
 
@@ -39,6 +39,6 @@ struct Data
 	std::list<std::string> args;
 };
 
-extern int DumpHelp(struct Operations *ops);
-extern int Process(struct Data *data);
+extern void DumpHelp(struct Operations *ops);
+extern void Process(struct Data *data);
 

@@ -41,11 +41,7 @@ namespace WebUI.Code.Providers
 
 		public override bool ChangePassword (string name, string oldPwd, string newPwd)
 		{
-            int ret = Camera.UserSetPassword(name, newPwd);
-			if (ret < 0)
-				throw(new CameraClientException(ret));
-			if (ret == 0)
-				return false;
+            Camera.UserSetPassword(name, newPwd);
 			return true;
 		}
 
@@ -56,23 +52,17 @@ namespace WebUI.Code.Providers
 
 		public override MembershipUser CreateUser (string username, string password, string email, string pwdQuestion, string pwdAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
 		{
-            if (Camera.UserExists(username) > 0)
+            if (Camera.UserExists(username))
                 throw(new MembershipCreateUserException(MembershipCreateStatus.DuplicateUserName));
-			int ret = Camera.UserCreate (username, password, email);
-			if (ret < 0)
-				throw(new CameraClientException(ret));
-            ret = Camera.UserSetApproved(username, true);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+			Camera.UserCreate (username, password, email);
+            Camera.UserSetApproved(username, true);
 			status = MembershipCreateStatus.Success;
             return GetUser(username, false);
 		}
 
 		public override bool DeleteUser (string name, bool deleteAllRelatedData)
 		{
-            int ret = Camera.UserDelete(name);
-			if (ret < 0)
-				throw(new CameraClientException(ret));
+            Camera.UserDelete(name);
 			return true;
 		}
 
@@ -104,11 +94,7 @@ namespace WebUI.Code.Providers
 		public override MembershipUserCollection GetAllUsers (int pageIndex, int pageSize, out int totalRecords)
 		{
 			MembershipUserCollection col = new MembershipUserCollection ();
-
-            StringVector lst = new StringVector();
-            int ret = Camera.UserList(lst);
-            if (ret < 0)
-                throw new CameraClientException(ret);
+            StringVector lst = Camera.UserList();
 
             for (int i = 0; i < lst.Count; i++)
             {
@@ -137,13 +123,8 @@ namespace WebUI.Code.Providers
 
 		public override MembershipUser GetUser (string name, bool userIsOnline)
 		{
-            int ret = Camera.UserExists(name);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
             UserItem info = new UserItem();
-            ret = Camera.UserInfo(name, info);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+            Camera.UserInfo(name, info);
 
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
             MembershipUser mu = new MembershipUser(Name, info.Username, info.Key, info.EMail, string.Empty, string.Empty, info.IsApproved, info.IsLockedOut,
@@ -213,20 +194,14 @@ namespace WebUI.Code.Providers
 
 		public override bool UnlockUser (string userName)
 		{
-            int ret = Camera.UserSetLockedOut(userName, false);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+            Camera.UserSetLockedOut(userName, false);
             return true;
 		}
 
 		public override void UpdateUser (MembershipUser user)
 		{
-            int ret = Camera.UserSetApproved(user.UserName, user.IsApproved);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
-            ret = Camera.UserSetLockedOut(user.UserName, user.IsLockedOut);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+            Camera.UserSetApproved(user.UserName, user.IsApproved);
+            Camera.UserSetLockedOut(user.UserName, user.IsLockedOut);
             if (user.IsOnline)
             {
                 Camera.UserTouch(user.UserName);
@@ -235,12 +210,7 @@ namespace WebUI.Code.Providers
 
 		public override bool ValidateUser (string name, string password)
 		{
-			int ret = Camera.UserAuth (name, password);
-			if (ret < 0)
-				throw(new CameraClientException(ret));
-			if (ret == 0)
-				return false;
-			return true;
+			return Camera.UserAuth (name, password);
 		}
 	}
 }

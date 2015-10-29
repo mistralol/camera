@@ -1,26 +1,23 @@
 
 #include <cameractl.h>
 
-int DumpHelp(struct Operations *ops)
+void DumpHelp(struct Operations *ops)
 {
-	int i =0;
 	printf("Avilable Commands\n");
 	while(ops->op != NULL)
 	{
 		printf("\t%s\n", ops->op);
 		ops++;
 	}
-	return 0;
 }
 
-int Process(struct Data *data)
+void Process(struct Data *data)
 {
-	int i =0;
 	
 	if (data->args.size() == 0)
 	{
 		fprintf(stderr, "Missing paramater try adding help for more information\n");
-		return 0;
+		throw(std::runtime_error("Missing paramater"));
 	}
 	data->command = data->args.front();
 	data->args.pop_front();
@@ -29,13 +26,14 @@ int Process(struct Data *data)
 	while(ops->op != NULL)
 	{
 		if (data->command == ops->op)
-			return ops->func(data);
-
+		{
+			ops->func(data);
+			return;
+		}
 		ops++;
 	}
 	
 	fprintf(stderr, "No Such Command '%s'\n", data->command.c_str());
-	return -1;
 }
 
 int main(int argc, char **argv)
@@ -60,12 +58,14 @@ int main(int argc, char **argv)
 	for(int j = 1;j<argc;j++)
 		args.push_back(argv[j]);
 
-	struct Data data = {NULL, &cli, command, args};
-	int ret = Misc::Process(&data);
-	printf("status: %d\n", ret);
-
+	try
+	{
+		struct Data data = {NULL, &cli, command, args};
+		Misc::Process(&data);
+	} catch(std::exception ex)
+	{
+		fprintf(stderr, "Exception: %s", ex.what());
+	}
 	cli.Disconnect();
-
-	return ret;
 }
 

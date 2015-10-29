@@ -49,7 +49,7 @@ void CameraClient::Disconnect()
 	m_Client = NULL;
 }
 
-int CameraClient::RTSPKickAll()
+void CameraClient::RTSPKickAll()
 {
 	PerfCounter PC("RTSPKickAll");
 	Request request;
@@ -58,15 +58,13 @@ int CameraClient::RTSPKickAll()
 	request.SetCommand("RTSPKickAll");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::RTSPGetPort(int *value)
+int CameraClient::RTSPGetPort()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPGetPort");
 	Request request;
 	Request response;
@@ -74,30 +72,32 @@ int CameraClient::RTSPGetPort(int *value)
 	request.SetCommand("RTSPGetPort");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("value", value) == false)
-		return -EINVAL;
+		throw(CameraClientException(ret));
+	if (response.GetInt("value", &ret) == false)
+		throw(CameraClientException(-EINVAL));
 
 	return ret;
 }
 
-int CameraClient::RTSPSetPort(int value)
+void CameraClient::RTSPSetPort(int value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPSetPort");
 	Request request;
 	Request response;
 
 	request.SetCommand("RTSPSetPort");
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::RTSPGetClientCount(int *value)
+int CameraClient::RTSPGetClientCount()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPGetClientCount");
 	Request request;
 	Request response;
@@ -105,30 +105,32 @@ int CameraClient::RTSPGetClientCount(int *value)
 	request.SetCommand("RTSPGetClientCount");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("value", value) == false)
-		return -EINVAL;
-	
-	return ret;
+		throw(CameraClientException(ret));
+	int value = 0;
+	if (response.GetInt("value", &value) == false)
+		throw(CameraClientException(-EINVAL));
+	return value;
 }
 
-int CameraClient::RTSPSetMaxClients(int max)
+void CameraClient::RTSPSetMaxClients(int max)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPSetMaxClients");
 	Request request;
 	Request response;
 
 	request.SetCommand("RTSPSetMaxClients");
 	request.SetArg("value", max);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::RTSPGetMaxClients(int *max)
+int CameraClient::RTSPGetMaxClients()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPGetMaxClients");
 	Request request;
 	Request response;
@@ -136,30 +138,33 @@ int CameraClient::RTSPGetMaxClients(int *max)
 	request.SetCommand("RTSPGetMaxClients");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("value", max) == false)
+		throw(CameraClientException(ret));
+	int max = 0;
+	if (response.GetInt("value", &max) == false)
 		return -EINVAL;
 
-	return ret;
+	return max;
 }
 
-int CameraClient::RTSPSetMaxBacklog(int max)
+void CameraClient::RTSPSetMaxBacklog(int max)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPSetMaxBacklog");
 	Request request;
 	Request response;
 
 	request.SetCommand("RTSPSetMaxBacklog");
 	request.SetArg("value", max);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::RTSPGetMaxBacklog(int *max)
+int CameraClient::RTSPGetMaxBacklog()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("RTSPGetMaxBacklog");
 	Request request;
 	Request response;
@@ -167,17 +172,18 @@ int CameraClient::RTSPGetMaxBacklog(int *max)
 	request.SetCommand("RTSPGetMaxBacklog");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("value", max) == false)
-		return -EINVAL;
+		throw(CameraClientException(ret));
+	int max = 0;
+	if (response.GetInt("value", &max) == false)
+		throw(CameraClientException(ret));
 
-	return ret;
+	return max;
 }
 
-int CameraClient::Version(std::string *str)
+std::string CameraClient::Version()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VERSION");
 	Request request;
 	Request response;
@@ -185,16 +191,17 @@ int CameraClient::Version(std::string *str)
 	request.SetCommand("VERSION");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetString("value", str) == false)
-		return -EINVAL;
-	return ret;
+		throw(CameraClientException(ret));
+	std::string str = "Unknown";
+	if (response.GetString("value", &str) == false)
+		throw(CameraClientException(-EINVAL));
+	return str;
 }
 
-int CameraClient::VideoInputCount(int *value)
+int CameraClient::VideoInputCount()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VideoInputCount");
 	Request request;
 	Request response;
@@ -202,16 +209,17 @@ int CameraClient::VideoInputCount(int *value)
 	request.SetCommand("VideoInputCount");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("value", value) == false)
+		throw(CameraClientException(ret));
+	int value = 0;
+	if (response.GetInt("value", &value) == false)
 		return -EINVAL;
-	return 0;
+	return value;
 }
 
-int CameraClient::VideoInputSetEnabled(int input, bool enabled)
+void CameraClient::VideoInputSetEnabled(int input, bool enabled)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VideoInputSetEnabled");
 	Request request;
 	Request response;
@@ -219,13 +227,15 @@ int CameraClient::VideoInputSetEnabled(int input, bool enabled)
 	request.SetCommand("VideoInputSetEnabled");
 	request.SetArg("input", input);
 	request.SetArg("enabled", enabled);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::VideoInputGetEnabled(int input, int *value)
+int CameraClient::VideoInputGetEnabled(int input)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VideoInputGetEnabled");
 	Request request;
 	Request response;
@@ -234,17 +244,18 @@ int CameraClient::VideoInputGetEnabled(int input, int *value)
 	request.SetArg("input", input);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("enabled", value) == false)
-		return -EINVAL;
+		throw(CameraClientException(ret));
+	int value = 0;
+	if (response.GetInt("enabled", &value) == false)
+		throw(CameraClientException(-EINVAL));
 
-	return ret;
+	return value;
 }
 
-int CameraClient::VideoInputGetConfig(int input, VideoInputConfig *cfg)
+VideoInputConfig CameraClient::VideoInputGetConfig(int input)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VideoInputGetConfig");
 	Request request;
 	Request response;
@@ -253,19 +264,20 @@ int CameraClient::VideoInputGetConfig(int input, VideoInputConfig *cfg)
 	request.SetArg("input", input);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
 	std::string str = "";
 	if (response.GetString("config", &str) == false)
-		return -EINVAL;
-	if (cfg->Decode(str) == false)
-		return -EINVAL;
-	return ret;
+		throw(CameraClientException(-EINVAL));
+	VideoInputConfig cfg;
+	if (cfg.Decode(str) == false)
+		throw(CameraClientException(-EINVAL));
+	return cfg;
 }
 
-int CameraClient::VideoInputSetConfig(int input, VideoInputConfig *cfg)
+void CameraClient::VideoInputSetConfig(int input, VideoInputConfig *cfg)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VideoInputGetConfig");
 	Request request;
 	Request response;
@@ -273,13 +285,15 @@ int CameraClient::VideoInputSetConfig(int input, VideoInputConfig *cfg)
 	request.SetCommand("VideoInputGetConfig");
 	request.SetArg("input", input);
 	request.SetArg("config", cfg->Encode());
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::VideoInputGetSupport(int input, VideoInputSupported *info)
+VideoInputSupported CameraClient::VideoInputGetSupport(int input)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("VideoInputGetSupport");
 	Request request;
 	Request response;
@@ -288,19 +302,20 @@ int CameraClient::VideoInputGetSupport(int input, VideoInputSupported *info)
 	request.SetArg("input", input);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
 	std::string str = "";
 	if (response.GetString("info", &str) == false)
-		return -EINVAL;
-	if (info->Decode(str) == false)
-		return -EINVAL;
-	return ret;
+		throw(CameraClientException(-EINVAL));
+	VideoInputSupported info;
+	if (info.Decode(str) == false)
+		throw(CameraClientException(-EINVAL));
+	return info;
 }
 
-int CameraClient::UserCreate(const std::string Username, const std::string Password, const std::string EMail)
+void CameraClient::UserCreate(const std::string Username, const std::string Password, const std::string EMail)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserCreate");
 	Request request;
 	Request response;
@@ -312,14 +327,14 @@ int CameraClient::UserCreate(const std::string Username, const std::string Passw
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+
 }
 
-int CameraClient::UserAuth(const std::string Username, const std::string Password)
+bool CameraClient::UserAuth(const std::string Username, const std::string Password)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserAuth");
 	Request request;
 	Request response;
@@ -331,13 +346,15 @@ int CameraClient::UserAuth(const std::string Username, const std::string Passwor
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		return ret;
-	return ret;
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::UserDelete(const std::string Username)
+void CameraClient::UserDelete(const std::string Username)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserDelete");
 	Request request;
 	Request response;
@@ -347,14 +364,13 @@ int CameraClient::UserDelete(const std::string Username)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::UserExists(const std::string Username)
+bool CameraClient::UserExists(const std::string Username)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserExists");
 	Request request;
 	Request response;
@@ -364,14 +380,16 @@ int CameraClient::UserExists(const std::string Username)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::UserTouch(const std::string Username)
+void CameraClient::UserTouch(const std::string Username)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserTouch");
 	Request request;
 	Request response;
@@ -381,14 +399,13 @@ int CameraClient::UserTouch(const std::string Username)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::UserIsLockedOut(const std::string Username)
+bool CameraClient::UserIsLockedOut(const std::string Username)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserIsLockedOut");
 	Request request;
 	Request response;
@@ -398,14 +415,16 @@ int CameraClient::UserIsLockedOut(const std::string Username)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::UserIsApproved(const std::string Username)
+bool CameraClient::UserIsApproved(const std::string Username)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserIsApproved");
 	Request request;
 	Request response;
@@ -415,14 +434,16 @@ int CameraClient::UserIsApproved(const std::string Username)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::UserIsOnline(const std::string Username)
+bool CameraClient::UserIsOnline(const std::string Username)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserIsOnline");
 	Request request;
 	Request response;
@@ -432,14 +453,16 @@ int CameraClient::UserIsOnline(const std::string Username)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::UserSetLockedOut(const std::string Username, bool value)
+void CameraClient::UserSetLockedOut(const std::string Username, bool value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserSetLockedOut");
 	Request request;
 	Request response;
@@ -447,13 +470,15 @@ int CameraClient::UserSetLockedOut(const std::string Username, bool value)
 	request.SetCommand("UserSetLockedOut");
 	request.SetArg("Username", Username);
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::UserSetApproved(const std::string Username, bool value)
+void CameraClient::UserSetApproved(const std::string Username, bool value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserSetApproved");
 	Request request;
 	Request response;
@@ -461,13 +486,15 @@ int CameraClient::UserSetApproved(const std::string Username, bool value)
 	request.SetCommand("UserSetApproved");
 	request.SetArg("Username", Username);
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::UserSetPassword(const std::string Username, const std::string Password)
+void CameraClient::UserSetPassword(const std::string Username, const std::string Password)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserSetPassword");
 	Request request;
 	Request response;
@@ -478,89 +505,102 @@ int CameraClient::UserSetPassword(const std::string Username, const std::string 
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
 int CameraClient::UserGetLockoutDuration()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserGetLockoutDuration");
 	Request request;
 	Request response;
 
 	request.SetCommand("UserGetLockoutDuration");
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	return ret;
 }
 
-int CameraClient::UserSetLockoutDuration(int value)
+void CameraClient::UserSetLockoutDuration(int value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserSetLockoutDuration");
 	Request request;
 	Request response;
 
 	request.SetCommand("UserSetLockoutDuration");
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
 int CameraClient::UserGetMaxFailedAttempts()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserGetMaxFailedAttempts");
 	Request request;
 	Request response;
 
 	request.SetCommand("UserGetMaxFailedAttempts");
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::UserSetMaxFailedAttempts(int value)
+void CameraClient::UserSetMaxFailedAttempts(int value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserSetMaxFailedAttempts");
 	Request request;
 	Request response;
 
 	request.SetCommand("UserSetMaxFailedAttempts");
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
 int CameraClient::UserGetAutoLogOff()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserGetAutoLogOff");
 	Request request;
 	Request response;
 
 	request.SetCommand("UserGetAutoLogOff");
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	return ret;
 }
 
-int CameraClient::UserSetAutoLogOff(int value)
+void CameraClient::UserSetAutoLogOff(int value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserSetAutoLogOff");
 	Request request;
 	Request response;
 
 	request.SetCommand("UserSetAutoLogOff");
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::UserInfo(const std::string Username, struct UserItem *info)
+void CameraClient::UserInfo(const std::string Username, struct UserItem *info)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserInfo");
 	Request request;
 	Request response;
@@ -569,19 +609,18 @@ int CameraClient::UserInfo(const std::string Username, struct UserItem *info)
 	request.SetArg("Username", Username);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
 	std::string str;
 	if (response.GetString("info", &str) == false)
-		return -EINVAL;
+		throw(CameraClientException(-EINVAL));
 	if (info->Decode(str) == false)
-		return -EINVAL;
-	return ret;
+		throw(CameraClientException(-EINVAL));
 }
 
-int CameraClient::UserList(std::vector<std::string> &lst)
+std::vector<std::string> CameraClient::UserList()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserList");
 	Request request;
 	Request response;
@@ -590,16 +629,17 @@ int CameraClient::UserList(std::vector<std::string> &lst)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
+	std::vector<std::string> lst;
 	if (response.GetVectorString("value", &lst) == false)
-		return -6;
-	return lst.size();
+		throw(CameraClientException(-EINVAL));
+	return lst;
 }
 
-int CameraClient::UserGetUserFromEMail(const std::string EMail, std::string &User)
+std::string CameraClient::UserGetUserFromEMail(const std::string EMail)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserGetUserFromEMail");
 	Request request;
 	Request response;
@@ -608,27 +648,17 @@ int CameraClient::UserGetUserFromEMail(const std::string EMail, std::string &Use
 	request.SetArg("EMail", EMail);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetString("Username", &User) == false)
-		return -6;
-	return ret;
+		throw(CameraClientException(ret));
+	std::string str = "";
+	if (response.GetString("Username", &str) == false)
+		throw(CameraClientException(-EINVAL));
+	return str;
 }
 
-int CameraClient::UserGetUserFromEMail(const std::string EMail, std::vector<std::string> &User)
-{
-	std::string username = "";
-	int ret = UserGetUserFromEMail(EMail, username);
-	User.clear();
-	if (ret < 0)
-		return ret;
-	User.push_back(username);
-	return ret;
-}
-
-int CameraClient::UserGetUserFromKey(const std::string Key, std::string &User)
+std::string CameraClient::UserGetUserFromKey(const std::string Key)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("UserGetUserFromKey");
 	Request request;
 	Request response;
@@ -637,27 +667,17 @@ int CameraClient::UserGetUserFromKey(const std::string Key, std::string &User)
 	request.SetArg("Key", Key);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetString("Username", &User) == false)
-		return -6;
-	return ret;
+		throw(CameraClientException(ret));
+	std::string str = "";
+	if (response.GetString("Username", &str) == false)
+		throw(CameraClientException(-EINVAL));
+	return str;
 }
 
-int CameraClient::UserGetUserFromKey(const std::string Key, std::vector<std::string> &User)
-{
-	std::string username = "";
-	int ret = UserGetUserFromKey(Key, username);
-	User.clear();
-	if (ret < 0)
-		return ret;
-	User.push_back(username);
-	return ret;
-}
-
-int CameraClient::GroupCreate(const std::string Group)
+void CameraClient::GroupCreate(const std::string Group)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupCreate");
 	Request request;
 	Request response;
@@ -667,14 +687,13 @@ int CameraClient::GroupCreate(const std::string Group)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::GroupDelete(const std::string Group)
+void CameraClient::GroupDelete(const std::string Group)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupDelete");
 	Request request;
 	Request response;
@@ -684,14 +703,13 @@ int CameraClient::GroupDelete(const std::string Group)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::GroupExists(const std::string Group)
+bool CameraClient::GroupExists(const std::string Group)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupExists");
 	Request request;
 	Request response;
@@ -701,14 +719,16 @@ int CameraClient::GroupExists(const std::string Group)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::GroupIsUserInGroup(const std::string Group, const std::string User, int *result)
+bool CameraClient::GroupIsUserInGroup(const std::string Group, const std::string User)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupIsUserInGroup");
 	Request request;
 	Request response;
@@ -719,14 +739,16 @@ int CameraClient::GroupIsUserInGroup(const std::string Group, const std::string 
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
 }
 
-int CameraClient::GroupUserAdd(const std::string Group, const std::string User)
+void CameraClient::GroupUserAdd(const std::string Group, const std::string User)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupUserAdd");
 	Request request;
 	Request response;
@@ -737,14 +759,13 @@ int CameraClient::GroupUserAdd(const std::string Group, const std::string User)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::GroupUserRemove(const std::string Group, const std::string User)
+void CameraClient::GroupUserRemove(const std::string Group, const std::string User)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupUserRemove");
 	Request request;
 	Request response;
@@ -755,14 +776,13 @@ int CameraClient::GroupUserRemove(const std::string Group, const std::string Use
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	return ret;
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::GroupList(std::vector<std::string> &lst)
+std::vector<std::string> CameraClient::GroupList()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupList");
 	Request request;
 	Request response;
@@ -771,16 +791,17 @@ int CameraClient::GroupList(std::vector<std::string> &lst)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
+	std::vector<std::string> lst;
 	if (response.GetVectorString("value", &lst) == false)
-		return -1;
-	return lst.size();
+		throw(CameraClientException(-EINVAL));
+	return lst;
 }
 
-int CameraClient::GroupListUsers(const std::string Group, std::vector<std::string> &lst)
+std::vector<std::string> CameraClient::GroupListUsers(const std::string Group)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("GroupListUsers");
 	Request request;
 	Request response;
@@ -790,16 +811,17 @@ int CameraClient::GroupListUsers(const std::string Group, std::vector<std::strin
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
+	std::vector<std::string> lst;
 	if (response.GetVectorString("value", &lst) == false)
-		return -1;
-	return lst.size();
+		throw(CameraClientException(-EINVAL));
+	return lst;
 }
 
-int CameraClient::WebServerGetPort(int *port)
+int CameraClient::WebServerGetPort()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerGetPort");
 	Request request;
 	Request response;
@@ -807,30 +829,32 @@ int CameraClient::WebServerGetPort(int *port)
 	request.SetCommand("WebServerGetPort");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("port", port) == false)
+		throw(CameraClientException(ret));
+	int port = 0;
+	if (response.GetInt("port", &port) == false)
 		return -EINVAL;
-
-	return ret;
+	return port;
 }
 
-int CameraClient::WebServerSetPort(int port)
+void CameraClient::WebServerSetPort(int port)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerSetPort");
 	Request request;
 	Request response;
 	
 	request.SetCommand("WebServerSetPort");
 	request.SetArg("port", port);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::WebServerGetEnabled(int *enabled)
+bool CameraClient::WebServerGetEnabled()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerGetEnabled");
 	Request request;
 	Request response;
@@ -838,58 +862,52 @@ int CameraClient::WebServerGetEnabled(int *enabled)
 	request.SetCommand("WebServerGetEnabled");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("enabled", enabled) == false)
+		throw(CameraClientException(ret));
+	int enabled = 0;
+	if (response.GetInt("enabled", &enabled) == false)
 		return -EINVAL;
-		
-	return 0;
+	if (enabled)
+		return true;
+	return false;
 }
 
-int CameraClient::WebServerSetEnabled(bool enabled)
+void CameraClient::WebServerSetEnabled(bool enabled)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerSetEnabled");
 	Request request;
 	Request response;
 	
 	request.SetCommand("WebServerSetEnabled");
 	request.SetArg("enabled", enabled);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::WebServerGetProperty(const std::string key, const std::string def, std::string &value)
+std::string CameraClient::WebServerGetProperty(const std::string key, const std::string def)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerGetProperty");
 	Request request;
 	Request response;
-	
+
 	request.SetCommand("WebServerGetProperty");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+	        throw(CameraClientException(ret));
+	std::string value = "";
 	if (response.GetString("value", &value) == false)
-		return -EINVAL;
-	return 0;
+		throw(CameraClientException(-EINVAL));
+	return value;
 }
 
-int CameraClient::WebServerGetProperty(const std::string key, const std::string def, std::vector<std::string> &value)
-{
-	std::string prop = "";
-	int ret = WebServerGetProperty(key, def, prop);
-	value.clear();
-	if (ret < 0)
-		return ret;
-	value.push_back(prop);
-	return ret;
-}
-
-int CameraClient::WebServerSetProperty(const std::string key, const std::string value)
+void CameraClient::WebServerSetProperty(const std::string key, const std::string value)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerSetProperty");
 	Request request;
 	Request response;
@@ -897,53 +915,62 @@ int CameraClient::WebServerSetProperty(const std::string key, const std::string 
 	request.SetCommand("WebServerSetProperty");
 	request.SetArg("key", key);
 	request.SetArg("value", value);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::WebServerRestart()
+void CameraClient::WebServerRestart()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebServerRestart");
 	Request request;
 	Request response;
 	
 	request.SetCommand("WebServerRestart");
-	return m_Client->SendRequest(&request, &response);	
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
 int CameraClient::WebStreamStart(WebStreamOptions *options)
 {
 	std::string str;
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("WebStreamStart");
 	Request request;
 	Request response;
 	request.SetCommand("WebStreamStart");
 	if (options->Encode(str) == false)
-		return -EINVAL;
+		throw(CameraClientException(-EINVAL));
 	request.SetArg("options", str);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	return ret; // return port number
 }
 
-int CameraClient::DebugSetEnabled(bool enabled)
+void CameraClient::DebugSetEnabled(bool enabled)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("DebugSetEnabled");
 	Request request;
 	Request response;
 	
 	request.SetCommand("DebugSetEnabled");
 	request.SetArg("enabled", enabled);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::DebugGetEnabled(int *enabled)
+bool CameraClient::DebugGetEnabled()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("DebugGetEnabled");
 	Request request;
 	Request response;
@@ -951,75 +978,79 @@ int CameraClient::DebugGetEnabled(int *enabled)
 	request.SetCommand("DebugGetEnabled");
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
-	if (response.GetInt("enabled", enabled) == false)
+		throw(CameraClientException(ret));
+	int enabled = 0;
+	if (response.GetInt("enabled", &enabled) == false)
 		return -EINVAL;
-		
-	return 0;
+	
+	if (enabled)
+		return true;
+	return false;	
+
 }
 
-int CameraClient::SystemReboot()
+void CameraClient::SystemReboot()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("SystemReboot");
 	Request request;
 	Request response;
 
 	request.SetCommand("SystemReboot");
 
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::SystemShutdown()
+void CameraClient::SystemShutdown()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("SystemShutdown");
 	Request request;
 	Request response;
 
 	request.SetCommand("SystemShutdown");
 
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-std::string CameraClient::Version()
-{
-	std::string str = "";
-	if (Version(&str) < 0)
-		return "";
-	return str;
-}
-
-int CameraClient::Ping()
+void CameraClient::Ping()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("PING");
 	Request request;
 	Request response;
 
 	request.SetCommand("PING");
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::Quit()
+void CameraClient::Quit()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("QUIT");
 	Request request;
 	Request response;
 
 	request.SetCommand("QUIT");
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::Log(const std::string Level, const std::string Message)
+void CameraClient::Log(const std::string Level, const std::string Message)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("LOG");
 	Request request;
 	Request response;
@@ -1027,53 +1058,55 @@ int CameraClient::Log(const std::string Level, const std::string Message)
 	request.SetCommand("LOG");
 	request.SetArg("Level", Level);
 	request.SetArg("Message", Message);
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::LogDebug(const std::string Message)
+void CameraClient::LogDebug(const std::string Message)
 {
 	return Log("DEBUG", Message);
 }
 
-int CameraClient::LogInfo(const std::string Message)
+void CameraClient::LogInfo(const std::string Message)
 {
 	return Log("INFO", Message);
 }
 
-int CameraClient::LogNotice(const std::string Message)
+void CameraClient::LogNotice(const std::string Message)
 {
 	return Log("NOTICE", Message);
 }
 
-int CameraClient::LogWarning(const std::string Message)
+void CameraClient::LogWarning(const std::string Message)
 {
 	return Log("WARNING", Message);
 }
 
-int CameraClient::LogError(const std::string Message)
+void CameraClient::LogError(const std::string Message)
 {
 	return Log("ERROR", Message);
 }
 
-int CameraClient::LogCritical(const std::string Message)
+void CameraClient::LogCritical(const std::string Message)
 {
 	return Log("CRITICAL", Message);
 }
 
-int CameraClient::LogAlert(const std::string Message)
+void CameraClient::LogAlert(const std::string Message)
 {
 	return Log("ALERT", Message);
 }
 
-int CameraClient::LogEmergency(const std::string Message)
+void CameraClient::LogEmergency(const std::string Message)
 {
 	return Log("EMERGENCY", Message);
 }
 
-int CameraClient::StatsList(std::vector<std::string> &lst)
+std::vector<std::string> CameraClient::StatsList()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("StatsList");
 	Request request;
 	Request response;
@@ -1082,53 +1115,61 @@ int CameraClient::StatsList(std::vector<std::string> &lst)
 
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
+	std::vector<std::string> lst;
 	if (response.GetVectorString("list", &lst) == false)
-		return -6;
-	return lst.size();
+		throw(CameraClientException(-EINVAL));
+	return lst;
 }
 
-int CameraClient::StatsInfo(const std::string key, struct StatsInfo *info)
+void CameraClient::StatsInfo(const std::string key, struct StatsInfo *info)
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("StatsInfo");
 	Request request;
 	Request response;
 	
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
-		return ret;
+		throw(CameraClientException(ret));
 	if (response.GetInt("TotalTime", &info->TotalTime) == false)
-		return -6;
+		throw(CameraClientException("Unable to parse TotalTime"));
 	if (response.GetInt("WorstTime", &info->WorstTime) == false)
-		return -7;
+		throw(CameraClientException("Unable to parse WorstTime"));
 	if (response.GetInt("BestTime", &info->BestTime) == false)
-		return -8;
+		throw(CameraClientException("Unable to parse BestTime"));
 	if (response.GetInt("Count", &info->Count) == false)
-		return -9;
-	return ret;
+		throw(CameraClientException("Unable to parse Count"));
+
 }
 
-int CameraClient::StatsDump()
+void CameraClient::StatsDump()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("StatsDump");
 	Request request;
 	Request response;
 	
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
 
-int CameraClient::StatsReset()
+void CameraClient::StatsReset()
 {
 	if (m_Client == NULL)
-		return -ENOTCONN;
+		throw(CameraClientException(ENOTCONN));
 	PerfCounter PC("StatsReset");
 	Request request;
 	Request response;
 	
-	return m_Client->SendRequest(&request, &response);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
 }
+
+
+
 

@@ -37,18 +37,14 @@ namespace WebUI.Config.VideoInput
 
         protected void btnEnable_Click(object sender, EventArgs e)
         {
-            int ret = Camera.VideoInputSetEnabled(SelectedInput, true);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+            Camera.VideoInputSetEnabled(SelectedInput, true);
             pnlEnable.Visible = false;
             pnlConfig.Visible = true;
         }
 
         protected void btnDisable_Click(object sender, EventArgs e)
         {
-            int ret = Camera.VideoInputSetEnabled(SelectedInput, false);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+            Camera.VideoInputSetEnabled(SelectedInput, false);
             pnlEnable.Visible = true;
             pnlConfig.Visible = false;
         }
@@ -65,10 +61,7 @@ namespace WebUI.Config.VideoInput
 
         private void Bind()
         {
-            int enabled = 0;
-            int ret = Camera.VideoInputGetEnabled(SelectedInput, out enabled);
-            if (ret < 0)
-                throw (new CameraClientException(ret));
+            int enabled = Camera.VideoInputGetEnabled(SelectedInput);
             if (enabled == 1)
             {
                 pnlEnable.Visible = false;
@@ -100,10 +93,7 @@ namespace WebUI.Config.VideoInput
         {
             get
             {
-                int value = 0;
-                int ret = Camera.VideoInputCount(out value);
-                if (ret < 0)
-                    throw (new CameraClientException(ret));
+                int value = Camera.VideoInputCount();
                 return value;
             }
         }

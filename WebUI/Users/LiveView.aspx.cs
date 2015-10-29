@@ -15,10 +15,7 @@ namespace WebUI.Users
 
             if (IsPostBack == false)
             {
-                int Count = 0;
-                int ret = Camera.VideoInputCount(out Count);
-                if (ret < 0)
-                    throw(new CameraClientException(ret));
+                int Count = Camera.VideoInputCount();
                 for (int i = 0; i < Count; i++)
                 {  
                     ddlVideo.Items.Add(new ListItem(string.Format("Video Input {0}", i+1), string.Format("{0}", i)));
@@ -32,7 +29,7 @@ namespace WebUI.Users
             //Camera.VideoInputGetConfig(0, Cfg);
 
             //FIXME:
-//            VStream.Width = Cfg.GetWidth();
+            //VStream.Width = Cfg.G
 //            VStream.Height = Cfg.GetHight();
             VStream.VInput = Convert.ToInt32(ddlVideo.SelectedValue);
             VStream.Width = 640;

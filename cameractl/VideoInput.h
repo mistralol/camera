@@ -2,9 +2,9 @@
 class VideoInput
 {
 	public:
-		static int Enabled(struct Data *data);
-		static int Count(struct Data *data);
+		static void Enabled(struct Data *data);
+		static void Count(struct Data *data);
 	
-		static int Help(struct Data *data);
-		static int Process(struct Data *data);
+		static void Help(struct Data *data);
+		static void Process(struct Data *data);
 };

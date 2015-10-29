@@ -9,56 +9,51 @@ static struct Operations Ops[] = {
 	{NULL, NULL }
 };
 
-int WebServer::Enabled(struct Data *data)
+void WebServer::Enabled(struct Data *data)
 {
 	int enabled = 0;
 	if (data->args.size() == 0)
 	{
-		int ret = data->cli->WebServerGetEnabled(&enabled);
-		if (ret < 0)
-			return ret;
-		return enabled;
+		int ret = data->cli->WebServerGetEnabled();
+		printf("Enabled: %d", ret);
+		return;
 	}
 
 	std::string str = data->args.front();
 	if (str == "1")
 		enabled = true;
-	return data->cli->WebServerSetEnabled(enabled);
+	data->cli->WebServerSetEnabled(enabled);
 }
 
-int WebServer::Restart(struct Data *data)
+void WebServer::Restart(struct Data *data)
 {
-	return data->cli->WebServerRestart();
+	data->cli->WebServerRestart();
 }
 
-int WebServer::Port(struct Data *data)
+void WebServer::Port(struct Data *data)
 {
 	int port = 0;
 	if (data->args.size() == 0)
 	{
-		int ret = data->cli->WebServerGetPort(&port);
-		if (ret < 0)
-			return ret;
-		return port;
+		int ret = data->cli->WebServerGetPort();
+		printf("Port: %d", ret);
+		return;
 	}
 
 	std::string str = data->args.front();
 	port = atoi(str.c_str());
-	int ret = data->cli->WebServerSetPort(port);
-	if (ret < 0)
-		return ret;
-	return port;
+	data->cli->WebServerSetPort(port);
 }
 
-int WebServer::Help(struct Data *data)
+void WebServer::Help(struct Data *data)
 {
-	return DumpHelp(Ops);
+	DumpHelp(Ops);
 }
 
-int WebServer::Process(struct Data *data)
+void WebServer::Process(struct Data *data)
 {
 	data->ops = Ops;
-	return ::Process(data);
+	::Process(data);
 }
 
 

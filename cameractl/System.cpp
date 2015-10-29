@@ -8,24 +8,24 @@ static struct Operations Ops[] = {
 	{NULL, NULL }
 };
 
-int System::Reboot(struct Data *data)
+void System::Reboot(struct Data *data)
 {
-	return data->cli->SystemReboot();
+	data->cli->SystemReboot();
 }
 
-int System::Shutdown(struct Data *data)
+void System::Shutdown(struct Data *data)
 {
-	return data->cli->SystemShutdown();
+	data->cli->SystemShutdown();
 }
 
-int System::Help(struct Data *data)
+void System::Help(struct Data *data)
 {
-	return DumpHelp(Ops);
+	DumpHelp(Ops);
 }
 
-int System::Process(struct Data *data)
+void System::Process(struct Data *data)
 {
 	data->ops = Ops;
-	return ::Process(data);
+	::Process(data);
 }
 

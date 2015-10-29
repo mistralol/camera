@@ -22,12 +22,12 @@ static struct Operations Ops[] = {
 	{NULL, NULL, NULL }
 };
 
-int User::Create(struct Data *data)
+void User::Create(struct Data *data)
 {
 	if (data->args.size() < 2 || data->args.size() > 3)
 	{
-		printf("Invalid number of paramaters\n");
-		return -1;
+		fprintf(stderr, "Invalid number of paramaters\n");
+		return;
 	}
 	std::string username = data->args.front();
 	data->args.pop_front();
@@ -39,70 +39,74 @@ int User::Create(struct Data *data)
 		email = data->args.front();
 		data->args.pop_front();
 	}
-	return data->cli->UserCreate(username, password, email);
+	data->cli->UserCreate(username, password, email);
 }
 
-int User::Auth(struct Data *data)
+void User::Auth(struct Data *data)
 {
 	if (data->args.size() != 2)
 	{
-		printf("Error need username and password as paramaters\n");
-		return -1;
+		fprintf(stderr, "Error need username and password as paramaters\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
 	std::string password = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserAuth(username, password);
+	bool value = data->cli->UserAuth(username, password);
+	printf("value: %d\n", value);
 }
 
-int User::Delete(struct Data *data)
+void User::Delete(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need username as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need username as paramater\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserDelete(username);
+	data->cli->UserDelete(username);
 }
 
-int User::Exists(struct Data *data)
+void User::Exists(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need username as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need username as paramater\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserExists(username);
+	bool value = data->cli->UserExists(username);
+	printf("value: %d\n", value);
 }
 
-int User::Touch(struct Data *data)
+void User::Touch(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need username as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need username as paramater\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserTouch(username);
+	data->cli->UserTouch(username);
 }
 
-int User::LockedOut(struct Data *data)
+void User::LockedOut(struct Data *data)
 {
 	if (data->args.size() == 1)
 	{
 		std::string username = data->args.front();
 		data->args.pop_front();
-		return data->cli->UserIsLockedOut(username);
+		bool locked = data->cli->UserIsLockedOut(username);
+		printf("locked: %d\n", locked);
+		return;
 	}
 
 	if (data->args.size() == 2)
@@ -112,20 +116,22 @@ int User::LockedOut(struct Data *data)
 		std::string str = data->args.front();
 		data->args.pop_front();
 		int value = atoi(str.c_str());
-		return data->cli->UserSetLockedOut(username, value ? true : false);
+		data->cli->UserSetLockedOut(username, value ? true : false);
 	}
 
-	printf("Invalid number of paramaters\n");
-	return -1;
+	fprintf(stderr, "Invalid number of paramaters\n");
+	return;
 }
 
-int User::Approved(struct Data *data)
+void User::Approved(struct Data *data)
 {
 	if (data->args.size() == 1)
 	{
 		std::string username = data->args.front();
 		data->args.pop_front();
-		return data->cli->UserIsApproved(username);
+		bool value = data->cli->UserIsApproved(username);
+		printf("value: %d\n", value);
+		return;
 	}
 
 	if (data->args.size() == 2)
@@ -135,55 +141,54 @@ int User::Approved(struct Data *data)
 		std::string str = data->args.front();
 		data->args.pop_front();
 		int value = atoi(str.c_str());
-		return data->cli->UserSetApproved(username, value ? true : false);
+		data->cli->UserSetApproved(username, value ? true : false);
 	}
 
-	printf("Invalid number of paramaters\n");
-	return -1;
+	fprintf(stderr, "Invalid number of paramaters\n");
+	return;
 }
 
-int User::Online(struct Data *data)
+void User::Online(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need username as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need username as paramater\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserIsOnline(username);
+	bool value = data->cli->UserIsOnline(username);
+	printf("online: %d\n", value);
 }
 
-int User::Password(struct Data *data)
+void User::Password(struct Data *data)
 {
 	if (data->args.size() != 2)
 	{
-		printf("Error need username and password as paramaters\n");
-		return -1;
+		fprintf(stderr, "Error need username and password as paramaters\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
 	std::string password = data->args.front();
 	data->args.pop_front();
-	return data->cli->UserSetPassword(username, password);
+	data->cli->UserSetPassword(username, password);
 }
 
-int User::Info(struct Data *data)
+void User::Info(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need username as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need username as paramater\n");
+		return;
 	}
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
 	struct UserItem info;
-	int ret = data->cli->UserInfo(username, &info);
-	if (ret < 0)
-		return ret;
+	data->cli->UserInfo(username, &info);
 	
 	printf("Key: %s\n", info.Key.c_str());
 	printf("Username: %s\n", info.Username.c_str());
@@ -201,117 +206,116 @@ int User::Info(struct Data *data)
 	printf("IsOnline: %s\n", info.IsOnline ? "true" : "false");
 	printf("FailedPasswordAttempts: %d\n", info.FailedPasswordAttempts);
 	
-	return ret;
 }
 
-int User::UserFromEMail(struct Data *data)
+void User::UserFromEMail(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need key as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need key as paramater\n");
+		return;
 	}
 	
 	std::string username;
 	std::string email = data->args.front();
 	data->args.pop_front();
-	int ret = data->cli->UserGetUserFromEMail(email, username);
-	if (ret < 0)
-		return ret;
+	username = data->cli->UserGetUserFromEMail(email);
 	printf("%s\n", username.c_str());
-	return ret;
 }
 
-int User::UserFromKey(struct Data *data)
+void User::UserFromKey(struct Data *data)
 {
 	if (data->args.size() != 1)
 	{
-		printf("Error need key as paramater\n");
-		return -1;
+		fprintf(stderr, "Error need key as paramater\n");
+		return;
 	}
 	
 	std::string username;
 	std::string key = data->args.front();
 	data->args.pop_front();
-	int ret = data->cli->UserGetUserFromKey(key, username);
-	if (ret < 0)
-		return ret;
+	username = data->cli->UserGetUserFromKey(key);
 	printf("%s\n", username.c_str());
-	return ret;
 }
 
-int User::LockoutDuration(struct Data *data)
+void User::LockoutDuration(struct Data *data)
 {
 	if (data->args.size() == 0)
-		return data->cli->UserGetLockoutDuration();
+	{
+		int ret = data->cli->UserGetLockoutDuration();
+		printf("value: %d\n", ret);
+		return;
+	}
 
 	if (data->args.size() == 1)
 	{
 		std::string str = data->args.front();
 		data->args.pop_front();
 		int value = atoi(str.c_str());
-		return data->cli->UserSetLockoutDuration(value);
+		data->cli->UserSetLockoutDuration(value);
+		return;
 	}
 
-	printf("Invalid number of paramaters\n");
-	return -1;
+	fprintf(stderr, "Invalid number of paramaters\n");
 }
 
-int User::MaxFailedAttempts(struct Data *data)
+void User::MaxFailedAttempts(struct Data *data)
 {
 	if (data->args.size() == 0)
-		return data->cli->UserGetMaxFailedAttempts();
+	{
+		int ret = data->cli->UserGetMaxFailedAttempts();
+		printf("Max: %d\n", ret);
+	}
 
 	if (data->args.size() == 1)
 	{
 		std::string str = data->args.front();
 		data->args.pop_front();
 		int value = atoi(str.c_str());
-		return data->cli->UserSetMaxFailedAttempts(value);
+		data->cli->UserSetMaxFailedAttempts(value);
+		return;
 	}
 
-	printf("Invalid number of paramaters\n");
-	return -1;
+	fprintf(stderr, "Invalid number of paramaters\n");
 }
 
-int User::AutoLogOff(struct Data *data)
+void User::AutoLogOff(struct Data *data)
 {
 	if (data->args.size() == 0)
-		return data->cli->UserGetAutoLogOff();
+	{
+		int ret = data->cli->UserGetAutoLogOff();
+		printf("Enabled: %d\n", ret);
+	}
 
 	if (data->args.size() == 1)
 	{
 		std::string str = data->args.front();
 		data->args.pop_front();
 		int value = atoi(str.c_str());
-		return data->cli->UserSetAutoLogOff(value);
+		data->cli->UserSetAutoLogOff(value);
+		return;
 	}
 
-	printf("Invalid number of paramaters\n");
-	return -1;
+	fprintf(stderr, "Invalid number of paramaters\n");
 }
 
-int User::List(struct Data *data)
+void User::List(struct Data *data)
 {
-	std::vector<std::string> lst;
-	int ret = data->cli->UserList(lst);
-	if (ret < 0)
-		return ret;
+	std::vector<std::string> lst = data->cli->UserList();
 	for(std::vector<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
 	{
 		printf("%s\n", it->c_str());
 	}
-	return ret;
 }
 
-int User::Help(struct Data *data)
+void User::Help(struct Data *data)
 {
-	return DumpHelp(Ops);
+	DumpHelp(Ops);
 }
 
 
-int User::Process(struct Data *data)
+void User::Process(struct Data *data)
 {
 	data->ops = Ops;
-	return ::Process(data);
+	::Process(data);
 }

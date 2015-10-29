@@ -8,12 +8,12 @@ static struct Operations Ops[] = {
 	{NULL, NULL }
 };
 
-int VideoInput::Enabled(struct Data *data)
+void VideoInput::Enabled(struct Data *data)
 {
 	if (data->args.size() < 1)
 	{
 		fprintf(stderr, "Missing paramater 'input'\n");
-		return -1;
+		return;
 	}
 
 	std::string szinput = data->args.front();
@@ -23,37 +23,30 @@ int VideoInput::Enabled(struct Data *data)
 	int enabled = 0;
 	if (data->args.size() == 0)
 	{
-		int ret = data->cli->VideoInputGetEnabled(input, &enabled);
-		if (ret < 0)
-			return ret;
-		return enabled;
+		int ret = data->cli->VideoInputGetEnabled(input);
+		printf("Enabled: %d\n", ret);
+		return;
 	}
 
 	std::string str = data->args.front();
 	if (str == "1")
 		enabled = true;
-	int ret = data->cli->VideoInputSetEnabled(input, enabled);
-	if (ret < 0)
-		return ret;
-	return enabled;
+	data->cli->VideoInputSetEnabled(input, enabled);
 }
 
-int VideoInput::Count(struct Data *data)
+void VideoInput::Count(struct Data *data)
 {
-	int value = 0;
-	int ret = data->cli->VideoInputCount(&value);
-	if (ret < 0)
-		return ret;
-	return value;
+	int ret = data->cli->VideoInputCount();
+	printf("Count: %d\n", ret);
 }
 
-int VideoInput::Help(struct Data *data)
+void VideoInput::Help(struct Data *data)
 {
-	return DumpHelp(Ops);
+	DumpHelp(Ops);
 }
 
-int VideoInput::Process(struct Data *data)
+void VideoInput::Process(struct Data *data)
 {
 	data->ops = Ops;
-	return ::Process(data);
+	::Process(data);
 }

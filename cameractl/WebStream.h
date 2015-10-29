@@ -2,8 +2,8 @@
 class WebStream
 {
 	public:
-		static int Start(struct Data *data);
+		static void Start(struct Data *data);
 	
-		static int Help(struct Data *data);
-		static int Process(struct Data *data);
+		static void Help(struct Data *data);
+		static void Process(struct Data *data);
 };

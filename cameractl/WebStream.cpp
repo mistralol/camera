@@ -7,30 +7,31 @@ static struct Operations Ops[] = {
 	{NULL, NULL }
 };
 
-int WebStream::Start(struct Data *data)
+void WebStream::Start(struct Data *data)
 {
 	int enabled = 0;
 	if (data->args.size() == 0)
 	{
 		printf("Need a Video paramater\n");
-		return -1;
+		return;
 	}
 
 	std::string str = data->args.front();
 	WebStreamOptions options;
 	options.vinput = atoi(str.c_str());
 	options.type = MP4;
-	return data->cli->WebStreamStart(&options);
+	int port = data->cli->WebStreamStart(&options);
+	printf("Port: %d\n", port);
 }
 
-int WebStream::Help(struct Data *data)
+void WebStream::Help(struct Data *data)
 {
-	return DumpHelp(Ops);
+	DumpHelp(Ops);
 }
 
-int WebStream::Process(struct Data *data)
+void WebStream::Process(struct Data *data)
 {
 	data->ops = Ops;
-	return ::Process(data);
+	::Process(data);
 }
 

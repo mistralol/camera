@@ -4,7 +4,7 @@ BUILT_SOURCES=libcameraclient_csharp.cpp
 lib_LTLIBRARIES=libcameraclient.la \
 		libcameraclient_csharp.la
 
-libcameraclient_la_SOURCES=CameraClient.cpp
+libcameraclient_la_SOURCES=CameraClient.cpp CameraClientException.cpp
 libcameraclient_la_CXXFLAGS=-fPIC -I../libcameracommon $(JSON_CFLAGS) $(LIBCLIENTSERVER_CFLAGS)
 libcameraclient_la_LDFLAGS=-Wl,-z,defs -L../libcameracommon/.libs -lcameracommon \
 		$(JSON_LIBS) \

@@ -2,11 +2,11 @@
 class WebServer
 {
 	public:
-		static int Enabled(struct Data *data);
-		static int Restart(struct Data *data);
-		static int Port(struct Data *data);
+		static void Enabled(struct Data *data);
+		static void Restart(struct Data *data);
+		static void Port(struct Data *data);
 	
-		static int Help(struct Data *data);
-		static int Process(struct Data *data);
+		static void Help(struct Data *data);
+		static void Process(struct Data *data);
 };
 

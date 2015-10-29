@@ -4,10 +4,10 @@
 class System
 {
 	public:
-		static int Reboot(struct Data *data);
-		static int Shutdown(struct Data *data);
+		static void Reboot(struct Data *data);
+		static void Shutdown(struct Data *data);
 
-		static int Help(struct Data *data);
-		static int Process(struct Data *data);
+		static void Help(struct Data *data);
+		static void Process(struct Data *data);
 };
 

@@ -20,50 +20,27 @@ namespace WebUI.Config.Network
 
         protected void Bind()
         {
-            int port = 0;
-            int maxbacklog = 0;
-            int maxclients = 0;
-
-            int ret = Camera.RTSPGetPort(out port);
-            if (ret < 0)
-                throw(new CameraClientException(ret));
-
-            ret = Camera.RTSPGetMaxBacklog(out maxbacklog);
-            if (ret < 0)
-                throw(new CameraClientException(ret));
-
-            ret = Camera.RTSPGetMaxClients(out maxclients);
-            if (ret < 0)
-                throw(new CameraClientException(ret));
-
-            txtPort.Text = port.ToString();
-            txtMaxClient.Text = maxclients.ToString();
-            txtMaxBackLog.Text = maxbacklog.ToString();
+            txtPort.Text = Camera.RTSPGetPort().ToString();
+            txtMaxClient.Text = Camera.RTSPGetMaxClients().ToString();
+            txtMaxBackLog.Text = Camera.RTSPGetMaxBacklog().ToString();
         }
 
         protected void UnBind()
         {
-            bool success = true;
-
-            int port = Convert.ToInt32(txtPort.Text);
-            int maxbacklog = Convert.ToInt32(txtMaxBackLog.Text);
-            int maxclients = Convert.ToInt32(txtMaxClient.Text);
-
-            if (Camera.RTSPSetPort(port) < 0)
-                success = false;
-
-            if (Camera.RTSPSetMaxClients(maxclients) < 0)
-                success = false;
-
-            if (Camera.RTSPSetMaxBacklog(maxbacklog) < 0)
-                success = false;
-
-            if (success)
+            try
             {
+                int port = Convert.ToInt32(txtPort.Text);
+                int maxbacklog = Convert.ToInt32(txtMaxBackLog.Text);
+                int maxclients = Convert.ToInt32(txtMaxClient.Text);
+
+                Camera.RTSPSetPort(port);
+                Camera.RTSPSetMaxClients(maxclients);
+                Camera.RTSPSetMaxBacklog(maxbacklog);
                 lblError.Text = "Saved";
             }
-            else
+            catch (Exception ex)
             {
+                Camera.LogError(ex.Message);
                 lblError.Text = "Error";
             }
         }

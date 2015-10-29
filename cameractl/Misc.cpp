@@ -16,54 +16,45 @@ static struct Operations Ops[] = {
 	{NULL, NULL }
 };
 
-int Misc::Debug(struct Data *data)
+void Misc::Debug(struct Data *data)
 {
 	int enabled = 0;
 	if (data->args.size() == 0)
 	{
-		int ret = data->cli->DebugGetEnabled(&enabled);
-		if (ret < 0)
-			return ret;
-		return enabled;
+		bool value = data->cli->DebugGetEnabled();
+		printf("%d", value);
 	}
 
 	std::string str = data->args.front();
 	if (str == "1")
 		enabled = true;
-	return data->cli->DebugSetEnabled(enabled);
+	data->cli->DebugSetEnabled(enabled);
 }
 
-int Misc::Ping(struct Data *data)
+void Misc::Ping(struct Data *data)
 {
-	return data->cli->Ping();
+	data->cli->Ping();
 }
 
-int Misc::Version(struct Data *data)
+void Misc::Version(struct Data *data)
 {
-	std::string version = "";
-	int ret = data->cli->Version(&version);
-	if (ret == 0)
-		printf("%s\n", version.c_str());
-	return ret;
+	std::string version = data->cli->Version();
+	printf("%s\n", version.c_str());
 }
 
-int Misc::Quit(struct Data *data)
+void Misc::Quit(struct Data *data)
 {
-	int ret = data->cli->Quit();
-	printf("status: %d\n", ret);
-	if (ret == 0)
-		exit(EXIT_SUCCESS);
-	return ret;
+	data->cli->Quit();
 }
 
-int Misc::Help(struct Data *data)
+void Misc::Help(struct Data *data)
 {
-	return DumpHelp(Ops);
+	DumpHelp(Ops);
 }
 
-int Misc::Process(struct Data *data)
+void Misc::Process(struct Data *data)
 {
 	data->ops = Ops;
-	return ::Process(data);
+	::Process(data);
 }
 
