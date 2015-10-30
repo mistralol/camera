@@ -15,9 +15,9 @@ GPIOOutputTimer::~GPIOOutputTimer()
 
 }
 		
-time_t GPIOOutputTimer::GetDelay()
+void GPIOOutputTimer::GetDelay(struct timespec *ts)
 {
-	return m_timeout.tv_sec;	
+	*ts = m_timeout;
 }
 
 void GPIOOutputTimer::TimerExpired(Timers *timers, ITimer *timer)

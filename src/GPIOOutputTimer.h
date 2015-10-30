@@ -7,7 +7,7 @@ class GPIOOutputTimer : public ITimer
 		GPIOOutputTimer(unsigned int output, CameraHandler *handler, const struct timespec *ts, bool m_enabled);
 		~GPIOOutputTimer();
 		
-		time_t GetDelay();
+		void GetDelay(struct timespec *ts);
 		void TimerExpired(Timers *timers, ITimer *timer);
 		
 
