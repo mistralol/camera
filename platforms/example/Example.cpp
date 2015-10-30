@@ -22,6 +22,9 @@ bool Example::Init()
 {
 	LogDebug("Example::Init");
 
+	for(int i=0;i<GPIO_OUTPUTS;i++)
+		m_gpio_outputs[i] = false;
+
 	return true;
 }
 
@@ -162,6 +165,24 @@ bool Example::VideoInputDisable(unsigned int input)
 	pipeline->Stop();
 	delete pipeline;
 	return true;
+}
+
+unsigned int Example::GPIOOutputCount()
+{
+	return GPIO_OUTPUTS;
+}
+
+void Example::GPIOOutputSetState(unsigned int output, bool enabled)
+{
+	if (m_gpio_outputs[output] == enabled)
+	{
+		return;
+	}
+	else
+	{
+		LogNotice("GPIO Output State Changed to %s", enabled ? "On" : "Off");
+		m_gpio_outputs[output] = enabled;
+	}
 }
 
 

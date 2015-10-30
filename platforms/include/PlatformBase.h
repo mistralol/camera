@@ -26,7 +26,6 @@ class PlatformBase
 		}
 
 		/* Video Stream Specific */
-
 		virtual unsigned int VideoInputCount()
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
@@ -44,7 +43,6 @@ class PlatformBase
 			LogCritical("Platform has not implemented function %s", __FUNCTION__);
 			abort();
 		}
-		
 		
 		virtual bool VideoInputConfigure(unsigned int input, const VideoInputConfig *config)
 		{
@@ -78,6 +76,72 @@ class PlatformBase
 				return false;
 			}
 			return true;
+		}
+		
+		virtual unsigned int VideoOutputCount()
+		{
+			LogWarning("Platform has not implemented function %s", __FUNCTION__);
+			return 0;
+		}
+		
+		virtual bool VideoOutputSupportedInfo(unsigned int output, void *p)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual unsigned int AudioInputCount()
+		{
+			LogWarning("Platform has not implemented function %s", __FUNCTION__);
+			return 0;
+		}
+		
+		virtual unsigned int AudioOutputCount()
+		{
+			LogWarning("Platform has not implemented function %s", __FUNCTION__);
+			return 0;
+		}
+		
+		virtual unsigned int GPIOInputCount()
+		{
+			LogWarning("Platform has not implemented function %s", __FUNCTION__);
+			return 0;
+		}
+		
+		virtual std::string GPIOInputDesc(unsigned int input)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual bool GPIOInputGetState(unsigned int input)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual bool GPIOInputEnable(unsigned int input)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual bool GPIOInputDisable(unsigned int input)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual unsigned int GPIOOutputCount()
+		{
+			LogWarning("Platform has not implemented function %s", __FUNCTION__);
+			return 0;
+		}
+		
+		virtual void GPIOOutputSetState(unsigned int output, bool enabled)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
 		}
 
 	protected:

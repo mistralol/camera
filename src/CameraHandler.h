@@ -9,7 +9,7 @@ class CameraHandler
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 
-		void VideoInputCount(int *count);
+		int VideoInputCount();
 
 		bool VideoInputSetEnabled(unsigned int input, bool enabled);
 		bool VideoInputGetEnabled(unsigned int input, bool &enabled);
@@ -20,9 +20,12 @@ class CameraHandler
 		bool VideoInputEnable(unsigned int input);
 		bool VideoInputDisable(unsigned int input);
 
+		int GPIOOutputCount();
+		int GPIOOutputSetState(unsigned int output, bool state);
+		int GPIOOutputSetState(unsigned int output, bool state, const struct timespec *tv);
+
 		void Wait();
 		void Quit();
-
 
 		WebServer *WServer;
 		WebStream *WStream;
@@ -45,6 +48,7 @@ class CameraHandler
 		Mutex m_VideoInputMutex;
 		std::map<unsigned int, struct VideoInputConfig *> m_VideoInputs;
 
+		std::map<unsigned int, GPIOOutputTimer *> m_GPIOOutputTimers;
 };
 
 

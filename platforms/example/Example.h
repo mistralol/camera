@@ -1,4 +1,6 @@
 
+#define GPIO_OUTPUTS 5
+
 class Example : public PlatformBase
 {
 	public:
@@ -19,10 +21,14 @@ class Example : public PlatformBase
 
 		bool VideoInputEnable(unsigned int stream);
 		bool VideoInputDisable(unsigned int stream);
+		
+		unsigned int GPIOOutputCount();
+		void GPIOOutputSetState(unsigned int output, bool enabled);
 
 	private:
 		std::map<unsigned int, PipelineBasic *> m_videoinputpipelines;
 		std::map<unsigned int, VideoInputConfig> m_videoinputconfig;
+		bool m_gpio_outputs[GPIO_OUTPUTS];
 
 
 };

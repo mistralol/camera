@@ -12,7 +12,7 @@ CameraHandler::CameraHandler()
 	guint major, minor, micro, nano;
 	gst_version(&major, &minor, &micro, &nano);
 	LogInfo("Gstreamer Version: %u.%u.%u.%u", major, minor, micro, nano);
-	
+
 	WServer = NULL;
 	WStream = NULL;
 	RServer = NULL;
@@ -34,6 +34,16 @@ CameraHandler::~CameraHandler()
 			m_Platform->VideoInputDisable(input);
 		m_VideoInputs.erase(it);
 		delete config;
+	}
+	
+	//Cleanup Any timers we might have
+	while(m_GPIOOutputTimers.size() > 0)
+	{
+		std::map<unsigned int, GPIOOutputTimer *>::iterator it = m_GPIOOutputTimers.begin();
+		GPIOOutputTimer *t = it->second;
+		CameraTimers->Remove(t);
+		m_GPIOOutputTimers.erase(it);
+		delete t;
 	}
 
 	WServer->Stop();
@@ -172,6 +182,21 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 			LogInfo("%s", tmp.c_str());
 		}
 	}
+	
+	//Video Outputs
+	LogInfo("Supported Video Outputs: %u", m_Platform->VideoOutputCount());
+
+	//Audio Inputs
+	LogInfo("Supported Audio Inputs: %u", m_Platform->AudioInputCount());
+
+	//Audio Outputs
+	LogInfo("Supported Audio Outputs: %u", m_Platform->AudioOutputCount());
+	
+	//GPIO Inputs
+	LogInfo("Supported GPIO Inputs: %u", m_Platform->GPIOInputCount());
+
+	//GPIO Outputs
+	LogInfo("Supported GPIO Outputs: %u", m_Platform->GPIOOutputCount());
 
 	//Load Default Config's. The Config Load can override these later
 	//We also wait until after the config load until we enable the config + enable the streams on the platform.
@@ -183,7 +208,6 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 		LogInfo("VideoInput %u default Config: '%s'", i, config->ToStr().c_str());
 		m_VideoInputs[i] = config;
 	}
-
 
 	//Load The actual configuration
 	Cfg = new Config(this, CfgFile);
@@ -315,10 +339,10 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	return true;
 }
 
-void CameraHandler::VideoInputCount(int *count)
+int CameraHandler::VideoInputCount()
 {
 	LogDebug("CameraHandler::VideoInputCount");
-	*count = m_Platform->VideoInputCount();
+	return m_Platform->VideoInputCount();
 }
 
 bool CameraHandler::VideoInputSetEnabled(unsigned int input, bool enabled)
@@ -454,7 +478,6 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 		LogDebug("CameraHandler::VideoInputEnable(%u) - No such input", input);
 		return false;
 	}
-	
 
 	std::stringstream url;
 	url << "/video/" << input;
@@ -509,6 +532,55 @@ bool CameraHandler::VideoInputDisable(unsigned int input)
 		return false;
 	}
 	return true;
+}
+
+int CameraHandler::GPIOOutputCount()
+{
+	LogDebug("CameraHandler::GPIOOutputCount");
+	return m_Platform->GPIOOutputCount();
+}
+
+int CameraHandler::GPIOOutputSetState(unsigned int output, bool state)
+{
+	LogDebug("CameraHandler::GPIOOutputSetState(%u, %s)", output, state ? "On" : "Off");
+	if (output >= CameraHandler::GPIOOutputCount())
+		return -EEXIST;
+
+	//Cancel existing timers if they exist	
+	std::map<unsigned int, GPIOOutputTimer *>::iterator it = m_GPIOOutputTimers.find(output);
+	if (it != m_GPIOOutputTimers.end())
+	{
+		GPIOOutputTimer *t = it->second;
+		CameraTimers->Remove(t);
+		m_GPIOOutputTimers.erase(it);
+		delete t;
+	}
+
+	m_Platform->GPIOOutputSetState(output, state);
+}
+
+int CameraHandler::GPIOOutputSetState(unsigned int output, bool state, const struct timespec *tv)
+{
+	LogDebug("CameraHandler::GPIOOutputSetState(%u, %s, { %ld, %ld })", output, state ? "On" : "Off", tv->tv_sec, tv->tv_nsec);
+	if (output >= CameraHandler::GPIOOutputCount())
+		return -EEXIST;
+
+	//Cancel existing timers if they exist	
+	std::map<unsigned int, GPIOOutputTimer *>::iterator it = m_GPIOOutputTimers.find(output);
+	if (it != m_GPIOOutputTimers.end())
+	{
+		GPIOOutputTimer *t = it->second;
+		CameraTimers->Remove(t);
+		m_GPIOOutputTimers.erase(it);
+		delete t;
+	}
+
+	bool next = state ? false : true; //Invert
+
+	m_Platform->GPIOOutputSetState(output, state);
+	GPIOOutputTimer *t = new GPIOOutputTimer(output, this, tv, next);
+	CameraTimers->Add(t);
+	return 0;
 }
 
 void CameraHandler::Wait()
