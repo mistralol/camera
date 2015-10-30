@@ -243,6 +243,65 @@ int CameraServer::VideoInputGetSupported(CameraHandler *handler, IServerConnecti
 	return ret;
 }
 
+int CameraServer::GPIOOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	int count = handler->GPIOOutputCount();
+	response->SetArg("value", count);
+	return 0;
+}
+
+int CameraServer::GPIOOutputSetState(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int output = -1;
+	bool enabled = false;
+	struct timespec timeout = { 0, 0};
+	
+	if (request->GetUInt("output", &output) == false)
+	{
+		LogError("CameraServer::GPIOOutputSetState Failed - exists: %s", request->HasArg("output") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->GetBool("value", &enabled) == false)
+	{
+		LogError("CameraServer::GPIOOutputSetState Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	if (request->HasArg("timeout"))
+	{
+		if (request->GetTimeSpec("timeout", &timeout) == false)
+		{
+			LogError("CameraServer::GPIOOutputSetState Failed - exists: %s", request->HasArg("timeout") ? "true" : "false");
+			return -EINVAL;
+		}
+		return handler->GPIOOutputSetState(output, enabled, &timeout);
+	}
+	else
+	{
+		return handler->GPIOOutputSetState(output, enabled);
+	}
+	
+	abort(); //Unreachable
+	return -1;
+}
+
+int CameraServer::GPIOOutputGetState(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	unsigned int output = -1;
+	bool enabled = false;
+	
+	if (request->GetUInt("output", &output) == false)
+	{
+		LogError("CameraServer::GPIOOutputGetState Failed - exists: %s", request->HasArg("output") ? "true" : "false");
+		return -EINVAL;
+	}
+	enabled = handler->GPIOOutputGetState(output);
+	response->SetArg("enabled", enabled);
+
+	return 0;
+}
+
 int CameraServer::UserCreate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	std::string Username = "";

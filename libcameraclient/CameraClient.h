@@ -31,6 +31,11 @@ class CameraClient
 		void VideoInputSetConfig(int input, VideoInputConfig *cfg);
 		VideoInputSupported VideoInputGetSupport(int input);
 		
+		int GPIOOutputCount();
+		void GPIOOutputSetState(int output, bool enabled);
+		void GPIOOutputSetState(int output, bool enabled, const struct timespec *ts);
+		bool GPIOOutputGetState(int output);
+		
 		void UserCreate(const std::string Username, const std::string Password, const std::string EMail);
 		bool UserAuth(const std::string Username, const std::string Password);
 		void UserDelete(const std::string Username);

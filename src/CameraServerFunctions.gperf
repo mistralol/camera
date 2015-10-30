@@ -29,6 +29,10 @@ VideoInputGetConfig,	CameraServer::VideoInputGetConfig
 VideoInputSetConfig,	CameraServer::VideoInputSetConfig
 VideoInputGetSupported,	CameraServer::VideoInputGetSupported
 #####
+GPIOOutputCount,	CameraServer::GPIOOutputCount
+GPIOOutputSetState,	CameraServer::GPIOOutputSetState
+GPIOOutputGetState,	CameraServer::GPIOOutputGetState
+#####
 UserCreate,		CameraServer::UserCreate
 UserAuth,		CameraServer::UserAuth
 UserDelete,		CameraServer::UserDelete

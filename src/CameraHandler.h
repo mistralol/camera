@@ -23,6 +23,7 @@ class CameraHandler
 		int GPIOOutputCount();
 		int GPIOOutputSetState(unsigned int output, bool state);
 		int GPIOOutputSetState(unsigned int output, bool state, const struct timespec *tv);
+		bool GPIOOutputGetState(unsigned int output);
 
 		void Wait();
 		void Quit();

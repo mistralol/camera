@@ -312,6 +312,72 @@ VideoInputSupported CameraClient::VideoInputGetSupport(int input)
 	return info;
 }
 
+int CameraClient::GPIOOutputCount()
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("GPIOOutputCount");
+	Request request;
+	Request response;
+	
+	request.SetCommand("GPIOOutputCount");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	int value = 0;
+	if (response.GetInt("value", &value) == false)
+		throw(CameraClientException(-EINVAL));
+	return value;
+}
+
+void CameraClient::GPIOOutputSetState(int output, bool enabled)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("GPIOOutputSetState");
+	Request request;
+	Request response;
+	
+	request.SetCommand("GPIOOutputSetState");
+	request.SetArg("output", output);
+	request.SetArg("value", enabled);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+}
+
+void CameraClient::GPIOOutputSetState(int output, bool enabled, const struct timespec *ts)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("GPIOOutputSetState");
+	Request request;
+	Request response;
+	
+	request.SetCommand("GPIOOutputSetState");
+	request.SetArg("output", output);
+	request.SetArg("value", enabled);
+	request.SetArg("timeout", ts);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+}
+
+bool CameraClient::GPIOOutputGetState(int output)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("GPIOOutputGetState");
+	Request request;
+	Request response;
+	
+	request.SetCommand("GPIOOutputGetState");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+
+}
+
 void CameraClient::UserCreate(const std::string Username, const std::string Password, const std::string EMail)
 {
 	if (m_Client == NULL)

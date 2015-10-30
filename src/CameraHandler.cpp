@@ -583,6 +583,12 @@ int CameraHandler::GPIOOutputSetState(unsigned int output, bool state, const str
 	return 0;
 }
 
+bool CameraHandler::GPIOOutputGetState(unsigned int output)
+{
+	LogDebug("CameraHandler::GPIOOutputGetState(%u)", output);
+	return m_Platform->GPIOOutputGetState(output);
+}
+
 void CameraHandler::Wait()
 {
 	LogDebug("CameraHandler::Wait");

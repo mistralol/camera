@@ -143,6 +143,12 @@ class PlatformBase
 			LogCritical("Platform has not implemented function %s", __FUNCTION__);
 			abort();
 		}
+		
+		virtual bool GPIOOutputGetState(unsigned int output)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
 
 	protected:
 

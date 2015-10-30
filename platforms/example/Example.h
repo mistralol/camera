@@ -24,6 +24,7 @@ class Example : public PlatformBase
 		
 		unsigned int GPIOOutputCount();
 		void GPIOOutputSetState(unsigned int output, bool enabled);
+		bool GPIOOutputGetState(unsigned int output);
 
 	private:
 		std::map<unsigned int, PipelineBasic *> m_videoinputpipelines;
