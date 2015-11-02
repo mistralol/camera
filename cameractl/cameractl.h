@@ -21,6 +21,7 @@
 #include <WebStreamOptions.h>
 #include <UserItem.h>
 #include <User.h>
+#include <GPIOOutput.h>
 
 
 #include <CameraClient.h>

@@ -12,6 +12,7 @@ static struct Operations Ops[] = {
 	{"videoinput", VideoInput::Process, "Process video input commands"},
 	{"webserver", WebServer::Process, "Process webserver commands"},
 	{"webstream", WebStream::Process, "Process webstream comands"},
+	{"gpiooutput", GPIOOutput::Process, "Process GPIO Output commands"},
 	{"quit", Misc::Quit, "Tells camera server to quit and exit"},
 	{NULL, NULL }
 };

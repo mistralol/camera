@@ -372,6 +372,7 @@ bool CameraClient::GPIOOutputGetState(int output)
 	Request response;
 	
 	request.SetCommand("GPIOOutputGetState");
+	request.SetArg("output", output);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
