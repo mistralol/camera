@@ -49,6 +49,7 @@ class CameraHandler
 		Mutex m_VideoInputMutex;
 		std::map<unsigned int, struct VideoInputConfig *> m_VideoInputs;
 
+		Mutex m_GPIOOutputMutex;
 		std::map<unsigned int, GPIOOutputTimer *> m_GPIOOutputTimers;
 };
 

@@ -326,6 +326,7 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 		}
 		it++;
 	}
+	VideoLock.Unlock();
 
 	if (User::ConfigSave(json["users"]) == false)
 		return false;
@@ -341,14 +342,15 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 
 int CameraHandler::VideoInputCount()
 {
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputCount");
 	return m_Platform->VideoInputCount();
 }
 
 bool CameraHandler::VideoInputSetEnabled(unsigned int input, bool enabled)
 {
-	LogDebug("CameraHandler::VideoInputSetEnabled(%u, %s)", input, enabled ? "True" : "False");
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	LogDebug("CameraHandler::VideoInputSetEnabled(%u, %s)", input, enabled ? "True" : "False");
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
@@ -377,8 +379,8 @@ bool CameraHandler::VideoInputSetEnabled(unsigned int input, bool enabled)
 
 bool CameraHandler::VideoInputGetEnabled(unsigned int input, bool &enabled)
 {
-	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)", input);
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)", input);
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
@@ -392,8 +394,8 @@ bool CameraHandler::VideoInputGetEnabled(unsigned int input, bool &enabled)
 
 int CameraHandler::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg)
 {
-	LogDebug("CameraHandler::VideoInputSetConfig(%u)", input);
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	LogDebug("CameraHandler::VideoInputSetConfig(%u)", input);
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
@@ -440,8 +442,8 @@ int CameraHandler::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg
 
 int CameraHandler::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg)
 {
-	LogDebug("CameraHandler::VideoInputGetConfig(%u)", input);
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	LogDebug("CameraHandler::VideoInputGetConfig(%u)", input);
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
@@ -455,8 +457,8 @@ int CameraHandler::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg
 
 int CameraHandler::VideoInputGetSupported(unsigned int input, VideoInputSupported *info)
 {
-	LogDebug("CameraHandler::VideoInputGetSupported(%u)", input);
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	LogDebug("CameraHandler::VideoInputGetSupported(%u)", input);
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
@@ -470,8 +472,8 @@ int CameraHandler::VideoInputGetSupported(unsigned int input, VideoInputSupporte
 
 bool CameraHandler::VideoInputEnable(unsigned int input)
 {
-	LogDebug("CameraHandler::VideoInputEnable(%u)", input);
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
+	LogDebug("CameraHandler::VideoInputEnable(%u)", input);
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
@@ -514,6 +516,7 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 
 bool CameraHandler::VideoInputDisable(unsigned int input)
 {
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputDisable(%u)", input);
 	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
@@ -536,12 +539,14 @@ bool CameraHandler::VideoInputDisable(unsigned int input)
 
 int CameraHandler::GPIOOutputCount()
 {
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::GPIOOutputCount");
 	return m_Platform->GPIOOutputCount();
 }
 
 int CameraHandler::GPIOOutputSetState(unsigned int output, bool state)
 {
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::GPIOOutputSetState(%u, %s)", output, state ? "On" : "Off");
 	if (output >= CameraHandler::GPIOOutputCount())
 		return -EEXIST;
@@ -561,6 +566,7 @@ int CameraHandler::GPIOOutputSetState(unsigned int output, bool state)
 
 int CameraHandler::GPIOOutputSetState(unsigned int output, bool state, const struct timespec *tv)
 {
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::GPIOOutputSetState(%u, %s, { %ld, %ld })", output, state ? "On" : "Off", tv->tv_sec, tv->tv_nsec);
 	if (output >= CameraHandler::GPIOOutputCount())
 		return -EEXIST;
@@ -579,12 +585,14 @@ int CameraHandler::GPIOOutputSetState(unsigned int output, bool state, const str
 
 	m_Platform->GPIOOutputSetState(output, state);
 	GPIOOutputTimer *t = new GPIOOutputTimer(output, this, tv, next);
+	m_GPIOOutputTimers[output] = t;
 	CameraTimers->Add(t);
 	return 0;
 }
 
 bool CameraHandler::GPIOOutputGetState(unsigned int output)
 {
+	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::GPIOOutputGetState(%u)", output);
 	return m_Platform->GPIOOutputGetState(output);
 }
