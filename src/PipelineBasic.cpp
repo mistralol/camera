@@ -1,15 +1,26 @@
 
 #include <Camera.h>
 
-PipelineBasic::PipelineBasic(const std::string str)
+PipelineBasic::PipelineBasic(const std::string name, const std::string str)
 {
+	m_name = name;
 	m_running = false;
 	m_pipelinestr = str;
 	m_restart = true;
 	m_restartdelay.tv_sec = 1;
 	m_restartdelay.tv_nsec = 0;
 	m_exited = false;
+}
+
+PipelineBasic::PipelineBasic(const std::string str)
+{
 	m_name = "";
+	m_running = false;
+	m_pipelinestr = str;
+	m_restart = true;
+	m_restartdelay.tv_sec = 1;
+	m_restartdelay.tv_nsec = 0;
+	m_exited = false;
 }
 
 PipelineBasic::~PipelineBasic()
@@ -57,6 +68,17 @@ void PipelineBasic::Stop()
 		abort();
 }
 
+bool PipelineBasic::HasExisted()
+{
+	ScopedLock lock(&m_mutex);
+	if (m_restart == true)
+	{
+		LogCritical("Pipeline '%s' It does not make sense to call HasExited when restart it set to true", m_name.c_str());
+		abort();
+	}
+	return m_exited;
+}
+
 void PipelineBasic::WaitForExit()
 {
 	ScopedLock lock(&m_mutex);
@@ -85,6 +107,31 @@ void PipelineBasic::OnStartFailure(GstElement *pipeline)
 void PipelineBasic::OnStop(GstElement *pipeline)
 {
 	LogDebug("Pipeline '%s' Stopped", m_name.c_str());
+}
+
+//If this is overriden and you return true and set *stop to true
+//It will cause the pipeline to stop
+bool PipelineBasic::OnBusMessage(GstMessage *msg, bool *stop)
+{
+#if 0
+	LogDebug("Pipeline '%s' Message(%u) From '%s' Of Type: '%s'", 
+			m_name.c_str(), gst_message_get_seqnum(msg),
+			GST_MESSAGE_SRC_NAME(msg),
+			gst_message_type_get_name(GST_MESSAGE_TYPE(msg))
+	);
+#endif
+
+	return false;
+}
+
+void PipelineBasic::OnInfo(const gchar *msg, const gchar *details)
+{
+	LogInfo("Pipeline '%s', INFO: %s Details: %s", m_name.c_str(), msg, details);
+}
+
+void PipelineBasic::OnWarning(const gchar *msg, const gchar *details)
+{
+	LogWarning("Pipeline '%s', WARNING: %s Details: %s", m_name.c_str(), msg, details);
 }
 
 void PipelineBasic::OnError(const gchar *msg, const gchar *details)
@@ -232,20 +279,48 @@ bool PipelineBasic::WaitForEos(GstElement *pipeline, GstBus *bus)
 		return false;
 	}
 
+	bool Flag = false;
+	if (OnBusMessage(msg, &Flag))
+	{
+		return Flag;
+	}
+
 	switch (GST_MESSAGE_TYPE (msg)) {
 		case GST_MESSAGE_EOS:
 			return true;
 			break;
+		case GST_MESSAGE_INFO:
+		{
+			GError *info = NULL; /* info to show to users                 */
+			gchar *dbg = NULL;  /* additional debug string for developers */
+			gst_message_parse_info(msg, &info, &dbg);
+			if (info && dbg)
+				OnInfo(info->message, dbg);
+			g_error_free(info);
+			g_free(dbg);
+			break;
+		}
+		case GST_MESSAGE_WARNING:
+		{
+			GError *warn = NULL; /* info to show to users                 */
+			gchar *dbg = NULL;  /* additional debug string for developers */
+			gst_message_parse_warning(msg, &warn, &dbg);
+			if (warn && dbg)
+				OnWarning(warn->message, dbg);
+			g_error_free(warn);
+			g_free(dbg);
+			break;
+		}
 		case GST_MESSAGE_ERROR:
 		{
 			GError *err = NULL; /* error to show to users                 */
 			gchar *dbg = NULL;  /* additional debug string for developers */
-			gst_message_parse_error (msg, &err, &dbg);
-			if (err && dbg) {
+			gst_message_parse_error(msg, &err, &dbg);
+			if (err && dbg)
 				OnError(err->message, dbg);
-			}
 			g_error_free (err);
 			g_free(dbg);
+			return true;
 			break;
 		}
 		//Suppress Noise
