@@ -180,39 +180,11 @@ restart_accept:
 
 	//Start gstreamer pipeline
 	do {
-		std::string pipe = ss.str();
-		GstElement *pipeline = NULL;
-		GError *error = NULL;
-	
-		pipeline = gst_parse_launch (pipe.c_str(), &error);
-		if (!pipeline) {
-			LogError("Cannot Parse: %s", pipe.c_str());
-			LogError("Parse error: %s", error->message);
-			goto cleanup;
-		}
-		
-		//Enable for debugging
-		//g_signal_connect(pipeline, "deep-notify", G_CALLBACK (gst_object_default_deep_notify), NULL);
-
-		LogInfo("Starting Pipeline: '%s'", pipe.c_str());	
-		if (GstUtil::SetState(pipeline, GST_STATE_PLAYING) == true)
-		{
-			while (GstUtil::WaitForEos(pipeline) == false && m_running == true) { }
-		}
-		else
-		{
-			LogError("Failed To Start Pipeline: %s", pipe.c_str());
-		}
-
-		if (GstUtil::SetState(pipeline, GST_STATE_NULL) == false)
-		{
-			LogCritical("WebStreamPipeline::Run() - Failed to Set pipeline state to NULL");
-			abort();
-		}
-	
-		LogInfo("Stopping Pipeline: '%s'", pipe.c_str());
-		gst_object_unref(pipeline);
-		pipeline = NULL;
+		std::unique_ptr<PipelineBasic> Pipeline(new PipelineBasic(ss.str()));
+		Pipeline->SetName("WebStream");
+		Pipeline->SetRestart(false);
+		Pipeline->Start();
+		Pipeline->WaitForExit();		
 	} while(0);
 	
 	//Clear up
