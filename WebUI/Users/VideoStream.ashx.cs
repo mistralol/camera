@@ -72,6 +72,8 @@ namespace WebUI.Users
                     context.Response.Clear();
                     context.Response.ContentType = Content;
 
+                    context.Server.ScriptTimeout = 1000000;
+
                     try
                     {
                         using (TcpClient tcp = new TcpClient("127.0.0.1", Port))

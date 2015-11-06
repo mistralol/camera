@@ -58,6 +58,33 @@ namespace WebUI.Config.VideoInput {
         protected global::System.Web.UI.WebControls.Panel pnlConfig;
         
         /// <summary>
+        /// ddlCodec control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCodec;
+        
+        /// <summary>
+        /// ddlResolution control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlResolution;
+        
+        /// <summary>
+        /// ddlFrameRate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlFrameRate;
+        
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>

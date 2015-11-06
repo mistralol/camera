@@ -26,27 +26,26 @@
         <table>
             <tr>
                 <td>Codec</td>
-                <td></td>
+                <td><asp:DropDownList runat="server" ID="ddlCodec"></asp:DropDownList></td>
             </tr>
             <tr>
                 <td>Resolution</td>
-                <td></td>
+                <td><asp:DropDownList runat="server" ID="ddlResolution"></asp:DropDownList></td>
             </tr>
             <tr>
                 <td>Frame Rate</td>
-                <td></td>
+                <td><asp:DropDownList runat="server" ID="ddlFrameRate"></asp:DropDownList></td>
             </tr>
             <tr>
                 <td></td>
                 <td>
                     <asp:Button runat="server" ID="btnSave" Text="Save" onclick="btnSave_Click" />
-                    <asp:Button runat="server" ID="btnCancel" Text="Cancel" 
-                        onclick="btnCancel_Click" />
+                    <asp:Button runat="server" ID="btnCancel" Text="Cancel" onclick="btnCancel_Click" />
+                    <asp:Button runat="server" ID="btnDisable" Text="Disable" onclick="btnDisable_Click" />
                 </td>
             </tr>
         </table>
-        <asp:Button runat="server" ID="btnDisable" Text="Disable" 
-            onclick="btnDisable_Click" />
+
     </asp:Panel>
 
 </asp:Content>

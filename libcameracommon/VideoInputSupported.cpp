@@ -23,9 +23,9 @@ VideoInputSupported::~VideoInputSupported()
 
 }
 
-std::list<std::string> VideoInputSupported::GetCodecs()
+std::vector<std::string> VideoInputSupported::GetCodecs()
 {
-	std::list<std::string> lst;
+	std::vector<std::string> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.begin();
 	while(it != m_codecs.end())
 	{
@@ -35,14 +35,14 @@ std::list<std::string> VideoInputSupported::GetCodecs()
 	return lst;
 }
 
-std::list<std::string> VideoInputSupported::GetCodecResolutions(const std::string &codec)
+std::vector<std::string> VideoInputSupported::GetCodecResolutions(const std::string &codec)
 {
-	std::list<std::string> lst;
+	std::vector<std::string> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.find(codec);
 	if (it == m_codecs.end())
 		return lst;
 
-	std::map<std::string, std::list<int> >::iterator resit = it->second.m_res.begin();
+	std::map<std::string, std::vector<int> >::iterator resit = it->second.m_res.begin();
 	while(resit != it->second.m_res.end())
 	{
 		lst.push_back(resit->first);
@@ -51,14 +51,14 @@ std::list<std::string> VideoInputSupported::GetCodecResolutions(const std::strin
 	return lst;
 }
 
-std::list<int> VideoInputSupported::GetCodecFrameRates(const std::string &codec, std::string &res)
+std::vector<int> VideoInputSupported::GetCodecFrameRates(const std::string &codec, const std::string &res)
 {
-	std::list<int> lst;
+	std::vector<int> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.find(codec);
 	if (it == m_codecs.end())
 		return lst;
 
-	std::map<std::string, std::list<int> >::iterator resit = it->second.m_res.find(res);
+	std::map<std::string, std::vector<int> >::iterator resit = it->second.m_res.find(res);
 	if (resit == it->second.m_res.end())
 		return lst;
 
@@ -83,16 +83,16 @@ void VideoInputSupported::Clear()
 	m_codecs.clear();
 }
 
-std::list<std::string> VideoInputSupported::ToStrV()
+std::vector<std::string> VideoInputSupported::ToStrV()
 {
-	std::list<std::string> lst;
+	std::vector<std::string> lst;
 	std::map<std::string, struct CodecInfo>::iterator it = m_codecs.begin();
 	while(it != m_codecs.end())
 	{
-		std::map<std::string, std::list<int> >::iterator resit = it->second.m_res.begin();
+		std::map<std::string, std::vector<int> >::iterator resit = it->second.m_res.begin();
 		while(resit != it->second.m_res.end())
 		{
-			std::list<int>::iterator fpsit = resit->second.begin();
+			std::vector<int>::iterator fpsit = resit->second.begin();
 			std::stringstream ss;
 			while(fpsit != resit->second.end())
 			{
@@ -125,14 +125,14 @@ std::string VideoInputSupported::Encode()
 		json["codecs"].append(codec);
 				
 		Json::Value res;
-		std::map<std::string, std::list<int> >::iterator it2 = info->m_res.begin();
+		std::map<std::string, std::vector<int> >::iterator it2 = info->m_res.begin();
 		while(it2 != info->m_res.end())
 		{
 			std::string resolution = it2->first;
-			std::list<int> *framerates = &it2->second;
+			std::vector<int> *framerates = &it2->second;
 
 			Json::Value rates = Json::arrayValue;
-			std::list<int>::iterator it3 = framerates->begin();
+			std::vector<int>::iterator it3 = framerates->begin();
 			while(it3 != framerates->end())
 			{
 				rates.append(*it3);

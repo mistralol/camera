@@ -103,6 +103,9 @@ bool Example::VideoInputEnable(unsigned int input)
 	if (m_videoinputpipelines.find(input) != m_videoinputpipelines.end())
 		abort(); //WTF? We already have a pipeline which means the input is enabled
 
+	std::stringstream pipename;
+	pipename << "Example Encoder " << input;
+
 	std::stringstream pipe;
 	std::string res = m_videoinputconfig[input].GetResolution();
 	std::string width = "";
@@ -123,7 +126,7 @@ bool Example::VideoInputEnable(unsigned int input)
 		
 		LogDebug("Example::VideoInputEnable - Pipeline %s", pipe.str().c_str());
 		LogInfo("Example::VideoInputEnable - Starting Input %u", input);
-		PipelineBasic *pipeline = new PipelineBasic(pipe.str());
+		PipelineBasic *pipeline = new PipelineBasic(pipename.str(), pipe.str());
 		m_videoinputpipelines[input] = pipeline;
 		m_videoinputpipelines[input]->Start();
 		return true;
@@ -137,7 +140,9 @@ bool Example::VideoInputEnable(unsigned int input)
 		
 		LogDebug("Example::VideoInputEnable - Pipeline %s", pipe.str().c_str());
 		LogInfo("Example::VideoInputEnable - Starting Input %u", input);
-		PipelineBasic *pipeline = new PipelineBasic(pipe.str());
+		
+		
+		PipelineBasic *pipeline = new PipelineBasic(pipename.str(), pipe.str());
 		m_videoinputpipelines[input] = pipeline;
 		m_videoinputpipelines[input]->Start();
 		return true;

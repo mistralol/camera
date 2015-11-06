@@ -24,6 +24,7 @@ using namespace std;
 %apply int { time_t };
 
 %template(StringVector) std::vector<std::string>;
+%template(StringInt) std::vector<int>;
 
 %exception {
 try {

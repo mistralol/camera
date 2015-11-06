@@ -29,7 +29,7 @@ class CameraClient
 		int VideoInputGetEnabled(int input);
 		VideoInputConfig VideoInputGetConfig(int input);
 		void VideoInputSetConfig(int input, VideoInputConfig *cfg);
-		VideoInputSupported VideoInputGetSupport(int input);
+		VideoInputSupported VideoInputGetSupported(int input);
 		
 		int GPIOOutputCount();
 		void GPIOOutputSetState(int output, bool enabled);

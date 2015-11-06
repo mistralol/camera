@@ -5,16 +5,16 @@ class VideoInputSupported
 		VideoInputSupported();
 		~VideoInputSupported();
 
-		std::list<std::string> GetCodecs();
-		std::list<std::string> GetCodecResolutions(const std::string &codec);
-		std::list<int> GetCodecFrameRates(const std::string &codec, std::string &res);
+		std::vector<std::string> GetCodecs();
+		std::vector<std::string> GetCodecResolutions(const std::string &codec);
+		std::vector<int> GetCodecFrameRates(const std::string &codec, const std::string &res);
 
 		void AddCodec(const std::string &codec, const std::string &res, int fps);
 		void AddCodec(const std::string &codec, const std::string &res, int lowfps, int upperfps);
 
 		void Clear();
 
-		std::list<std::string> ToStrV();
+		std::vector<std::string> ToStrV();
 		
 		std::string Encode();
 		bool Decode(const std::string);
@@ -22,7 +22,7 @@ class VideoInputSupported
 	private:
 		struct CodecInfo
 		{
-			std::map<std::string, std::list<int> > m_res;
+			std::map<std::string, std::vector<int> > m_res;
 			//FIXME: List of modes eg vbr, cbr, cq
 			//FIXME: is bitrate, maxbitrate configured
 		};

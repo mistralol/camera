@@ -26,7 +26,7 @@ PipelineBasic::PipelineBasic(const std::string str)
 PipelineBasic::~PipelineBasic()
 {
 	if (m_running == true)
-		abort(); //Somebody forgot to call stop
+		Stop();
 }
 
 void PipelineBasic::SetName(const std::string name)
@@ -233,8 +233,8 @@ bool PipelineBasic::SetState(GstElement *pipeline, GstState state)
 		return false;
 	if (ret == GST_STATE_CHANGE_NO_PREROLL)
 	{
-		LogCritical("Pipeline '%s' GstUtil::SetState Unhandled Error Code GST_STATE_CHANGE_NO_PREROLL", m_name.c_str());
-		abort(); //Not Yet Handled
+		LogError("Pipeline '%s' GstUtil::SetState Unhandled Error Code GST_STATE_CHANGE_NO_PREROLL", m_name.c_str());
+		return false;
 	}
 
 	if (ret == GST_STATE_CHANGE_ASYNC)

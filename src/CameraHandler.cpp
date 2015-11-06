@@ -175,8 +175,8 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 		}
 		LogInfo("VideoInput %u Supports", i);
 
-		std::list<std::string> lst = info.ToStrV();
-		for(std::list<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
+		std::vector<std::string> lst = info.ToStrV();
+		for(std::vector<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
 		{
 			std::string tmp = *it;
 			LogInfo("%s", tmp.c_str());
@@ -437,7 +437,7 @@ int CameraHandler::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg
 	}
 	*oldcfg = *cfg;
 	LogInfo("CameraHandler::VideoInputSetConfig(%u) - Now configured to be '%s'", input, cfg->ToStr().c_str());
-	return -1;
+	return 0;
 }
 
 int CameraHandler::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg)

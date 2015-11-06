@@ -278,11 +278,11 @@ void CameraClient::VideoInputSetConfig(int input, VideoInputConfig *cfg)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));
-	PerfCounter PC("VideoInputGetConfig");
+	PerfCounter PC("VideoInputSetConfig");
 	Request request;
 	Request response;
 	
-	request.SetCommand("VideoInputGetConfig");
+	request.SetCommand("VideoInputSetConfig");
 	request.SetArg("input", input);
 	request.SetArg("config", cfg->Encode());
 	int ret = m_Client->SendRequest(&request, &response);
@@ -290,15 +290,15 @@ void CameraClient::VideoInputSetConfig(int input, VideoInputConfig *cfg)
 		throw(CameraClientException(ret));
 }
 
-VideoInputSupported CameraClient::VideoInputGetSupport(int input)
+VideoInputSupported CameraClient::VideoInputGetSupported(int input)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));
-	PerfCounter PC("VideoInputGetSupport");
+	PerfCounter PC("VideoInputGetSupported");
 	Request request;
 	Request response;
 	
-	request.SetCommand("VideoInputGetSupport");
+	request.SetCommand("VideoInputGetSupported");
 	request.SetArg("input", input);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)

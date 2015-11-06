@@ -96,6 +96,7 @@ int VideoInputConfig::GetHeight()
 	size_t pos = m_resolution.find_first_of('x');
 	if (pos == std::string::npos)
 		return 0;
+	pos++;
 	std::string right = m_resolution.substr(pos, m_resolution.length() - pos);
 	return atoi(right.c_str()); //FIXME: Proper parsing?
 }
@@ -134,7 +135,7 @@ bool VideoInputConfig::Decode(const std::string str)
 		return false;
 		
 	try {
-		m_framerate = root["recordingSchedule"].asInt();
+		m_framerate = root["framerate"].asInt();
 		m_codec = root["codec"].asString();
 		m_resolution = root["resolution"].asString();
 		m_enabled = root["enabled"].asBool();

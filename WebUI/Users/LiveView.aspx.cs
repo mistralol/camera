@@ -25,16 +25,12 @@ namespace WebUI.Users
                     ddlVideo.SelectedIndex = 0;
             }
 
-            //VideoInputConfig Cfg;
-            //Camera.VideoInputGetConfig(0, Cfg);
+            int VInput = Convert.ToInt32(ddlVideo.SelectedValue);
+            VideoInputConfig Config = Camera.VideoInputGetConfig(VInput);
 
-            //FIXME:
-            //VStream.Width = Cfg.G
-//            VStream.Height = Cfg.GetHight();
-            VStream.VInput = Convert.ToInt32(ddlVideo.SelectedValue);
-            VStream.Width = 640;
-            VStream.Height = 400;
-
+            VStream.VInput = VInput;
+            VStream.Width = Config.GetWidth();
+            VStream.Height = Config.GetHeight();
         }
     }
 }
