@@ -5,6 +5,9 @@ class VideoOutputSupported
 		VideoOutputSupported();
 		~VideoOutputSupported();
 		
+		void SetMaxPanes(int );
+		int GetMaxPanes();
+		
 		void Clear();
 		
 		std::string Encode();

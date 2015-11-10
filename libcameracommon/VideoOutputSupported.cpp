@@ -19,9 +19,19 @@ VideoOutputSupported::~VideoOutputSupported()
 
 }
 
+void VideoOutputSupported::SetMaxPanes(int value)
+{
+	m_maxpanes = value;
+}
+
+int VideoOutputSupported::GetMaxPanes()
+{
+	return m_maxpanes;
+}
+
 void VideoOutputSupported::Clear()
 {
-	m_maxpanes = 0;
+	m_maxpanes = 1; //Must always be at least 1
 }
 
 std::string VideoOutputSupported::Encode()
