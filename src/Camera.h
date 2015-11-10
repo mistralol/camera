@@ -46,6 +46,9 @@ using namespace liblogger;
 #include <VideoInputConfig.h>
 
 #include <VideoOutputSupported.h>
+#include <VideoOutputConfig.h>
+#include <VideoOutputTourItem.h>
+#include <VideoOutputTour.h>
 
 #include <PlatformBase.h>
 

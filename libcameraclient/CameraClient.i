@@ -8,6 +8,10 @@ using namespace std;
 #include <WebStreamOptions.h>
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
+#include <VideoOutputSupported.h>
+#include <VideoOutputConfig.h>
+#include <VideoOutputTourItem.h>
+#include <VideoOutputTour.h>
 #include <UserItem.h>
 
 #include "CameraClient.h"
@@ -37,6 +41,10 @@ try {
 %include CameraClient.h
 %include VideoInputSupported.h
 %include VideoInputConfig.h
+%include VideoOutputSupported.h
+%include VideoOutputConfig.h
+%include VideoOutputTour.h
+%include VideoOutputTourItem.h
 %include UserItem.h
 %include WebStreamType.h
 %include WebStreamOptions.h
