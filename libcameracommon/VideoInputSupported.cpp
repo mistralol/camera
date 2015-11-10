@@ -7,10 +7,6 @@
 
 #include <json/json.h>
 
-#include <liblogger.h>
-using namespace liblogger;
-
-
 #include <VideoInputSupported.h>
 
 VideoInputSupported::VideoInputSupported()
