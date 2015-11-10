@@ -1,5 +1,6 @@
 
 #include <string>
+#include <json/json.h>
 
 #include <VideoOutputTourItem.h>
 
@@ -39,4 +40,21 @@ void VideoOutputTourItem::SetDelay(int seconds)
 	m_delay = seconds;
 }
 
+bool VideoOutputTourItem::ConfigSave(Json::Value &json)
+{
+	json["source"] = m_source;
+	json["delay"] = m_delay;
+	return true;
+}
+
+bool VideoOutputTourItem::ConfigLoad(Json::Value &json)
+{
+	if (json.isMember("source") && json["source"].isString())
+		m_source = json["source"].asString();
+
+	if (json.isMember("delay") && json["delay"].isNumeric())
+		m_delay = json["delay"].asInt();
+		
+	return true;
+}
 
