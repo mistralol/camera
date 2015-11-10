@@ -45,6 +45,8 @@ using namespace liblogger;
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
 
+#include <VideoOutputSupported.h>
+
 #include <PlatformBase.h>
 
 #include <GPIOOutputTimer.h>

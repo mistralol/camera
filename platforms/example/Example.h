@@ -13,15 +13,15 @@ class Example : public PlatformBase
 		bool ConfigSave(Json::Value &);
 
 		unsigned int VideoInputCount();
-
 		bool VideoInputSupportedInfo(unsigned int stream, VideoInputSupported *info);
-
 		void VideoInputDefaultConfig(unsigned int stream, VideoInputConfig *config);
 		bool VideoInputConfigure(unsigned int stream, const VideoInputConfig *config);
-
 		bool VideoInputEnable(unsigned int stream);
 		bool VideoInputDisable(unsigned int stream);
-		
+
+		unsigned int VideoOutputCount();
+		void VideoOutputSupportedInfo(unsigned int output, VideoOutputSupported *info);
+
 		unsigned int GPIOOutputCount();
 		void GPIOOutputSetState(unsigned int output, bool enabled);
 		bool GPIOOutputGetState(unsigned int output);

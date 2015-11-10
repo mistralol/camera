@@ -537,6 +537,13 @@ bool CameraHandler::VideoInputDisable(unsigned int input)
 	return true;
 }
 
+int CameraHandler::VideoOutputCount()
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputCount()");
+	return m_Platform->VideoOutputCount();
+}
+
 int CameraHandler::GPIOOutputCount()
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);

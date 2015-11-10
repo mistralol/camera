@@ -172,6 +172,16 @@ bool Example::VideoInputDisable(unsigned int input)
 	return true;
 }
 
+unsigned int Example::VideoOutputCount()
+{
+	return 1;
+}
+
+void Example::VideoOutputSupportedInfo(unsigned int output, VideoOutputSupported *info)
+{
+	info->Clear(); //Reset to defaults
+}
+
 unsigned int Example::GPIOOutputCount()
 {
 	LogDebug("Example::GPIOOutputCount()");

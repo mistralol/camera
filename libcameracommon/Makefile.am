@@ -5,6 +5,9 @@ lib_LTLIBRARIES=libcameracommon.la
 
 libcameracommon_la_SOURCES=VideoInputConfig.cpp \
 			VideoInputSupported.cpp \
+			VideoOutputConfig.cpp \
+			VideoOutputTour.cpp \
+			VideoOutputTourItem.cpp \
 			VideoOutputSupported.cpp \
 			WebStreamOptions.cpp
 

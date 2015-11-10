@@ -84,7 +84,7 @@ class PlatformBase
 			return 0;
 		}
 		
-		virtual bool VideoOutputSupportedInfo(unsigned int output, void *p)
+		virtual void VideoOutputSupportedInfo(unsigned int output, VideoOutputSupported *info)
 		{
 			LogCritical("Platform has not implemented function %s", __FUNCTION__);
 			abort();

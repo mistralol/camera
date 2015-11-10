@@ -10,15 +10,16 @@ class CameraHandler
 		bool ConfigSave(Json::Value &);
 
 		int VideoInputCount();
-
 		bool VideoInputSetEnabled(unsigned int input, bool enabled);
 		bool VideoInputGetEnabled(unsigned int input, bool &enabled);
 		int VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg);
 		int VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg);
 		int VideoInputGetSupported(unsigned int input, VideoInputSupported *info);
-
 		bool VideoInputEnable(unsigned int input);
 		bool VideoInputDisable(unsigned int input);
+
+		int VideoOutputCount();
+		int VideoOutputGetSupported(unsigned int output, VideoOutputSupported *info);
 
 		int GPIOOutputCount();
 		int GPIOOutputSetState(unsigned int output, bool state);
@@ -49,6 +50,11 @@ class CameraHandler
 		Mutex m_VideoInputMutex;
 		std::map<unsigned int, struct VideoInputConfig *> m_VideoInputs;
 
+		//Video Output Stuff
+		Mutex m_VideoOutputMutex;
+		std::map<unsigned int, struct VideoOutputConfig *> m_VideoOutputs;
+
+		//GPIO Output Stuff
 		Mutex m_GPIOOutputMutex;
 		std::map<unsigned int, GPIOOutputTimer *> m_GPIOOutputTimers;
 };
