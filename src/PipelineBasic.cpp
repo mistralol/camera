@@ -324,10 +324,12 @@ bool PipelineBasic::WaitForEos(GstElement *pipeline, GstBus *bus)
 			break;
 		}
 		//Suppress Noise
+		case GST_MESSAGE_STATE_CHANGED:
+			break;
+
 		case GST_MESSAGE_STREAM_STATUS:
 		case GST_MESSAGE_ASYNC_START:
 		case GST_MESSAGE_ASYNC_DONE:
-		case GST_MESSAGE_STATE_CHANGED:
 		case GST_MESSAGE_NEW_CLOCK:
 			LogDebug("Pipeline '%s' UnHandled message of type %s", m_name.c_str(), GST_MESSAGE_TYPE_NAME (msg));
 			break;
