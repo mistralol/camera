@@ -5,6 +5,7 @@ lib_LTLIBRARIES=libcameracommon.la
 
 libcameracommon_la_SOURCES=VideoInputConfig.cpp \
 			VideoInputSupported.cpp \
+			VideoOutputSupported.cpp \
 			WebStreamOptions.cpp
 
 libcameracommon_la_CXXFLAGS=-fPIC $(JSON_CFLAGS)
