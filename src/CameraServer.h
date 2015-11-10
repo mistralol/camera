@@ -20,12 +20,20 @@ class CameraServer : public IServerHandler
 		static int RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
 		static int VideoInputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
-
 		static int VideoInputSetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int VideoInputGetEnabled(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int VideoInputGetConfig(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int VideoInputSetConfig(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int VideoInputGetSupported(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+
+		static int VideoOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputGetSupported(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputTourList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputTourAdd(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputTourUpdate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputTourGet(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputTourExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
+		static int VideoOutputTourRemove(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 
 		static int GPIOOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);
 		static int GPIOOutputSetState(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response);

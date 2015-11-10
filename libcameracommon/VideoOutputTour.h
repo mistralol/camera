@@ -13,8 +13,8 @@ class VideoOutputTour
 		void AddSource(const std::string source, int delay);
 		void Clear();
 		
-		//Encode
-		//ConfigSave
+		std::string Encode();
+		bool Decode(const std::string str);
 		
 	private:
 		std::string m_name;

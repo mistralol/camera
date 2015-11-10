@@ -17,6 +17,10 @@
 #include <VideoInput.h>
 #include <VideoInputConfig.h>
 #include <VideoInputSupported.h>
+#include <VideoOutputConfig.h>
+#include <VideoOutputSupported.h>
+#include <VideoOutputTourItem.h>
+#include <VideoOutputTour.h>
 #include <WebStreamType.h>
 #include <WebStreamOptions.h>
 #include <UserItem.h>

@@ -28,6 +28,15 @@ VideoInputGetEnabled,	CameraServer::VideoInputGetEnabled
 VideoInputGetConfig,	CameraServer::VideoInputGetConfig
 VideoInputSetConfig,	CameraServer::VideoInputSetConfig
 VideoInputGetSupported,	CameraServer::VideoInputGetSupported
+####
+VideoOutputCount,	CameraServer::VideoOutputCount
+VideoOutputGetSupported,CameraServer::VideoOutputGetSupported
+VideoOutputTourList,	CameraServer::VideoOutputTourList
+VideoOutputTourAdd,	CameraServer::VideoOutputTourAdd
+VideoOutputTourGet,	CameraServer::VideoOutputTourGet
+VideoOutputTourUpdate,	CameraServer::VideoOutputTourUpdate
+VideoOutputTourExists,	CameraServer::VideoOutputTourExists
+VideoOutputTourRemove,	CameraServer::VideoOutputTourRemove
 #####
 GPIOOutputCount,	CameraServer::GPIOOutputCount
 GPIOOutputSetState,	CameraServer::GPIOOutputSetState

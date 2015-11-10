@@ -243,6 +243,46 @@ int CameraServer::VideoInputGetSupported(CameraHandler *handler, IServerConnecti
 	return ret;
 }
 
+int CameraServer::VideoOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputGetSupported(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputTourList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputTourAdd(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputTourUpdate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputTourGet(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputTourExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
+int CameraServer::VideoOutputTourRemove(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+{
+	return -1;
+}
+
 int CameraServer::GPIOOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	int count = handler->GPIOOutputCount();

@@ -46,4 +46,14 @@ void VideoOutputTour::Clear()
 	m_items.clear();
 }
 
+std::string VideoOutputTour::Encode()
+{
+	throw;
+}
+
+bool VideoOutputTour::Decode(const std::string str)
+{
+	return false;
+}
+
 

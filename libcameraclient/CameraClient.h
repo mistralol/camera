@@ -31,6 +31,16 @@ class CameraClient
 		void VideoInputSetConfig(int input, VideoInputConfig *cfg);
 		VideoInputSupported VideoInputGetSupported(int input);
 		
+		int VideoOutputCount();
+		VideoOutputSupported VideoOutputGetSupported(int input);
+		
+		std::vector<std::string> VideoOutputTourList();
+		void VideoOutputTourAdd(VideoOutputTour *tour);
+		void VideoOutputTourUpdate(VideoOutputTour *tour);
+		VideoOutputTour VideoOutputTourGet(const std::string &name);
+		bool VideoOutputTourExists(const std::string &name);
+		void VideoOutputTourRemove(const std::string &name);
+		
 		int GPIOOutputCount();
 		void GPIOOutputSetState(int output, bool enabled);
 		void GPIOOutputSetState(int output, bool enabled, const struct timespec *ts);

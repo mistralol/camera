@@ -7,6 +7,9 @@
 #include <WebStreamOptions.h>
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
+#include <VideoOutputSupported.h>
+#include <VideoOutputTourItem.h>
+#include <VideoOutputTour.h>
 #include <UserItem.h>
 
 #include <CameraClient.h>
@@ -312,6 +315,136 @@ VideoInputSupported CameraClient::VideoInputGetSupported(int input)
 	return info;
 }
 
+int CameraClient::VideoOutputCount()
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputCount");
+	Request request;
+	Request response;
+
+	request.SetCommand("VideoOutputCount");
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	int value = 0;
+	if (response.GetInt("value", &value) == false)
+		return -EINVAL;
+	return value;
+}
+
+VideoOutputSupported CameraClient::VideoOutputGetSupported(int input)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputGetSupported");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoOutputGetSupported");
+	request.SetArg("input", input);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	std::string str = "";
+	if (response.GetString("info", &str) == false)
+		throw(CameraClientException(-EINVAL));
+	VideoOutputSupported info;
+	if (info.Decode(str) == false)
+		throw(CameraClientException(-EINVAL));
+	return info;
+}
+		
+std::vector<std::string> CameraClient::VideoOutputTourList()
+{
+throw(CameraClientException(-EINVAL));
+}
+
+void CameraClient::VideoOutputTourAdd(VideoOutputTour *tour)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputTourAdd");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoOutputTourAdd");
+	request.SetArg("config", tour->Encode());
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+}
+
+void CameraClient::VideoOutputTourUpdate(VideoOutputTour *tour)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputTourUpdate");
+	Request request;
+	Request response;
+
+	request.SetCommand("VideoOutputTourUpdate");
+	request.SetArg("config", tour->Encode());
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+}
+
+VideoOutputTour CameraClient::VideoOutputTourGet(const std::string &name)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputTourGet");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoOutputTourGet");
+	request.SetArg("name", name);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	std::string str = "";
+	if (response.GetString("config", &str) == false)
+		throw(CameraClientException(-EINVAL));
+	VideoOutputTour cfg;
+	if (cfg.Decode(str) == false)
+		throw(CameraClientException(-EINVAL));
+	return cfg;
+}
+
+bool CameraClient::VideoOutputTourExists(const std::string &name)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputTourExists");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoOutputTourExists");
+	request.SetArg("name", name);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	if (ret)
+		return true;
+	return false;
+}
+
+void CameraClient::VideoOutputTourRemove(const std::string &name)
+{
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputTourRemove");
+	Request request;
+	Request response;
+	
+	request.SetCommand("VideoOutputTourRemove");
+	request.SetArg("name", name);
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+}
+
 int CameraClient::GPIOOutputCount()
 {
 	if (m_Client == NULL)
@@ -376,7 +509,9 @@ bool CameraClient::GPIOOutputGetState(int output)
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
-
+	if (ret)
+		return true;
+	return false;
 }
 
 void CameraClient::UserCreate(const std::string Username, const std::string Password, const std::string EMail)
