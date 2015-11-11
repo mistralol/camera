@@ -333,7 +333,7 @@ int CameraClient::VideoOutputCount()
 	return value;
 }
 
-VideoOutputSupported CameraClient::VideoOutputGetSupported(int input)
+VideoOutputSupported CameraClient::VideoOutputGetSupported(int output)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));
@@ -342,7 +342,7 @@ VideoOutputSupported CameraClient::VideoOutputGetSupported(int input)
 	Request response;
 	
 	request.SetCommand("VideoOutputGetSupported");
-	request.SetArg("input", input);
+	request.SetArg("output", output);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
@@ -357,7 +357,21 @@ VideoOutputSupported CameraClient::VideoOutputGetSupported(int input)
 		
 std::vector<std::string> CameraClient::VideoOutputTourList()
 {
-throw(CameraClientException(-EINVAL));
+	if (m_Client == NULL)
+		throw(CameraClientException(ENOTCONN));
+	PerfCounter PC("VideoOutputTourList");
+	Request request;
+	Request response;
+
+	request.SetCommand("VideoOutputTourList");
+
+	int ret = m_Client->SendRequest(&request, &response);
+	if (ret < 0)
+		throw(CameraClientException(ret));
+	std::vector<std::string> lst;
+	if (response.GetVectorString("info", &lst) == false)
+		throw(CameraClientException(-EINVAL));
+	return lst;
 }
 
 void CameraClient::VideoOutputTourAdd(VideoOutputTour *tour)
@@ -369,7 +383,7 @@ void CameraClient::VideoOutputTourAdd(VideoOutputTour *tour)
 	Request response;
 	
 	request.SetCommand("VideoOutputTourAdd");
-	request.SetArg("config", tour->Encode());
+	request.SetArg("info", tour->Encode());
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
@@ -384,7 +398,7 @@ void CameraClient::VideoOutputTourUpdate(VideoOutputTour *tour)
 	Request response;
 
 	request.SetCommand("VideoOutputTourUpdate");
-	request.SetArg("config", tour->Encode());
+	request.SetArg("info", tour->Encode());
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
@@ -404,7 +418,7 @@ VideoOutputTour CameraClient::VideoOutputTourGet(const std::string &name)
 	if (ret < 0)
 		throw(CameraClientException(ret));
 	std::string str = "";
-	if (response.GetString("config", &str) == false)
+	if (response.GetString("info", &str) == false)
 		throw(CameraClientException(-EINVAL));
 	VideoOutputTour cfg;
 	if (cfg.Decode(str) == false)

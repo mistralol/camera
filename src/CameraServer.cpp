@@ -231,7 +231,7 @@ int CameraServer::VideoInputGetSupported(CameraHandler *handler, IServerConnecti
 
 	if (request->GetUInt("input", &input) == false)
 	{
-		LogError("CameraServer::VideoInputGetSupported Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		LogError("CameraServer::VideoInputGetSupported Failed - exists: %s", request->HasArg("input") ? "true" : "false");
 		return -EINVAL;
 	}
 
@@ -245,42 +245,113 @@ int CameraServer::VideoInputGetSupported(CameraHandler *handler, IServerConnecti
 
 int CameraServer::VideoOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	return handler->VideoOutputCount();
 }
 
 int CameraServer::VideoOutputGetSupported(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	VideoOutputSupported info;
+	unsigned int output = -1;
+	
+	if (request->GetUInt("output", &output) == false)
+	{
+		LogError("CameraServer::VideoOutputGetSupported Failed - exists: %s", request->HasArg("value") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	int ret = handler->VideoOutputGetSupported(output, &info);
+	if (ret < 0)
+		return ret;
+	response->SetArg("info", info.Encode());
+	return ret;
 }
 
 int CameraServer::VideoOutputTourList(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	std::vector<std::string> lst = handler->VideoOutputTourList();
+	response->SetArg("info", &lst);
+	return lst.size();
 }
 
 int CameraServer::VideoOutputTourAdd(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	VideoOutputTour info;
+	std::string data;
+	if (request->GetString("info", &data) == false)
+	{
+		LogError("CameraServer::VideoOutputTourAdd Failed - exists: %s", request->HasArg("data") ? "true" : "false");
+		return -EINVAL;
+	}
+	if (info.Decode(data) == false)
+	{
+		LogError("CameraServer::VideoOutputTourAdd Failed - Cannot decode VideoOutputTour");
+		return -EINVAL;
+	}
+	
+	return handler->VideoOutputTourAdd(&info);
 }
 
 int CameraServer::VideoOutputTourUpdate(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	VideoOutputTour info;
+	std::string data;
+	if (request->GetString("info", &data) == false)
+	{
+		LogError("CameraServer::VideoOutputTourUpdate Failed - exists: %s", request->HasArg("data") ? "true" : "false");
+		return -EINVAL;
+	}
+	if (info.Decode(data) == false)
+	{
+		LogError("CameraServer::VideoOutputTourUpdate Failed - Cannot decode VideoOutputTour");
+		return -EINVAL;
+	}
+	
+	return handler->VideoOutputTourUpdate(&info);
+
 }
 
 int CameraServer::VideoOutputTourGet(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	VideoOutputTour info;
+	std::string name = "";
+	if (request->GetString("name", &name) == false)
+	{
+		LogError("CameraServer::VideoOutputTourGet Failed - exists: %s", request->HasArg("name") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	int ret = handler->VideoOutputTourGet(name, &info);
+	if (ret < 0)
+		return ret;
+	response->SetArg("info", info.Encode());
+	return 0;
 }
 
 int CameraServer::VideoOutputTourExists(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	std::string name = "";
+	if (request->GetString("name", &name) == false)
+	{
+		LogError("CameraServer::VideoOutputTourExists Failed - exists: %s", request->HasArg("name") ? "true" : "false");
+		return -EINVAL;
+	}
+
+	bool value = handler->VideoOutputTourExists(name);
+	if (value)
+		return 1;
+	return 0;	
 }
 
 int CameraServer::VideoOutputTourRemove(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	return -1;
+	std::string name = "";
+	if (request->GetString("name", &name) == false)
+	{
+		LogError("CameraServer::VideoOutputTourRemove Failed - exists: %s", request->HasArg("name") ? "true" : "false");
+		return -EINVAL;
+	}
+	
+	return handler->VideoOutputTourRemove(name);
 }
 
 int CameraServer::GPIOOutputCount(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)

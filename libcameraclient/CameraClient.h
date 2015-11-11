@@ -40,7 +40,7 @@ class CameraClient
 		VideoOutputTour VideoOutputTourGet(const std::string &name);
 		bool VideoOutputTourExists(const std::string &name);
 		void VideoOutputTourRemove(const std::string &name);
-		
+
 		int GPIOOutputCount();
 		void GPIOOutputSetState(int output, bool enabled);
 		void GPIOOutputSetState(int output, bool enabled, const struct timespec *ts);

@@ -220,7 +220,7 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 
 
 	//Start The Video Inputs
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
 	while(it != m_VideoInputs.end())
 	{
 		if (m_Platform->VideoInputConfigure(it->first, it->second) == false)
@@ -273,7 +273,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 			return false;
 
 	ScopedLock VideoLock(&m_VideoInputMutex);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
 	while(it != m_VideoInputs.end())
 	{
 		std::stringstream ss;
@@ -314,7 +314,7 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 		return false;
 
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
 	while(it != m_VideoInputs.end())
 	{
 		std::stringstream ss;
@@ -351,7 +351,7 @@ bool CameraHandler::VideoInputSetEnabled(unsigned int input, bool enabled)
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputSetEnabled(%u, %s)", input, enabled ? "True" : "False");
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogDebug("CameraHandler::VideoInputSetEnabled(%u, %s) - No such input", input, enabled ? "True" : "False");
@@ -381,7 +381,7 @@ bool CameraHandler::VideoInputGetEnabled(unsigned int input, bool &enabled)
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoStreamGetEnabled(%u)", input);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogError("CameraHandler::VideoInputGetEnabled(%u) - No such input", input);
@@ -396,7 +396,7 @@ int CameraHandler::VideoInputSetConfig(unsigned int input, VideoInputConfig *cfg
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputSetConfig(%u)", input);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogError("CameraHandler::VideoInputSetConfig(%u) - No such input", input);
@@ -444,7 +444,7 @@ int CameraHandler::VideoInputGetConfig(unsigned int input, VideoInputConfig *cfg
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputGetConfig(%u)", input);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogError("CameraHandler::VideoInputGetConfig(%u) - No such input", input);
@@ -459,7 +459,7 @@ int CameraHandler::VideoInputGetSupported(unsigned int input, VideoInputSupporte
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputGetSupported(%u)", input);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogError("CameraHandler::VideoInputGetSupported(%u) - No such input", input);
@@ -474,7 +474,7 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputEnable(%u)", input);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogDebug("CameraHandler::VideoInputEnable(%u) - No such input", input);
@@ -518,7 +518,7 @@ bool CameraHandler::VideoInputDisable(unsigned int input)
 {
 	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
 	LogDebug("CameraHandler::VideoInputDisable(%u)", input);
-	std::map<unsigned int, struct VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
+	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.find(input);
 	if (it == m_VideoInputs.end())
 	{
 		LogDebug("CameraHandler::VideoInputDisable(%u) - No such input", input);
@@ -542,6 +542,89 @@ int CameraHandler::VideoOutputCount()
 	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
 	LogDebug("CameraHandler::VideoOutputCount()");
 	return m_Platform->VideoOutputCount();
+}
+
+int CameraHandler::VideoOutputGetSupported(unsigned int output, VideoOutputSupported *info)
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputGetSupported(%d, %p)", output, info);
+	return -1;
+}
+
+std::vector<std::string> CameraHandler::VideoOutputTourList()
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputTourList()");
+	std::vector<std::string> lst;
+}
+
+int CameraHandler::VideoOutputTourAdd(VideoOutputTour *tour)
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputTourAdd(%s)", tour->GetName().c_str());
+	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(tour->GetName());
+	if (it != m_VideoOutputTours.end())
+	{
+		LogError("CameraHandler::VideoOutputTourAdd - Tour '%s' already exists", tour->GetName().c_str());
+		return -EEXIST;
+	}
+	VideoOutputTour *tmp = new VideoOutputTour();
+	*tmp = *tour;
+	m_VideoOutputTours[tour->GetName()] = tmp;
+}
+
+int CameraHandler::VideoOutputTourUpdate(VideoOutputTour *tour)
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputTourList(%s)", tour->GetName().c_str());
+	if (VideoOutputTourExists(tour->GetName()))
+	{
+		if (VideoOutputTourRemove(tour->GetName()) < 0)
+		{
+			LogCritical("CameraHandler::VideoOutputTourUpdate - Tour '%s' Exists but could not be removed?", tour->GetName().c_str());
+			abort(); //Should be unreachable
+		}
+	}
+	return VideoOutputTourAdd(tour);
+}
+
+int CameraHandler::VideoOutputTourGet(const std::string &name, VideoOutputTour *info)
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputTourGet(%s)", name.c_str());
+	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(name);
+	if (it == m_VideoOutputTours.end())
+	{
+		LogError("CameraHandler::VideoOutputTourRemove - Tour '%s' does not exist", name.c_str());
+		return -EEXIST;
+	}
+	*info = *it->second;
+	return 0;
+}
+
+bool CameraHandler::VideoOutputTourExists(const std::string &name)
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputTourExists(%s)", name.c_str());
+	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(name);
+	if (it == m_VideoOutputTours.end())
+		return false;
+	return true;
+}
+
+int CameraHandler::VideoOutputTourRemove(const std::string &name)
+{
+	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
+	LogDebug("CameraHandler::VideoOutputTourRemove(%s)", name.c_str());
+	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(name);
+	if (it == m_VideoOutputTours.end())
+	{
+		LogError("CameraHandler::VideoOutputTourRemove - Tour '%s' does not exist", name.c_str());
+		return -EEXIST;
+	}
+	delete it->second;
+	m_VideoOutputTours.erase(it);
+	return 0;
 }
 
 int CameraHandler::GPIOOutputCount()
