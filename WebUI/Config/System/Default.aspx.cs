@@ -6,7 +6,7 @@ using System.Web.UI.WebControls;
 
 using WebUI.Code;
 
-namespace WebUI.Config
+namespace WebUI.Config.System
 {
     public partial class Default : AppPage
     {

@@ -44,6 +44,14 @@
                 </ul>
             </asp:Panel>
 
+            <asp:Panel runat="server" ID="pnlSystem">
+                <a href="/Config/System/Default.aspx">System</a>
+                <ul class="menu">
+                    <li><a href="/Config/System/Debug.aspx">Debug</a></li>
+                    <li><a href="/Config/System/Performance.aspx">Performance</a></li>
+                </ul>
+            </asp:Panel>
+
 
             <a href="/Users/Default.aspx">Your Account</a>
             <ul class="menu">
