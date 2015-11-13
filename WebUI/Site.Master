@@ -49,6 +49,7 @@
                 <ul class="menu">
                     <li><a href="/Config/System/Debug.aspx">Debug</a></li>
                     <li><a href="/Config/System/Performance.aspx">Performance</a></li>
+                    <li><a href="/Config/System/Service.aspx">Service</a></li>
                 </ul>
             </asp:Panel>
 

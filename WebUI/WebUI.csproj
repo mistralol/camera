@@ -73,6 +73,7 @@
     <Content Include="Config\System\Debug.aspx" />
     <Content Include="Config\System\Default.aspx" />
     <Content Include="Config\System\Performance.aspx" />
+    <Content Include="Config\System\Service.aspx" />
     <Content Include="Config\VideoInput\Default.aspx" />
     <Content Include="Config\VideoInput\NoInputs.aspx" />
     <Content Include="Controls\Default.aspx" />
@@ -174,6 +175,13 @@
     </Compile>
     <Compile Include="Config\System\Performance.aspx.designer.cs">
       <DependentUpon>Performance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\System\Service.aspx.cs">
+      <DependentUpon>Service.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\System\Service.aspx.designer.cs">
+      <DependentUpon>Service.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\VideoInput\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
