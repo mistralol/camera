@@ -10,6 +10,8 @@ class VideoOutputSupported
 		
 		void Clear();
 		
+		std::vector<std::string> ToStrV();
+		
 		std::string Encode();
                 bool Decode(const std::string);
                 

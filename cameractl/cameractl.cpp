@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 		Misc::Process(&data);
 	} catch(std::exception ex)
 	{
-		fprintf(stderr, "Exception: %s", ex.what());
+		fprintf(stderr, "Exception: %s\n", ex.what());
 	}
 	cli.Disconnect();
 }

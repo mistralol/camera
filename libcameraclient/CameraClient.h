@@ -32,7 +32,7 @@ class CameraClient
 		VideoInputSupported VideoInputGetSupported(int input);
 		
 		int VideoOutputCount();
-		VideoOutputSupported VideoOutputGetSupported(int input);
+		VideoOutputSupported VideoOutputGetSupported(int output);
 		
 		std::vector<std::string> VideoOutputTourList();
 		void VideoOutputTourAdd(VideoOutputTour *tour);

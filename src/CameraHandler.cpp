@@ -46,6 +46,27 @@ CameraHandler::~CameraHandler()
 		delete t;
 	}
 
+	//Cleanup any Video Output's
+	while(m_VideoOutputs.size() > 0)
+	{
+		std::map<unsigned int, VideoOutputConfig *>::iterator it = m_VideoOutputs.begin();
+//		int output = it->first;
+		VideoOutputConfig *config = it->second;
+//		if (config->GetEnabled())
+//			m_Platform->VideoOutputDisable(output);
+		m_VideoOutputs.erase(it);
+		delete config;
+	}
+
+	//Cleanup any tours we may have
+	while(m_VideoOutputTours.size() > 0)
+	{
+		std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.begin();
+		VideoOutputTour *config = it->second;
+		m_VideoOutputTours.erase(it);
+		delete config;
+	}
+
 	WServer->Stop();
 	delete WServer;
 	
@@ -239,6 +260,9 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 		it++;
 	}
 	
+	//Start the VideoOutputs
+	//TODO
+	
 	//Load WebService Last
 	WServer->Start();
 }
@@ -272,27 +296,77 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		if (WServer->ConfigLoad(json["webserver"]) == false)
 			return false;
 
-	ScopedLock VideoLock(&m_VideoInputMutex);
-	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
-	while(it != m_VideoInputs.end())
 	{
-		std::stringstream ss;
-		ss << "VideoInputConfig_" << it->first;
-		if (json.isMember(ss.str()))
+		ScopedLock VideoInputLock(&m_VideoInputMutex);
+		std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+		while(it != m_VideoInputs.end())
 		{
-			if (it->second->ConfigLoad(json[ss.str()]) == false)
+			std::stringstream ss;
+			ss << "VideoInputConfig_" << it->first;
+			if (json.isMember(ss.str()))
 			{
-				LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video input '%s'", ss.str().c_str());
-				return false;
+				if (it->second->ConfigLoad(json[ss.str()]) == false)
+				{
+					LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video input '%s'", ss.str().c_str());
+					return false;
+				}
+				LogInfo("VideoInput %u loaded config '%s'", it->first, it->second->ToStr().c_str());
 			}
-			LogInfo("VideoInput %u loaded config '%s'", it->first, it->second->ToStr().c_str());
+			else
+			{
+				LogWarning("CameraHandler::ConfigLoad - No configuration for video input '%s'", ss.str().c_str());
+			}
+			it++;
 		}
-		else
-		{
-			LogWarning("CameraHandler::ConfigLoad - No configuration for video input '%s'", ss.str().c_str());
-		}
-		it++;
 	}
+
+	{
+		ScopedLock VideoOutputLock(&m_VideoOutputMutex);
+		std::map<unsigned int, VideoOutputConfig *>::iterator it = m_VideoOutputs.begin();
+		while(it != m_VideoOutputs.end())
+		{
+			std::stringstream ss;
+			ss << "VideoutOutputConfig_" << it->first;
+			if (json.isMember(ss.str()))
+			{
+				if (it->second->ConfigLoad(json[ss.str()]) == false)
+				{
+					LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video output '%s'", ss.str().c_str());
+					return false;
+				}
+				LogInfo("VideoOutput %u loaded config '%s'", it->first, it->second->ToStr().c_str());
+			}
+			else
+			{
+				LogWarning("CameraHandler::ConfigLoad - No configuration for video output '%s'", ss.str().c_str());
+			}
+			it++;
+		}
+	}
+
+	//Load VideoOutput Tours
+	{
+		ScopedLock VideoOutputLock(&m_VideoOutputMutex);
+		if (json.isMember("VideoOutputTours") && json["VideoOutputTours"].isArray())
+		{
+			std::vector<std::string> lst = json["VideoOutputTours"].getMemberNames();
+			for(std::vector<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
+			{
+				std::string name = *it;
+				
+				VideoOutputTour *tour = new VideoOutputTour();
+				if (tour->ConfigLoad(json["VideoOutputTours"][name]) == false)
+				{
+					LogError("CameraHandler::ConfigLoad - Failed to load tour '%s'", name.c_str());
+					delete tour;
+					return false;
+				}
+				m_VideoOutputTours[tour->GetName()] = tour;
+				LogInfo("CameraHandler::ConfigLoad - Loaded Tour '%s'", tour->GetName().c_str());
+			}
+		}
+	}
+	
 
 	return true;
 }
@@ -313,20 +387,57 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 	if (RServer->ConfigSave(json["rtspserver"]) == false)
 		return false;
 
-	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
-	std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
-	while(it != m_VideoInputs.end())
+	//Save VideoInput Config
 	{
-		std::stringstream ss;
-		ss << "VideoInputConfig_" << it->first;
-		if (it->second->ConfigSave(json[ss.str()]) == false)
+		ScopedLock VideoInputLock = ScopedLock(&m_VideoInputMutex);
+		std::map<unsigned int, VideoInputConfig *>::iterator it = m_VideoInputs.begin();
+		while(it != m_VideoInputs.end())
 		{
-			LogError("CameraHandler::ConfigSave Failed to log configuration for video input '%s'", ss.str().c_str());
-			return false;
+			std::stringstream ss;
+			ss << "VideoInputConfig_" << it->first;
+			if (it->second->ConfigSave(json[ss.str()]) == false)
+			{
+				LogError("CameraHandler::ConfigSave Failed to save configuration for video input '%s'", ss.str().c_str());
+				return false;
+			}
+			it++;
 		}
-		it++;
 	}
-	VideoLock.Unlock();
+
+	//Save VideoOutput Config
+	{
+		ScopedLock VideoOutputLock = ScopedLock(&m_VideoOutputMutex);
+		std::map<unsigned int, VideoOutputConfig *>::iterator it = m_VideoOutputs.begin();
+		while(it != m_VideoOutputs.end())
+		{
+			std::stringstream ss;
+			ss << "VideoOutputConfig_" << it->first;
+			if (it->second->ConfigSave(json[ss.str()]) == false)
+			{
+				LogError("CameraHandler::ConfigSave Failed to save configuration for video output '%s'", ss.str().c_str());
+				return false;
+			}
+			it++;
+		}
+	}
+
+	//Save VideoOutputTours
+	{
+		ScopedLock VideoOutputLock = ScopedLock(&m_VideoOutputMutex);
+		std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.begin();
+		json["VideoOutputTours"] = Json::arrayValue;
+		while(it != m_VideoOutputTours.end())
+		{
+			Json::Value sub;
+			if (it->second->ConfigSave(sub) == false)
+			{
+				LogError("CameraHandler::ConfigSave Failed to save configuration for tour '%s'", it->second->GetName().c_str());
+				return false;
+			}
+			json["VideoOutputTours"].append(sub);
+			it++;
+		}
+	}
 
 	if (User::ConfigSave(json["users"]) == false)
 		return false;

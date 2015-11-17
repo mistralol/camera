@@ -34,6 +34,13 @@ void VideoOutputSupported::Clear()
 	m_maxpanes = 1; //Must always be at least 1
 }
 
+std::vector<std::string> VideoOutputSupported::ToStrV()
+{
+	std::vector<std::string> lst;
+	lst.push_back("MaxPanes: " + m_maxpanes);
+	return lst;
+}
+
 std::string VideoOutputSupported::Encode()
 {
 	Json::Value json;

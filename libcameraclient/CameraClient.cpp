@@ -327,10 +327,7 @@ int CameraClient::VideoOutputCount()
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
-	int value = 0;
-	if (response.GetInt("value", &value) == false)
-		return -EINVAL;
-	return value;
+	return ret;
 }
 
 VideoOutputSupported CameraClient::VideoOutputGetSupported(int output)
