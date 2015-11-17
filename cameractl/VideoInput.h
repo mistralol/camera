@@ -10,3 +10,4 @@ class VideoInput
 		static void Help(struct Data *data);
 		static void Process(struct Data *data);
 };
+

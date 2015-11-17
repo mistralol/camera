@@ -18,6 +18,7 @@
 #include <VideoInputConfig.h>
 #include <VideoInputSupported.h>
 #include <VideoOutputConfig.h>
+#include <VideoOutput.h>
 #include <VideoOutputSupported.h>
 #include <VideoOutputTourItem.h>
 #include <VideoOutputTour.h>

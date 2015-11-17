@@ -10,6 +10,7 @@ static struct Operations Ops[] = {
 	{"system", System::Process, "Process sytem wide commands use system help for more information"},
 	{"user", User::Process, "Process comands for the user database"},
 	{"videoinput", VideoInput::Process, "Process video input commands"},
+	{"videooutput", VideoOutput::Process, "Process video output commands"},
 	{"webserver", WebServer::Process, "Process webserver commands"},
 	{"webstream", WebStream::Process, "Process webstream comands"},
 	{"gpiooutput", GPIOOutput::Process, "Process GPIO Output commands"},

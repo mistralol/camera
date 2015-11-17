@@ -9,6 +9,7 @@ cameractl_SOURCES=cameractl.cpp \
 			WebStream.cpp \
 			Rtsp.cpp \
 			VideoInput.cpp \
+			VideoOutput.cpp \
 			User.cpp \
 			GPIOOutput.cpp
 			
