@@ -349,15 +349,12 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		ScopedLock VideoOutputLock(&m_VideoOutputMutex);
 		if (json.isMember("VideoOutputTours") && json["VideoOutputTours"].isArray())
 		{
-			std::vector<std::string> lst = json["VideoOutputTours"].getMemberNames();
-			for(std::vector<std::string>::iterator it = lst.begin(); it != lst.end(); it++)
+			for(int i=0;i<json["VideoOutputTours"].size();i++)
 			{
-				std::string name = *it;
-				
 				VideoOutputTour *tour = new VideoOutputTour();
-				if (tour->ConfigLoad(json["VideoOutputTours"][name]) == false)
+				if (tour->ConfigLoad(json["VideoOutputTours"][i]) == false)
 				{
-					LogError("CameraHandler::ConfigLoad - Failed to load tour '%s'", name.c_str());
+					LogError("CameraHandler::ConfigLoad - Failed to load tour '%d'", i);
 					delete tour;
 					return false;
 				}
