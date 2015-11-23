@@ -77,6 +77,35 @@ class SigHandler : public ISignalHandler
 
 };
 
+void GLibLogHandler(const gchar *domain, GLogLevelFlags level, const gchar *msg, gpointer data)
+{
+	switch(level)
+	{
+		case G_LOG_LEVEL_DEBUG:
+			LogDebug("GLIB: %s", msg);
+			break;
+		case G_LOG_LEVEL_INFO:
+			LogInfo("GLIB: %s", msg);
+			break;
+		case G_LOG_LEVEL_MESSAGE:
+			LogInfo("GLIB: %s", msg);
+			break;
+		case G_LOG_LEVEL_WARNING:
+			LogWarning("GLIB: %s", msg);
+			break;
+		case G_LOG_LEVEL_CRITICAL:
+			LogCritical("GLIB: %s", msg);
+			break;
+		case G_LOG_LEVEL_ERROR:
+			LogError("GLIB: %s", msg);
+			break;
+		default:
+			LogCritical("GLIB: Unknown Log Level %d Message: %s", level, msg);
+			abort();
+			break;
+	}
+}
+
 int main(int argc, char **argv)
 {
 	CameraServer *Server = NULL;
@@ -194,6 +223,9 @@ int main(int argc, char **argv)
 		}
 	}
 
+	//Insert GLIB Logging
+	guint GLibLogger = g_log_set_handler(NULL, G_LOG_LEVEL_MASK, GLibLogHandler, NULL);
+
 	CameraTimers = new Timers();
 	CameraTimers->Start();
 
@@ -220,6 +252,8 @@ int main(int argc, char **argv)
 	Signals.Block();
 	SHandler.SetServer(NULL);
 	Signals.UnBlock(); //Signals are now dead and won't execute any code.
+
+	g_log_remove_handler(NULL, GLibLogger);
 
 	//Cleanup!
 	delete Server;
