@@ -90,6 +90,40 @@ class PlatformBase
 			abort();
 		}
 		
+		virtual bool VideoOutputConfigure(unsigned int output, VideoOutputConfig *info)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual bool VideoOutputEnable(unsigned int output)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+		
+		virtual bool VideoOutputDisable(unsigned int output)
+		{
+			LogCritical("Platform has not implemented function %s", __FUNCTION__);
+			abort();
+		}
+
+		virtual bool VideoOutputRestart(unsigned int output)
+		{
+			if (VideoOutputEnable(output) == false)
+			{
+				LogCritical("PlatformBase::VideoOutputRestart - VideoOutputDisable Failed!!");
+				return false;
+			}
+
+			if (VideoOutputDisable(output) == false)
+			{
+				LogCritical("PlatformBase::VideoOutputRestart - VideoOutputDisable Failed!!");
+				return false;
+			}
+			return true;
+		}
+		
 		virtual unsigned int AudioInputCount()
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);
