@@ -266,6 +266,10 @@ bool PipelineBasic::SetState(GstElement *pipeline, GstState state)
 bool PipelineBasic::WaitForEos(GstElement *pipeline, GstBus *bus)
 {
 	GstClockTime timeout = 1000000000; //1 Seconds
+	struct timespec started;
+
+	Time::MonoTonic(&started);
+	
 	GstMessage *msg = gst_bus_timed_pop (bus, timeout); //We have to poll because this gstreamer function sometimes never returns
 	if (msg == NULL)
 	{
@@ -276,6 +280,20 @@ bool PipelineBasic::WaitForEos(GstElement *pipeline, GstBus *bus)
 		{
 			return true;
 		}
+
+		//Sometimes gst_bus_timed_pop gets into a state where it constantly wakes up
+		//Deal with this to prevent 100% cpu being used
+		struct timespec now;
+		Time::MonoTonic(&now);
+		GstClockTime gstarted = GST_TIMESPEC_TO_TIME(started);
+		GstClockTime gnow = GST_TIMESPEC_TO_TIME(now);
+		GstClockTime gdiff = GST_CLOCK_DIFF(gstarted, gnow);
+		if (gdiff < timeout)
+		{
+			LogAlert("Pipeline '%s' gst_bus_timed_pop no sleep bug is active", m_name.c_str());
+			usleep(gdiff); //Sleep for remaining time
+		}
+		
 		return false;
 	}
 
