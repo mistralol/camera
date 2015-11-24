@@ -126,7 +126,6 @@ namespace WebUI.Code.Providers
             UserItem info = new UserItem();
             Camera.UserInfo(name, info);
 
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
             MembershipUser mu = new MembershipUser(Name, info.Username, info.Key, info.EMail, string.Empty, string.Empty, info.IsApproved, info.IsLockedOut,
                 Util.FromUnixTimeStamp(info.Created), Util.FromUnixTimeStamp(info.LastLoginDate), Util.FromUnixTimeStamp(info.LastActivityDate),
                 Util.FromUnixTimeStamp(info.LastPasswordChange), Util.FromUnixTimeStamp(info.LastLockoutDate));
