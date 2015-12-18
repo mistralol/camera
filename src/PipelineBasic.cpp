@@ -265,7 +265,7 @@ bool PipelineBasic::SetState(GstElement *pipeline, GstState state)
 
 bool PipelineBasic::WaitForEos(GstElement *pipeline, GstBus *bus)
 {
-	GstClockTime timeout = 1000000000; //1 Seconds
+	GstClockTime timeout = GST_SECOND; //1 Seconds
 	struct timespec started;
 
 	Time::MonoTonic(&started);
