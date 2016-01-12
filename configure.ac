@@ -60,7 +60,7 @@ PKG_CHECK_MODULES(PYTHON, [
 	AC_SUBST(PYTHON_LIBS)
 ], [
 	AC_MSG_ERROR([
-		You need to install or upgrade python
+		You need to install or upgrade python-dev
 	])
 ])
 
