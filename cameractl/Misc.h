@@ -5,6 +5,7 @@ class Misc
 	public:
 		static void Debug(struct Data *data);
 		static void Ping(struct Data *data);
+		static void BenchMark(struct Data *data);
 		static void Version(struct Data *data);
 		static void Quit(struct Data *data);
 		

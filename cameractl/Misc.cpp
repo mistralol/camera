@@ -15,6 +15,7 @@ static struct Operations Ops[] = {
 	{"webstream", WebStream::Process, "Process webstream comands"},
 	{"gpiooutput", GPIOOutput::Process, "Process GPIO Output commands"},
 	{"quit", Misc::Quit, "Tells camera server to quit and exit"},
+	{"benchmark", Misc::BenchMark, "Perform an api benchmark"},
 	{NULL, NULL }
 };
 
@@ -36,6 +37,15 @@ void Misc::Debug(struct Data *data)
 void Misc::Ping(struct Data *data)
 {
 	data->cli->Ping();
+}
+
+void Misc::BenchMark(struct Data *data)
+{
+	for(int i=0;i<1000;i++)
+	{
+		data->cli->Ping();
+	}
+	printf("Done 1000 Calls\n");
 }
 
 void Misc::Version(struct Data *data)
