@@ -1364,6 +1364,8 @@ void CameraClient::StatsDump()
 	PerfCounter PC("StatsDump");
 	Request request;
 	Request response;
+
+	request.SetCommand("StatsDump");
 	
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
@@ -1377,6 +1379,8 @@ void CameraClient::StatsReset()
 	PerfCounter PC("StatsReset");
 	Request request;
 	Request response;
+	
+	request.SetCommand("StatsReset");
 	
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
