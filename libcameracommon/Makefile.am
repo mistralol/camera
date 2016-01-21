@@ -10,7 +10,8 @@ libcameracommon_la_SOURCES=VideoInputConfig.cpp \
 			VideoOutputTourItem.cpp \
 			VideoOutputSupported.cpp \
 			WebStreamOptions.cpp \
-			UserItem.cpp
+			UserItem.cpp \
+			StatsDetails.cpp
 
 libcameracommon_la_CXXFLAGS=-fPIC $(JSON_CFLAGS) $(LIBCLIENTSERVER_CFLAGS) 
 libcameracommon_la_LDFLAGS=-Wl,-z,defs $(JSON_LIBS) $(LIBCLIENTSERVER_LIBS)

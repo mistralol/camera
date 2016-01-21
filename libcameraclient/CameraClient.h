@@ -1,6 +1,5 @@
 
 #include <CameraClientException.h>
-#include <StatsInfo.h>
 
 class CameraClient
 {
@@ -110,7 +109,7 @@ class CameraClient
 		void LogEmergency(const std::string Message);
 		
 		std::vector<std::string> StatsList();
-		void StatsInfo(const std::string key, struct StatsInfo *);
+		void StatsInfo(const std::string key, StatsDetails *);
 		void StatsDump();
 		void StatsReset();
 

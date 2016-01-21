@@ -25,6 +25,7 @@
 #include <WebStreamType.h>
 #include <WebStreamOptions.h>
 #include <UserItem.h>
+#include <StatsDetails.h>
 #include <User.h>
 #include <GPIOOutput.h>
 

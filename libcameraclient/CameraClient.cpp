@@ -11,6 +11,7 @@
 #include <VideoOutputTourItem.h>
 #include <VideoOutputTour.h>
 #include <UserItem.h>
+#include <StatsDetails.h>
 
 #include <CameraClient.h>
 
@@ -1335,7 +1336,7 @@ std::vector<std::string> CameraClient::StatsList()
 	return lst;
 }
 
-void CameraClient::StatsInfo(const std::string key, struct StatsInfo *info)
+void CameraClient::StatsInfo(const std::string key, StatsDetails *info)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));

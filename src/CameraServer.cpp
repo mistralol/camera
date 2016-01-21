@@ -1103,9 +1103,9 @@ int CameraServer::StatsInfo(CameraHandler *handler, IServerConnection *Connectio
 	if (PerfManager::GetInfo(Key, &info) < 0)
 		return -ENOLINK;
 		
-	response->SetArg("TotalTime", (int) Time::Microseconds(&info.TotalTime));
-	response->SetArg("WorstTime", (int) Time::Microseconds(&info.WorstTime));
-	response->SetArg("BestTime", (int) Time::Microseconds(&info.BestTime));
+	response->SetArg("TotalTime", (int) Time::MicroSeconds(&info.TotalTime));
+	response->SetArg("WorstTime", (int) Time::MicroSeconds(&info.WorstTime));
+	response->SetArg("BestTime", (int) Time::MicroSeconds(&info.BestTime));
 	response->SetArg("Count", info.Count);
 	return 0;
 }
@@ -1118,7 +1118,7 @@ int CameraServer::StatsDump(CameraHandler *handler, IServerConnection *Connectio
 
 int CameraServer::StatsReset(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
-	LogDebug("CameraServer::StatsReset");
+	LogInfo("CameraServer::StatsReset");
 	StatsReset();
 }
 
@@ -1135,10 +1135,9 @@ void CameraServer::StatsDump()
 			continue;
 		if (info.Count == 0)
 			continue;
-		LogInfo("%15s Total Calls: %d Average Time: %8ld.%ld Seconds",
+		LogInfo("%25s Total Calls: %6d Average Time: %lld Micro Seconds",
 				it->c_str(), info.Count,
-				info.TotalTime.tv_sec / info.Count,
-				info.TotalTime.tv_nsec / 1000 / info.Count);
+				Time::MicroSeconds(&info.TotalTime) / info.Count);
 	}
 	LogInfo("CameraServer::Finished Dumping stats");
 }

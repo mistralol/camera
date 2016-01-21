@@ -13,6 +13,7 @@ using namespace std;
 #include <VideoOutputTourItem.h>
 #include <VideoOutputTour.h>
 #include <UserItem.h>
+#include <StatsDetails.h>
 
 #include "CameraClient.h"
 %}
@@ -32,9 +33,9 @@ using namespace std;
 
 %exception {
 try {
-	$action
+     $action
 } catch (std::exception e) {
-	SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, e.what());
+     SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, e.what());
 }
 }
 
@@ -46,6 +47,7 @@ try {
 %include VideoOutputTour.h
 %include VideoOutputTourItem.h
 %include UserItem.h
+%include StatsDetails.h
 %include WebStreamType.h
 %include WebStreamOptions.h
 
