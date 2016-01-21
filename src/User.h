@@ -33,7 +33,7 @@ class User
 		static int GetUserFromEMail(const std::string EMail, std::string *User);
 		static int GetUserFromKey(const std::string Key, std::string *User);
 		
-		static int UserInfo(const std::string User, struct UserItem *);
+		static int UserInfo(const std::string User, UserItem *);
 
 		static std::vector<std::string> List();
 
@@ -48,7 +48,7 @@ class User
 
 	private:
 		static Mutex m_mutex;
-		static std::map<std::string, struct UserItem *> m_map;
+		static std::map<std::string, UserItem *> m_map;
 		static int m_lockoutduration;
 		static int m_maxattempts;
 		static int m_autologoff;

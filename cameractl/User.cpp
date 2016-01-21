@@ -187,7 +187,7 @@ void User::Info(struct Data *data)
 	
 	std::string username = data->args.front();
 	data->args.pop_front();
-	struct UserItem info;
+	UserItem info;
 	data->cli->UserInfo(username, &info);
 	
 	printf("Key: %s\n", info.Key.c_str());

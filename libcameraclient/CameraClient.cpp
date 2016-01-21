@@ -810,7 +810,7 @@ void CameraClient::UserSetAutoLogOff(int value)
 		throw(CameraClientException(ret));
 }
 
-void CameraClient::UserInfo(const std::string Username, struct UserItem *info)
+void CameraClient::UserInfo(const std::string Username, UserItem *info)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));

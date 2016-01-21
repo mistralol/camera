@@ -63,7 +63,7 @@ class CameraClient
 		void UserSetMaxFailedAttempts(int value);
 		int UserGetAutoLogOff();
 		void UserSetAutoLogOff(int value);
-		void UserInfo(const std::string Username, struct UserItem *);
+		void UserInfo(const std::string Username, UserItem *);
 		std::vector<std::string> UserList();
 		std::string UserGetUserFromEMail(const std::string EMail);
 		std::string UserGetUserFromKey(const std::string Key);

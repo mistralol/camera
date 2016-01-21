@@ -665,7 +665,7 @@ int CameraServer::UserSetAutoLogOff(CameraHandler *handler, IServerConnection *C
 int CameraServer::UserInfo(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
 {
 	std::string Username = "";
-	struct UserItem info;
+	UserItem info;
 	if (request->GetString("Username", &Username) == false)
 	{
 		LogError("CameraServer::UserSetApproved Failed - Username exists: %s", request->HasArg("Username") ? "true" : "false");
@@ -689,7 +689,7 @@ int CameraServer::UserGetFromEMail(CameraHandler *handler, IServerConnection *Co
 {
 	std::string EMail = "";
 	std::string Username = "";
-	struct UserItem info;
+	UserItem info;
 	if (request->GetString("EMail", &EMail) == false)
 	{
 		LogError("CameraServer::UserGetFromEMail Failed - Key exists: %s", request->HasArg("Username") ? "true" : "false");
@@ -706,7 +706,7 @@ int CameraServer::UserGetFromKey(CameraHandler *handler, IServerConnection *Conn
 {
 	std::string Key = "";
 	std::string Username = "";
-	struct UserItem info;
+	UserItem info;
 	if (request->GetString("Key", &Key) == false)
 	{
 		LogError("CameraServer::UserGetFromKey Failed - Key exists: %s", request->HasArg("Username") ? "true" : "false");
