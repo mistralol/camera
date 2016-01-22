@@ -40,6 +40,7 @@ namespace WebUI.Config.VideoInput
             Camera.VideoInputSetEnabled(SelectedInput, true);
             pnlEnable.Visible = false;
             pnlConfig.Visible = true;
+			Bind();
         }
 
         protected void btnDisable_Click(object sender, EventArgs e)
@@ -47,6 +48,7 @@ namespace WebUI.Config.VideoInput
             Camera.VideoInputSetEnabled(SelectedInput, false);
             pnlEnable.Visible = true;
             pnlConfig.Visible = false;
+			Bind();
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
