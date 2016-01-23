@@ -850,7 +850,7 @@ std::vector<std::string> CameraClient::UserList()
 	return lst;
 }
 
-std::string CameraClient::UserGetUserFromEMail(const std::string EMail)
+std::string CameraClient::UserGetFromEMail(const std::string EMail)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));
@@ -858,7 +858,7 @@ std::string CameraClient::UserGetUserFromEMail(const std::string EMail)
 	Request request;
 	Request response;
 
-	request.SetCommand("UserGetUserFromEMail");
+	request.SetCommand("UserGetFromEMail");
 	request.SetArg("EMail", EMail);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
@@ -869,15 +869,15 @@ std::string CameraClient::UserGetUserFromEMail(const std::string EMail)
 	return str;
 }
 
-std::string CameraClient::UserGetUserFromKey(const std::string Key)
+std::string CameraClient::UserGetFromKey(const std::string Key)
 {
 	if (m_Client == NULL)
 		throw(CameraClientException(ENOTCONN));
-	PerfCounter PC("UserGetUserFromKey");
+	PerfCounter PC("UserGetFromKey");
 	Request request;
 	Request response;
 
-	request.SetCommand("UserGetUserFromKey");
+	request.SetCommand("UserGetFromKey");
 	request.SetArg("Key", Key);
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)

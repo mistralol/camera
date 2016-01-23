@@ -57,6 +57,7 @@ namespace WebUI.Admin
             {
                 pnlError.Visible = true;
                 lblError.Text = string.Format("Unexpected Error: {0}", HttpUtility.HtmlEncode(ex.Message));
+                Camera.LogException("Unknown Error", ex);
             }
         }
     }

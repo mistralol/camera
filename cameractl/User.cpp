@@ -219,7 +219,7 @@ void User::UserFromEMail(struct Data *data)
 	std::string username;
 	std::string email = data->args.front();
 	data->args.pop_front();
-	username = data->cli->UserGetUserFromEMail(email);
+	username = data->cli->UserGetFromEMail(email);
 	printf("%s\n", username.c_str());
 }
 
@@ -234,7 +234,7 @@ void User::UserFromKey(struct Data *data)
 	std::string username;
 	std::string key = data->args.front();
 	data->args.pop_front();
-	username = data->cli->UserGetUserFromKey(key);
+	username = data->cli->UserGetFromKey(key);
 	printf("%s\n", username.c_str());
 }
 

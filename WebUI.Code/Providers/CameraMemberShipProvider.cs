@@ -118,7 +118,8 @@ namespace WebUI.Code.Providers
 
 		public override MembershipUser GetUser (object providerUserKey, bool userIsOnline)
 		{
-            throw (new NotSupportedException());
+            string Uname = Camera.UserGetFromKey(providerUserKey.ToString());
+            return GetUser(Uname, userIsOnline);
 		}
 
 		public override MembershipUser GetUser (string name, bool userIsOnline)

@@ -64,8 +64,8 @@ class CameraClient
 		void UserSetAutoLogOff(int value);
 		void UserInfo(const std::string Username, UserItem *);
 		std::vector<std::string> UserList();
-		std::string UserGetUserFromEMail(const std::string EMail);
-		std::string UserGetUserFromKey(const std::string Key);
+		std::string UserGetFromEMail(const std::string EMail);
+		std::string UserGetFromKey(const std::string Key);
 
 		
 		void GroupCreate(const std::string Group);
