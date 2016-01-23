@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>WebUI.Code</RootNamespace>
     <AssemblyName>WebUI.Code</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AppHandler.cs" />
     <Compile Include="CameraClientException.cs" />
+    <Compile Include="CameraClientExt.cs" />
     <Compile Include="JScript.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
