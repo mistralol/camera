@@ -45,6 +45,29 @@ namespace WebUI.Code
         {
             Camera.LogEmergancy(string.Format(fmt, args));
         }
+
+        public static void LogException(this CameraClient Camera, string Message, Exception ex)
+        {
+            Camera.LogError("LogException {0}", Message);
+            Camera.LogError("LogException: {0}", ex.Message);
+            Exception e = ex;
+            while(e != null)
+            {
+                char[] newline = {'\n'};
+                string[] stack = e.StackTrace.Split(newline);
+                foreach(string x in stack)
+                {
+                    Camera.LogError("Stack: {0}", x);
+                }
+
+                e = e.InnerException;
+                if (e != null)
+                    Camera.LogError("Starting Next Stack");
+            }
+
+            Camera.LogError("End OF LogException");
+        }
+
     }
 }
 
