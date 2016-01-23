@@ -1343,12 +1343,17 @@ void CameraClient::StatsInfo(const std::string key, StatsDetails *info)
 	PerfCounter PC("StatsInfo");
 	Request request;
 	Request response;
-	
+
+	request.SetCommand("StatsInfo");
+	request.SetArg("key", key);
+
 	int ret = m_Client->SendRequest(&request, &response);
 	if (ret < 0)
 		throw(CameraClientException(ret));
-	if (response.GetInt("TotalTime", &info->TotalTime) == false)
-		throw(CameraClientException("Unable to parse TotalTime"));
+
+	info->Name = key;
+	if (response.GetInt("AverageTime", &info->AverageTime) == false)
+		throw(CameraClientException("Unable to parse AverageTime"));
 	if (response.GetInt("WorstTime", &info->WorstTime) == false)
 		throw(CameraClientException("Unable to parse WorstTime"));
 	if (response.GetInt("BestTime", &info->BestTime) == false)

@@ -5,7 +5,8 @@ class StatsDetails
 		StatsDetails();
 		~StatsDetails();
 
-		int TotalTime;
+		std::string Name;
+		int AverageTime;
 		int WorstTime;
 		int BestTime;
 		int Count;

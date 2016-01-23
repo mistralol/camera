@@ -1102,8 +1102,15 @@ int CameraServer::StatsInfo(CameraHandler *handler, IServerConnection *Connectio
 	
 	if (PerfManager::GetInfo(Key, &info) < 0)
 		return -ENOLINK;
-		
-	response->SetArg("TotalTime", (int) Time::MicroSeconds(&info.TotalTime));
+
+	if (info.Count == 0)
+	{
+		response->SetArg("AverageTime", 0);
+	}
+	else
+	{
+		response->SetArg("AverageTime", (int) (Time::MicroSeconds(&info.TotalTime) / info.Count));
+	}
 	response->SetArg("WorstTime", (int) Time::MicroSeconds(&info.WorstTime));
 	response->SetArg("BestTime", (int) Time::MicroSeconds(&info.BestTime));
 	response->SetArg("Count", info.Count);
