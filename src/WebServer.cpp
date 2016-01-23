@@ -269,9 +269,13 @@ bool WebServer::Exec()
 void WebServer::Run()
 {
 	int status = 0;
+	int FastFailures = 0;
+	struct timespec FastTime = {5, 0}; //Detect Fast failures
+	struct timespec Started = {0, 0};
 
 	while(1)
 	{
+		Time::MonoTonic(&Started);
 		if (m_pid >= 0)
 		{
 			pid_t ret = waitpid(m_pid, &status, 0);
@@ -301,6 +305,40 @@ void WebServer::Run()
 		{
 			LogDebug("WebServer::Run() - Monitor thread exiting");
 			return;
+		}
+
+		struct timespec Now;
+		struct timespec Diff;
+		Time::MonoTonic(&Now);
+		Time::Sub(&Now, &Started, &Diff);
+		if (Time::IsLess(&Diff, &FastTime))
+		{
+			LogWarning("WebServer::Run() - Fast Failure Detected");
+			FastFailures++;
+
+			//FIXME: this is an ugly hack it could be better
+			//basically if we crash / core the mono webserver will stay running
+			//when we restart this prevents mono binding on the port again.
+			//so we killall mono to fix this when we detect it happening.
+			if (FastFailures > 5)
+			{
+				LogNotice("WebServer::Run() - Running killall mono");
+				int ret = system("killall mono");
+				LogDebug("WebServer::Run() - Exit Status WEXITSTATUS(%d)", WEXITSTATUS(ret));
+				if (WEXITSTATUS(ret) != 0)
+				{
+					LogError("WebServer::Run() - Exit status is WEXITSTATUS(%d)", ret);
+				}
+				FastFailures = 0;
+			}
+		}
+		else
+		{
+			if (FastFailures > 0)
+			{
+				LogDebug("WebServer::Run() - Reset FastFailure Counter");
+				FastFailures = 0;
+			}
 		}
 		
 		LogInfo("WebServer::Run() - Restarting WebServer");
