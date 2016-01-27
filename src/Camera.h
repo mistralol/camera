@@ -34,6 +34,7 @@ using namespace liblogger;
 
 #include <UserItem.h>
 #include <User.h>
+#include <UserScopedLock.h>
 #include <Group.h>
 
 #include <IPipeline.h>

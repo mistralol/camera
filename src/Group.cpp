@@ -134,7 +134,7 @@ int Group::IsUserInGroup(const std::string Group, const std::string User)
 
 int Group::UserAdd(const std::string Group, const std::string User)
 {
-	User::Lock(); //Don't allow the user to be deleted while we are adding it to a group
+	UserScopedLock UserLock(); //Don't allow the user to be deleted while we are adding it to a group
 	if (User::Exists(User) == false)
 	{
 		LogError("Group::UserAdd - User '%s' does not exist\n", User.c_str());
@@ -154,19 +154,16 @@ int Group::UserAdd(const std::string Group, const std::string User)
 				if (*uit == User)
 				{
 					LogError("Group::UserAdd - Cannot add user '%s' to group '%s' because already exists", User.c_str(), Group.c_str());
-					User::Unlock();
 					return -EEXIST;
 				}
 				uit++;
 			}
 			it->second.push_back(User);
-			User::Unlock();
 			return 0;
 		}
 		it++;
 	}
 	LogError("Group::UserAdd - Cannot add user '%s' to group '%s' because group does not exist", User.c_str(), Group.c_str());
-	User::Unlock();
 	return -ENOLINK;
 }
 

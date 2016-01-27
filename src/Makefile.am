@@ -20,6 +20,7 @@ camera_SOURCES= Camera.cpp \
 		RTSPServer.cpp \
 		System.cpp \
 		User.cpp \
+		UserScopedLock.cpp \
 		Version.cpp \
 		WebServer.cpp \
 		WebStream.cpp \
