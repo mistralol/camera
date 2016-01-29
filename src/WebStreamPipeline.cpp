@@ -91,13 +91,14 @@ bool WebStreamPipeline::HasFinished()
 
 void WebStreamPipeline::Run()
 {
-	struct timeval timeout = { m_options.timeout, 0};
-	fd_set rset;
-	FD_ZERO(&rset);
-	FD_SET(m_fd, &rset);
+	struct timespec timeout = { m_options.timeout, 0};
+	struct pollfd fds;
 	
-restart_accept:
-	int ret = select(m_fd + 1, &rset, NULL, NULL, &timeout);
+	fds.fd = m_fd;
+	fds.events = POLLIN;
+
+restart_poll:
+	int ret = ppoll(&fds, 1, &timeout, NULL);
 	if (ret < 0)
 	{
 		switch(errno)
@@ -107,7 +108,7 @@ restart_accept:
 				return;
 				break;
 			case EINTR:
-				goto restart_accept;
+				goto restart_poll;
 				return;
 			default:
 				LogError("WebStreamPipeline::Run() - Unhandler error waiting for connection '%s'", strerror(errno));
@@ -116,11 +117,11 @@ restart_accept:
 				break;
 		}
 	}
-	
-	if (ret == 0)
+
+	if ((fds.revents & POLLIN) == 0)
 	{
-		LogWarning("WebStreamPipeline::Run() - Timeout while waiting for connection");
-		m_finished = false;
+		LogError("WebStreamPipeline::Run() - Poll returned but did not have POLLIN set");
+		m_finished = true;
 		return;
 	}
 
