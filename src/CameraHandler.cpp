@@ -117,7 +117,7 @@ static bool FindDLL(const std::string &Platform, std::string *path)
 		return true;
 
 	/* FIXME: This needs removed and replace with proper path + env searchs */		
-	*path = "./platforms/example/.libs/lib" + Platform + ".so";
+	*path = "./platforms/" + Platform + "/.libs/lib" + Platform + ".so";
 	if (CheckDLL(path))
 		return true;		
 

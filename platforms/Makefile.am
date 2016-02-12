@@ -1,3 +1,3 @@
 
-SUBDIRS=example
+SUBDIRS=example PI2Camera
 

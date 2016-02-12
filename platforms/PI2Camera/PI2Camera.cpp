@@ -1,7 +1,7 @@
 
 #include <Camera.h>
 
-#include <Example.h>
+#include <PI2Camera.h>
 
 extern "C" PlatformBase *Create()
 {
