@@ -15,6 +15,7 @@ namespace WebUI.Users
     {
         public void ProcessRequest(HttpContext context)
         {
+			DateTime Started = DateTime.UtcNow;
 
             using (CameraClient Camera = new CameraClient())
             {
@@ -27,7 +28,7 @@ namespace WebUI.Users
                     string VInput = context.Request.QueryString["VInput"];
                     string OType = context.Request.QueryString["OType"];
 
-                    Camera.LogDebug(string.Format("New WebVideoStream Request @ {0}", context.Request.Url.ToString()));
+                    Camera.LogDebug("New WebVideoStream Request @ {0}", context.Request.Url.ToString());
 
                     WebStreamOptions Opts = new WebStreamOptions();
                     try
@@ -94,20 +95,21 @@ namespace WebUI.Users
                     }
                     catch (Exception ex)
                     {
-                        Camera.LogError(string.Format("VideoStream Error Port {0} Error: {1}", Port, ex.Message));
-                        Camera.LogInfo(string.Format("VideoStream Closed Total Bytes Written {0}", TotalSize));
+						TimeSpan RunTime = DateTime.UtcNow - Started;
+                        Camera.LogError("VideoStream Error Port {0} Error: {1}", Port, ex.Message);
+						Camera.LogInfo("VideoStream Closed Total KBytes Written {0} Average Speed {1} KBytes/Sec", TotalSize / 1024, TotalSize / 1024 / RunTime.Seconds);
                     }
-                    Camera.LogDebug(string.Format("Ending VideoStream on port {0}", Port));
+                    Camera.LogDebug("Ending VideoStream on port {0}", Port);
                     context.Response.End();
 
                 }
                 catch (System.Threading.ThreadAbortException ex)
                 {
-                    Camera.LogDebug(string.Format("VideoStream: {0}", ex.Message)); //Expected when client disconnects
+                    Camera.LogDebug("VideoStream: {0}", ex.Message); //Expected when client disconnects
                 }
                 catch (Exception ex)
                 {
-                    Camera.LogError(string.Format("VideoStream Failed: {0}", ex.Message));
+                    Camera.LogError("VideoStream Failed: {0}", ex.Message);
                     throw (ex);
                 }
  
