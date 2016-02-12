@@ -129,6 +129,7 @@ AC_OUTPUT(Makefile
 	src/Makefile
 	platforms/Makefile
 	platforms/example/Makefile
+	platforms/PI2Camera/Makefile
 	libcameraclient/Makefile
 	libcameracommon/Makefile
 	cameractl/Makefile
