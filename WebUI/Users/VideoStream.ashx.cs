@@ -47,7 +47,7 @@ namespace WebUI.Users
                     int Port = Camera.WebStreamStart(Opts);
 
                     if (Port < 0)
-                        throw (new Exception(string.Format("Unable to start stream error: {0}", Port)));
+                        throw (new Exception("Unable to start stream error: {0}", Port));
 
                     string Content = "";
                     switch (Opts.type)

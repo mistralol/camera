@@ -43,7 +43,7 @@ namespace WebUI.Admin
                         break;
                     case "DoDelete":
                         MembershipUser mu = Membership.GetUser((object)UserID);
-                        Camera.LogInfo(string.Format("Requested to delete user '{0}' by user '{1}'", mu.UserName, User.Identity.Name));
+                        Camera.LogInfo("Requested to delete user '{0}' by user '{1}'", mu.UserName, User.Identity.Name);
                         Membership.DeleteUser(mu.UserName);
                         Bind();
                         break;

@@ -109,7 +109,7 @@ namespace WebUI.Config.VideoInput
             }
             catch (Exception ex)
             {
-                Camera.LogError(string.Format("VideoInput Config Page Exception: {0}", ex.Message));
+                Camera.LogError("VideoInput Config Page Exception: {0}", ex.Message);
                 throw (ex);
             }
         }

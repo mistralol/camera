@@ -13,8 +13,8 @@ namespace WebUI.Code
             Camera.LogError(Prefix);
             while (e != null)
             {
-                Camera.LogError(string.Format("{0}", Prefix, e.Message));
-                Camera.LogError(string.Format("{0}", Prefix, e.StackTrace));
+                Camera.LogError("{0}", Prefix, e.Message);
+                Camera.LogError("{0}", Prefix, e.StackTrace);
                 e = e.InnerException;
             }
         }
