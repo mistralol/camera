@@ -100,7 +100,7 @@ bool PI2Camera::VideoInputEnable(unsigned int input)
 	if (m_videoinputconfig[input].GetCodec() == "H264")
 	{
 		pipe << "rpicamsrc preview=false keyframe-interval=" << m_videoinputconfig[input].GetFrameRate();
-		pipe << " ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << m_videoinputconfig[input].GetFrameRate() << "/1";
+		pipe << " ! capsfilter caps=capsfilter caps=\"video/x-h264, framerate=" << m_videoinputconfig[input].GetFrameRate() << "/1";
 		pipe << ", width=" << width << " , height=" << height << "\"";
 		pipe << " ! h264parse";
 		pipe << " ! video/x-h264, stream-format=avc, alignment=au";
