@@ -1,8 +1,54 @@
 
 Video Camera Framework.
 
+Intoduction
+
+This package aims to build the same as a comercial ip video camera. It is aimed to support multiple different
+system such as the raspberrypi or running with webcams or any other suitable v4l device.
+
+Features.
+ 
+* Access Controlled.
+* RTSP Server
+* WebStreaming
+
+Current Platforms
+
+* videotest - This will run in a linux desktop / server enviroment for development it will be used as a reference system for all featues.
+
+Planned Features (feel free to help out)
+
+* Transcoding
+* RTSP Transcoding
+* v4l devices
+* local video recording
+* remote video recording (eg samba/cifs, nfs, scp, ftp, http)
+* record on alarm
+* snapshots
+* email alerts
+* onvif
 
 
+Getting Started
+
+The camera framework requires several core packages in order to compile it.
+
+* mono (c# compiler)
+* liblogger (https://github.com/mistralol/liblogger)
+* libclientserver (https://github.com/mistralol/libclientserver)
+* libgstreamer1.0 (at least version 1.4 but may work with 1.2)
+* gst-rtsp-server (https://cgit.freedesktop.org/gstreamer/gst-rtsp-server)
+* jsoncpp-dev
+* gperf
+* swig
+
+Runtime dependancies
+
+* gstreamer-js (https://github.com/mistralol/gstreamer-js)
+* gst-rpicamsrc (https://github.com/thaytan/gst-rpicamsrc)
+* xsp4
+
+Note: gst-rpicamsrc is only required if you want to run on the pi
 
 
 
