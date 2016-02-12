@@ -5,7 +5,9 @@ enum WebStreamType
 	MP4,
 	MKV,
 	WEBM,
-	FLV
+	FLV,
+	MJPEG,
+	MJPEG_TRANS
 };
 
 

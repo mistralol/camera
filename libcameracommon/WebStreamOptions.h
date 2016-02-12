@@ -12,6 +12,14 @@ class WebStreamOptions
 		WebStreamType type;
 		bool localonly;
 		int timeout;
+
+		/* Transcoding */
+		int width;
+		int height;
+
+		/* MJPEG TransCode */
+		int mjpeg_fps;
+		int mjpeg_quality;
 		
 };
 

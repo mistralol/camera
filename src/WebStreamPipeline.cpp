@@ -152,35 +152,62 @@ restart_poll:
 			goto cleanup;
 			break;
 		case MP4:
-			ss << "internalsrc streamname=video" << m_options.vinput << " !";
-			ss << " h264parse !";
-			ss << " qtmux streamable=true fragment-duration=250 !";
-			ss << " fdsink fd=" << fd;
+			ss << "internalsrc streamname=video" << m_options.vinput;
+			ss << " ! h264parse";
+			ss << " ! qtmux streamable=true fragment-duration=250";
+			ss << " ! fdsink fd=" << fd;
 			break;
 		case MKV:
-			ss << "internalsrc streamname=video" << m_options.vinput << " !";
-			ss << " h264parse !";
-			ss << " matroskamux streamable=true !";
-			ss << " fdsink fd=" << fd;
+			ss << "internalsrc streamname=video" << m_options.vinput;
+			ss << " ! h264parse";
+			ss << " ! matroskamux streamable=true";
+			ss << " ! fdsink fd=" << fd;
 			break;
 		case WEBM:
-			ss << "internalsrc streamname=video" << m_options.vinput << " !";
-			ss << " webmmux streamable=true !";
-			ss << " fdsink fd=" << fd;
+			ss << "internalsrc streamname=video" << m_options.vinput;
+			ss << " ! webmmux streamable=true";
+			ss << " ! fdsink fd=" << fd;
 			break;
 		case FLV:
-			ss << "internalsrc streamname=video" << m_options.vinput << " !";
-			ss << " flvmux streamable=true !";
-			ss << " fdsink fd=" << fd;
+			ss << "internalsrc streamname=video" << m_options.vinput;
+			ss << " ! flvmux streamable=true";
+			ss << " ! fdsink fd=" << fd;
+			break;
+		case MJPEG:
+			ss << "internalsrc streamname=video" << m_options.vinput;
+			ss << " ! multipartmux boundary=boundary";
+			ss << " ! fdsink fd=" << fd;
+			break;
+		case MJPEG_TRANS:
+			ss << "internalsrc streamname=video" << m_options.vinput;
+			ss << " ! decodebin";
+			if (m_options.mjpeg_fps > 0 && m_options.mjpeg_fps < 30)
+				ss << " ! videorate ! video/x-raw, framerate=" << m_options.mjpeg_fps << "/1";
+			//< 0 means fractions eg 1/abs(fps)
+			if (m_options.mjpeg_fps < 0)
+				ss << " ! videorate ! video/x-raw, framerate=1/" << m_options.mjpeg_fps * -1;
+			if (m_options.mjpeg_quality > 0)
+			{
+				if (m_options.mjpeg_quality > 100)
+					m_options.mjpeg_quality = 100;
+				ss << " ! jpegenc quality=" << m_options.mjpeg_quality;
+			}
+			else
+			{
+				ss << " ! jpegenc";
+			}
+			ss << " ! multipartmux boundary=boundary";
+			ss << " ! fdsink fd=" << fd;
 			break;
 		default:
-			LogCritical("WebStreamPipeline::Run() - Bad value or unsuported type");
+			LogCritical("WebStreamPipeline::Run() - Bad value or unsuported type %d", m_options.type);
 			abort();
 			break;
 	}
 
 	//Start gstreamer pipeline
 	do {
+		LogDebug("Starting Pipeline '%s'", ss.str().c_str());
 		std::unique_ptr<PipelineBasic> Pipeline(new PipelineBasic(ss.str()));
 		Pipeline->SetName("WebStream");
 		Pipeline->SetRestart(false);

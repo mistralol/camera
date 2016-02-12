@@ -27,6 +27,19 @@ namespace WebUI.Users
                     //FIXME: Verify incoming data?
                     string VInput = context.Request.QueryString["VInput"];
                     string OType = context.Request.QueryString["OType"];
+                    int Width = 0;
+                    int Height = 0;
+                    int FPS = 0;
+                    int Quality = 0;
+
+                    if (context.Request.QueryString["Width"] != null)
+	                    Convert.ToInt32(context.Request.QueryString["Width"]);
+	                if (context.Request.QueryString["Height"] != null)
+						Convert.ToInt32(context.Request.QueryString["Height"]);
+					if (context.Request.QueryString["FPS"] != null)
+						Convert.ToInt32(context.Request.QueryString["FPS"]);
+					if (context.Request.QueryString["Quality"] != null)
+						Convert.ToInt32(context.Request.QueryString["Quality"]);
 
                     Camera.LogDebug("New WebVideoStream Request @ {0}", context.Request.Url.ToString());
 
@@ -37,6 +50,10 @@ namespace WebUI.Users
                         Opts.type = WebStreamType.Unknown;
                         Opts.localonly = true;
                         Opts.type = (WebStreamType)Enum.Parse(typeof(WebStreamType), OType);
+                        Opts.width = Width;
+                        Opts.height = Height;
+                        Opts.mjpeg_fps = FPS;
+                        Opts.mjpeg_quality = Quality;
                     }
                     catch (Exception ex)
                     {
@@ -64,6 +81,12 @@ namespace WebUI.Users
                         case WebStreamType.WEBM:
                             Content = "video/webm";
                             break;
+						case WebStreamType.MJPEG:
+							Content = "multipart/x-mixed-replace;; boundary=boundary";
+							break;
+						case WebStreamType.MJPEG_TRANS:
+							Content = "multipart/x-mixed-replace;; boundary=boundary";
+							break;
                         case WebStreamType.Unknown:
                             throw (new NotImplementedException());
                         default:
@@ -101,7 +124,6 @@ namespace WebUI.Users
                     }
                     Camera.LogDebug("Ending VideoStream on port {0}", Port);
                     context.Response.End();
-
                 }
                 catch (System.Threading.ThreadAbortException ex)
                 {

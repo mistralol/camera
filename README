@@ -46,6 +46,7 @@ Runtime dependancies
 
 * gstreamer-js (https://github.com/mistralol/gstreamer-js)
 * gst-rpicamsrc (https://github.com/thaytan/gst-rpicamsrc)
+* gst-omx
 * xsp4
 
 Note: gst-rpicamsrc is only required if you want to run on the pi
