@@ -1142,7 +1142,7 @@ void CameraServer::StatsDump()
 			continue;
 		if (info.Count == 0)
 			continue;
-		LogInfo("%25s Total Calls: %6d Average Time: %lld Micro Seconds",
+		LogInfo("%25s Total Calls: %6d Average Time: %" PRIu64 " Micro Seconds",
 				it->c_str(), info.Count,
 				Time::MicroSeconds(&info.TotalTime) / info.Count);
 	}
