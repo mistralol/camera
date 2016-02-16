@@ -24,6 +24,11 @@ namespace WebUI.Users
 
 				if (ddlVideo.SelectedIndex < 0)
 					ddlVideo.SelectedIndex = 0;
+
+				if (ddlVideo.Items.Count <= 1)
+					ddlVideo.Visible = false;
+				else
+					ddlVideo.Visible = true;
 			}
 
 			int VInput = Convert.ToInt32(ddlVideo.SelectedValue);
