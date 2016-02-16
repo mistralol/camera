@@ -18,7 +18,8 @@ namespace WebUI.Users
 				int Count = Camera.VideoInputCount();
 				for (int i = 0; i < Count; i++)
 				{  
-					ddlVideo.Items.Add(new ListItem(string.Format("Video Input {0}", i + 1), string.Format("{0}", i)));
+					if (Camera.VideoInputGetEnabled(i) == 1)
+						ddlVideo.Items.Add(new ListItem(string.Format("Video Input {0}", i + 1), string.Format("{0}", i)));
 				}
 
 				if (ddlVideo.SelectedIndex < 0)
