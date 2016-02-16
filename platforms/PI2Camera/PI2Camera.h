@@ -6,8 +6,6 @@ class PI2Camera : public PlatformBase
 		PI2Camera();
 		~PI2Camera();
 
-		bool Init();
-
 		bool ConfigLoad(Json::Value &);
 		bool ConfigSave(Json::Value &);
 

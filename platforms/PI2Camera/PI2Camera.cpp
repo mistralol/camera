@@ -10,19 +10,12 @@ extern "C" PlatformBase *Create()
 
 PI2Camera::PI2Camera()
 {
-
+	LogDebug("PI2Camera::PI2Camera");
 }
 
 PI2Camera::~PI2Camera()
 {
 
-}
-
-bool PI2Camera::Init()
-{
-	LogDebug("PI2Camera::Init");
-
-	return true;
 }
 
 bool PI2Camera::ConfigLoad(Json::Value &json)

@@ -10,22 +10,15 @@ extern "C" PlatformBase *Create()
 
 Example::Example()
 {
+	LogDebug("Example::Example");
 
+	for(int i=0;i<GPIO_OUTPUTS;i++)
+		m_gpio_outputs[i] = false;
 }
 
 Example::~Example()
 {
 
-}
-
-bool Example::Init()
-{
-	LogDebug("Example::Init");
-
-	for(int i=0;i<GPIO_OUTPUTS;i++)
-		m_gpio_outputs[i] = false;
-
-	return true;
 }
 
 bool Example::ConfigLoad(Json::Value &json)

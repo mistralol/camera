@@ -7,12 +7,6 @@ class PlatformBase
 		{
 		}
 
-		virtual bool Init()
-		{
-			LogCritical("PlatformBase::Init is not implemented");
-			return false;
-		}
-
 		virtual bool ConfigLoad(Json::Value &)
 		{
 			LogWarning("Platform has not implemented function %s", __FUNCTION__);

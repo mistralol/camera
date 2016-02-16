@@ -162,17 +162,10 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 		exit(EXIT_FAILURE);
 	}
 	
-
 	m_Platform = create();
 	if (m_Platform == NULL)
 	{
 		LogCritical("Fail to load platform: %s", Platform.c_str());
-		exit(EXIT_FAILURE);
-	}
-
-	if (m_Platform->Init() == false)
-	{
-		LogCritical("Failed To Init Platform exiting....");
 		exit(EXIT_FAILURE);
 	}
 
