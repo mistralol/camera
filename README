@@ -52,5 +52,22 @@ Runtime dependancies
 Note: gst-rpicamsrc is only required if you want to run on the pi
 
 
+FAQ
+
+Q: How to start the camera on a pi.
+A:   camera -e PI2Camera -w /usr/local/share/camera/webui/
+
+Q: Whats the web gui default
+A: It will be on port 8080
+   with a default username and password of admin/admin
+
+Q: Whats the default rtsp port
+A: It will be on port 8554 and the video url looks like
+   rtsp://username:password@<ip>/video/0
+
+Q: The Web gui take a really long time to access on first attempt
+A: This would be mono doing the jit compile for its system lib's
+   You can speed them up doing an ahead of time compile of the mono libs
+   for i in `find /usr/lib/mono -type f -name "*.dll"` ; do mono --aot $i ; done
 
 
