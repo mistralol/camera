@@ -5,10 +5,13 @@ SUBDIRS=libcameracommon src platforms libcameraclient cameractl
 
 all-local:
 	xbuild /nologo /verbosity:quiet WebUI.sln
+	mono --aot WebUI/bin/CameraClient.dll
+	mono --aot WebUI/bin/WebUI.Code.dll
+	mono --aot WebUI/bin/WebUI.dll
 
 install-exec-hook:
-	ln -s $(libdir)/libcameraclient_csharp.so.0.0.0 $(libdir)/libCameraClientWrapper.so
-	ln -s $(libdir)/libcameraclient_csharp.so.0.0.0 /usr/lib/libCameraClientWrapper.so
+	-ln -s $(libdir)/libcameraclient_csharp.so.0.0.0 $(libdir)/libCameraClientWrapper.so
+	-ln -s $(libdir)/libcameraclient_csharp.so.0.0.0 /usr/lib/libCameraClientWrapper.so
 	ldconfig
 	mkdir -p $(prefix)/share/camera/webui
 	rsync -az --exclude '*.cs' WebUI/ $(prefix)/share/camera/webui
