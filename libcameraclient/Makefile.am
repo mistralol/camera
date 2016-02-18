@@ -18,7 +18,7 @@ libcameraclient_csharp_la_LDFLAGS=-Wl,-z,defs -L.libs -lcameraclient \
 		$(JSON_LIBS) \
 		$(LIBCLIENTSERVER_LIBS)
 
-libcameraclient_csharp.cpp: CameraClient.cpp CameraClient.h CameraClient.i
+libcameraclient_csharp.cpp: CameraClient.cpp CameraClient.h CameraClient.i libcameraclient.la
 	swig -Wall -c++ -I../libcameracommon -o libcameraclient_csharp.cpp -csharp CameraClient.i
 
 CameraClient.dll: *.cs
