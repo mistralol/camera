@@ -9,7 +9,8 @@
 
 #include <VideoInputSupported.h>
 
-VideoInputSupported::VideoInputSupported()
+VideoInputSupported::VideoInputSupported() :
+	hflip(0), vflip(0)
 {
 
 }
@@ -77,6 +78,8 @@ void VideoInputSupported::AddCodec(const std::string &codec, const std::string &
 void VideoInputSupported::Clear()
 {
 	m_codecs.clear();
+	hflip = 0;
+	vflip = 0;
 }
 
 std::vector<std::string> VideoInputSupported::ToStrV()
@@ -141,6 +144,9 @@ std::string VideoInputSupported::Encode()
 		it++;
 	}
 	
+	json["hflip"] = hflip;
+	json["vflip"] = vflip;
+	
 	std::stringstream ss;
 	Json::StyledWriter styledWriter;
 	ss << styledWriter.write(json);
@@ -156,6 +162,9 @@ bool VideoInputSupported::Decode(const std::string str)
 
 	if (reader.parse(str, root ) == false)
 		return false;
+
+	hflip = root["hflip"].asInt();
+	vflip = root["vflip"].asInt();
 
 	if (root.isMember("codecs") == false || root["codecs"].isArray() == false)
 		return false;

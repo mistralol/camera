@@ -12,6 +12,9 @@ class VideoInputSupported
 		void AddCodec(const std::string &codec, const std::string &res, int fps);
 		void AddCodec(const std::string &codec, const std::string &res, int lowfps, int upperfps);
 
+		int hflip;
+		int vflip;
+
 		void Clear();
 
 		std::vector<std::string> ToStrV();

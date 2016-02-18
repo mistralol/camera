@@ -61,6 +61,9 @@ bool Example::VideoInputSupportedInfo(unsigned int input, VideoInputSupported *i
 	info->AddCodec("MJPEG", "1280x720", 1, 30);
 	info->AddCodec("MJPEG", "1920x1080", 1, 30);
 	
+	info->hflip = 1;
+	info->vflip = 1;
+	
 	return true;
 }
 
@@ -98,20 +101,28 @@ bool Example::VideoInputPipeline(unsigned int input, VideoInputConfig *config, s
 
 	if (config->GetCodec() == "H264")
 	{
-		pipe << "videotestsrc horizontal-speed=5 is-live=true ! ";
-		pipe << "capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << config->GetFrameRate() << "/1";
-		pipe << ", width=" << width << " , height=" << height << "\" ! ";
-		pipe << "x264enc key-int-max=" << config->GetFrameRate() << " threads=1 ! ";
-		pipe << "video/x-h264, stream-format=avc, alignment=au ! ";
-		pipe << "internalsink streamname=video" << input;
+		pipe << "videotestsrc horizontal-speed=5 is-live=true";
+		pipe << " ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << config->GetFrameRate() << "/1";
+		pipe << ", width=" << width << " , height=" << height << "\"";
+		if (config->hflip)
+			pipe << " ! videoflip method=horizontal-flip";
+		if (config->vflip)
+			pipe << " ! videoflip method=vertical-flip";
+		pipe << " ! x264enc key-int-max=" << config->GetFrameRate() << " threads=1";
+		pipe << " ! video/x-h264, stream-format=avc, alignment=au";
+		pipe << " ! internalsink streamname=video" << input;
 
 	} else if (config->GetCodec() == "MJPEG")
 	{
-		pipe << "videotestsrc horizontal-speed=5 is-live=true ! ";
-		pipe << "capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << config->GetFrameRate() << "/1";
-		pipe << ", width=" << width << " , height=" << height << "\" ! ";
-		pipe << "jpegenc ! ";
-		pipe << "internalsink streamname=video" << input;
+		pipe << "videotestsrc horizontal-speed=5 is-live=true";
+		pipe << " ! capsfilter caps=capsfilter caps=\"video/x-raw, framerate=" << config->GetFrameRate() << "/1";
+		pipe << ", width=" << width << " , height=" << height << "\"";
+		if (config->hflip)
+			pipe << " ! videoflip method=horizontal-flip";
+		if (config->vflip)
+			pipe << " ! videoflip method=vertical-flip";
+		pipe << " ! jpegenc";
+		pipe << " ! internalsink streamname=video" << input;
 
 	}
 	else

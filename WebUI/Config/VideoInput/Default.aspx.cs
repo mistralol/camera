@@ -58,6 +58,14 @@ namespace WebUI.Config.VideoInput
             Config.SetCodec(ddlCodec.SelectedValue);
             Config.SetResolution(ddlResolution.SelectedValue);
             Config.SetFrameRate(Convert.ToInt32(ddlFrameRate.SelectedValue));
+            if (chkHFlip.Checked)
+            	Config.hflip = 1;
+            else
+				Config.hflip = 0;
+			if (chkVFlip.Checked)
+				Config.vflip = 1;
+			else
+				Config.vflip = 0;
 
             Camera.VideoInputSetConfig(SelectedInput, Config);
         }
@@ -86,20 +94,26 @@ namespace WebUI.Config.VideoInput
                     for (int i = 0; i < Codecs.Count; i++)
                         ddlCodec.Items.Add(new ListItem(Codecs[i], Codecs[i]));
                     ddlCodec.SelectedValue = Config.GetCodec();
-                    Codecs.Dispose();
 
                     StringVector Res = Supported.GetCodecResolutions(ddlCodec.SelectedValue);
                     for (int i = 0; i < Res.Count; i++)
                         ddlResolution.Items.Add(new ListItem(Res[i], Res[i]));
                     ddlResolution.SelectedValue = Config.GetResolution();
-                    Res.Dispose();
 
                     StringInt Rates = Supported.GetCodecFrameRates(ddlCodec.SelectedValue, ddlResolution.SelectedValue);
                     for (int i = 0; i < Rates.Count; i++)
                         ddlFrameRate.Items.Add(new ListItem(Rates[i].ToString(), Rates[i].ToString()));
                     ddlFrameRate.SelectedValue = Config.GetFrameRate().ToString();
-                    Rates.Dispose();
 
+                    if (Config.hflip == 1)
+						chkHFlip.Checked = true;
+					else
+						chkHFlip.Checked = false;
+					
+					if (Config.vflip == 1)
+						chkVFlip.Checked = true;
+					else
+						chkVFlip.Checked = false;
                 }
                 else
                 {

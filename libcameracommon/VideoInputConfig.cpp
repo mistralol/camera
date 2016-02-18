@@ -6,12 +6,15 @@
 #include <VideoInputConfig.h>
 
 
-VideoInputConfig::VideoInputConfig()
+VideoInputConfig::VideoInputConfig() :
+	m_framerate(0),
+	m_codec(""),
+	m_resolution(""),
+	m_enabled(false),
+	hflip(0),
+	vflip(0)
 {
-	m_framerate = 0;
-	m_codec = "";
-	m_resolution = "";
-	m_enabled = false;
+
 }
 
 VideoInputConfig::~VideoInputConfig()
@@ -32,6 +35,8 @@ bool VideoInputConfig::ConfigSave(Json::Value &json)
 	json["codec"] = m_codec;
 	json["resolution"] = m_resolution;
 	json["enabled"] = m_enabled;
+	json["hflip"] = hflip;
+	json["vflip"] = vflip;
 	return true;
 }
 
@@ -48,6 +53,12 @@ bool VideoInputConfig::ConfigLoad(Json::Value &json)
 
 	if (json.isMember("enabled") && json["enabled"].isBool())
 		m_enabled = json["enabled"].asBool();
+
+	if (json.isMember("hflip") && json["hflip"].isInt())
+		hflip = json["hflip"].asInt();
+
+	if (json.isMember("vflip") && json["vflip"].isInt())
+		hflip = json["vflip"].asInt();
 
 	return true;
 }
@@ -119,6 +130,8 @@ std::string VideoInputConfig::Encode()
 	json["codec"] = m_codec;
 	json["resolution"] = m_resolution;
 	json["enabled"] = m_enabled;
+	json["hflip"] = hflip;
+	json["vflip"] = vflip;
 	
 	std::stringstream ss;
 	Json::StyledWriter styledWriter;
@@ -139,6 +152,8 @@ bool VideoInputConfig::Decode(const std::string str)
 		m_codec = root["codec"].asString();
 		m_resolution = root["resolution"].asString();
 		m_enabled = root["enabled"].asBool();
+		hflip = root["hflip"].asInt();
+		vflip = root["vflip"].asInt();
 	} catch(...)
 	{
 		return false;

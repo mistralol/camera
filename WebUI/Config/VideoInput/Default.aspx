@@ -36,6 +36,20 @@
                 <td>Frame Rate</td>
                 <td><asp:DropDownList runat="server" ID="ddlFrameRate"></asp:DropDownList></td>
             </tr>
+			<tr>
+				<td>Horizontal Flip</td>
+				<td><asp:CheckBox runat="server" ID="chkHFlip"></asp:CheckBox></td>
+			</tr>
+			<tr>
+				<td>Vertical Flip</td>
+				<td><asp:CheckBox runat="server" ID="chkVFlip"></asp:CheckBox></td>
+			</tr>
+			<tr>
+				<td>
+				</td>
+				<td>
+				</td>
+			</tr>
             <tr>
                 <td></td>
                 <td>

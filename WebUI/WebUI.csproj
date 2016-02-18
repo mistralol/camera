@@ -72,10 +72,6 @@
     <Content Include="Config\Network\Default.aspx" />
     <Content Include="Config\Network\RTSP.aspx" />
     <Content Include="Config\Network\WebServer.aspx" />
-    <Content Include="Config\System\Debug.aspx" />
-    <Content Include="Config\System\Default.aspx" />
-    <Content Include="Config\System\Performance.aspx" />
-    <Content Include="Config\System\Service.aspx" />
     <Content Include="Config\VideoInput\Default.aspx" />
     <Content Include="Config\VideoInput\NoInputs.aspx" />
     <Content Include="Controls\Default.aspx" />
@@ -93,6 +89,10 @@
     </Content>
     <Content Include="Default.aspx" />
     <Content Include="Controls\web.config" />
+    <Content Include="Config\Sys\Debug.aspx" />
+    <Content Include="Config\Sys\Default.aspx" />
+    <Content Include="Config\Sys\Performance.aspx" />
+    <Content Include="Config\Sys\Service.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Default.aspx.cs">
@@ -157,34 +157,6 @@
     </Compile>
     <Compile Include="Config\Network\WebServer.aspx.designer.cs">
       <DependentUpon>WebServer.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Config\System\Debug.aspx.cs">
-      <DependentUpon>Debug.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\System\Debug.aspx.designer.cs">
-      <DependentUpon>Debug.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Config\System\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\System\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Config\System\Performance.aspx.cs">
-      <DependentUpon>Performance.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\System\Performance.aspx.designer.cs">
-      <DependentUpon>Performance.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Config\System\Service.aspx.cs">
-      <DependentUpon>Service.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\System\Service.aspx.designer.cs">
-      <DependentUpon>Service.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\VideoInput\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -283,6 +255,30 @@
     <Compile Include="Users\VideoStream.ashx.cs">
       <DependentUpon>VideoStream.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Config\Sys\Debug.aspx.cs">
+      <DependentUpon>Debug.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Debug.aspx.designer.cs">
+      <DependentUpon>Debug.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Performance.aspx.cs">
+      <DependentUpon>Performance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Performance.aspx.designer.cs">
+      <DependentUpon>Performance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Service.aspx.cs">
+      <DependentUpon>Service.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Sys\Service.aspx.designer.cs">
+      <DependentUpon>Service.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -348,4 +344,7 @@
   </ItemGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ItemGroup>
+    <Folder Include="Config\Sys\" />
+  </ItemGroup>
 </Project>

@@ -46,6 +46,9 @@ bool PI2Camera::VideoInputSupportedInfo(unsigned int input, VideoInputSupported 
 	info->AddCodec("H264", "704x576", 1, 30);
 	info->AddCodec("H264", "720x480", 1, 30);
 	info->AddCodec("H264", "1280x720", 1, 30);
+	
+	info->hflip = 1;
+	info->vflip = 1;
 
 	return true;
 }
@@ -79,6 +82,10 @@ bool PI2Camera::VideoInputPipeline(unsigned int input, VideoInputConfig *config,
 	if (config->GetCodec() == "H264")
 	{
 		pipe << "rpicamsrc preview=false keyframe-interval=" << config->GetFrameRate();
+		if (config->hflip)
+			pipe << " hflip=true";
+		if (config->vflip)
+			pipe << " vflip=true";
 		pipe << " ! capsfilter caps=capsfilter caps=\"video/x-h264, framerate=" << config->GetFrameRate() << "/1";
 		pipe << ", width=" << width << " , height=" << height << "\"";
 		pipe << " ! h264parse";

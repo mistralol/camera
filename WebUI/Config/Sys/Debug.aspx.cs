@@ -6,7 +6,7 @@ using System.Web.UI.WebControls;
 
 using WebUI.Code;
 
-namespace WebUI.Config.System
+namespace WebUI.Config.Sys
 {
     public partial class Debug : AppPage
     {

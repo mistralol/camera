@@ -25,6 +25,9 @@ class VideoInputConfig
 		bool GetEnabled();
 		void SetEnabled(bool enabled);
 
+		int hflip;
+		int vflip;
+
 		//FIXME: Codec Options eg bitrate, maxbitrate, vbr/cbr etc..
 		
 		
