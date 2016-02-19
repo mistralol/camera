@@ -15,6 +15,7 @@ install-exec-hook:
 	ldconfig
 	mkdir -p $(prefix)/share/camera/webui
 	rsync -az --exclude '*.cs' WebUI/ $(prefix)/share/camera/webui
+	chown root.root $(prefix)/share/camera/webui
 
 uninstall-hook:
 	echo $(prefix)
