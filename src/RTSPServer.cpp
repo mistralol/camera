@@ -1,6 +1,150 @@
 
 #include <Camera.h>
 
+static GstElement *(*default_pipeline) (GstRTSPMediaFactory *factory, const GstRTSPUrl *url);
+
+static GstElement *transcode_pipeline(GstRTSPMediaFactory *factory, const GstRTSPUrl *url)
+{
+	LogDebug("transcode_pipeline %s %s", url->abspath, url->query);
+	if (factory == NULL || url == NULL || url->query == NULL)
+		return default_pipeline(factory, url);
+
+	std::string path = url->abspath;
+	path = String::ToLower(url->abspath);
+	std::vector<std::string> vec;
+	if (String::Split(&path, "/", &vec) == false)
+		return default_pipeline(factory, url);
+	if (vec.size() != 4)
+		return default_pipeline(factory, url);
+	if (vec[1] != "video")	
+		return default_pipeline(factory, url);
+	if (vec[3] != "transcode")
+		return default_pipeline(factory, url);
+
+	int vinput = atoi(vec[2].c_str());
+	LogDebug("TransCode: %d", vinput);
+
+	std::string query = url->query;
+	std::map<std::string, std::string> qmap;
+	if (String::Split(&query, "&", "=", &qmap) == false)
+	{
+		LogError("Invalid Paramaters");
+		return NULL;
+	}
+	LogDebug("Map %d", qmap.size());
+
+	std::string codec;
+	std::string codec_mode;
+	int width = 0;
+	int height = 0;
+	int fps = 0;
+	int quality = 0;
+	int gop = 30;
+	int bitrate = 512;
+	
+	if (qmap.find("codec") != qmap.end())
+		codec = qmap["codec"];
+
+	if (qmap.find("codec_mode") != qmap.end())
+		codec_mode = qmap["codec_mode"];
+
+	
+	if (qmap.find("width") != qmap.end() && qmap.find("height") != qmap.end())
+	{
+		width = atoi(qmap["width"].c_str());
+		height = atoi(qmap["height"].c_str());
+	}
+	
+	if (qmap.find("fps") != qmap.end())
+		fps = atoi(qmap["fps"].c_str());
+		
+	if (qmap.find("quality") != qmap.end())
+		quality = atoi(qmap["quality"].c_str());
+		
+	if (qmap.find("gop") != qmap.end())
+		gop = atoi(qmap["gop"].c_str());
+
+	if (qmap.find("bitrate") != qmap.end())
+		bitrate = atoi(qmap["bitrate"].c_str());
+
+	LogDebug("TransCode Codec: %s Width: %d Height: %d FPS: %d Quality: %d GOP: %d BitRate: %d", codec.c_str(), width, height, fps, quality, gop, bitrate);
+
+	std::stringstream pipe;
+	
+	if (codec == "mjpeg")
+	{
+		pipe << "(";
+		pipe << " internalsrc streamname=video" << vinput << "raw";
+		//pipe << " ! decodebin";
+		if (width != 0 && height != 0)
+			pipe << " ! videoscale ! video/x-raw, width=" << width << ", height=" << height;
+		if (fps > 0)
+			pipe << " ! videorate ! video/x-raw, framerate=" << fps << "/1";
+		if (fps < 0)
+			pipe << " ! videorate ! video/x-raw, framrrate=1/" << fps;
+		pipe << " ! videoconvert";
+		if (quality > 0 && quality < 100)
+			pipe << " ! jpegenc quality=" << quality;
+		else
+			pipe << " ! jpegenc";
+		pipe << " ! rtpjpegpay name=pay0 pt=96";
+		pipe << " )";
+	}
+	else if (codec == "h264")
+	{
+		pipe << "(";
+		pipe << " internalsrc streamname=video" << vinput << "raw";
+		//pipe << " ! decodebin";
+		if (width != 0 && height != 0)
+			pipe << " ! videoscale ! video/x-raw, width=" << width << ", height=" << height;
+		if (fps > 0)
+			pipe << " ! videorate ! video/x-raw, framerate=" << fps << "/1";
+		if (fps < 0)
+			pipe << " ! videorate ! video/x-raw, framrrate=1/" << fps;
+		pipe << " ! videoconvert";
+		if (quality > 0 && quality < 100)
+		{
+			pipe << " ! x264enc key-int-max=" << gop << " pass=5 quantizer=" << quality / 2;
+		}
+		else
+		{
+			if (codec_mode == "cbr")
+			{
+				pipe << " ! x264enc key-int-max=" << gop << " pass=0 bitrate=" << bitrate;			
+			}
+			else if (codec_mode == "vbr")
+			{
+				pipe << " ! x264enc key-int-max=" << gop << " pass=17 bitrate=" << bitrate;			
+			}
+			else
+			{
+				pipe << " ! x264enc key-int-max=" << gop << " bitrate=" << bitrate;
+			}
+		}
+		pipe << " ! h264parse ! rtph264pay name=pay0 pt=96";
+		pipe << " )";
+	}
+	else
+	{
+		LogError("transcode unknown codec %s", codec.c_str());
+	}
+
+	GError *error = NULL;
+	GstElement *element = gst_parse_launch (pipe.str().c_str(), &error);
+	if (error != NULL)
+	{
+		LogError("transcode_pipeline: Parse Error: %s", error->message);
+		g_error_free(error);
+	}
+	if (element == NULL)
+	{
+		LogError("transcode_pipeline failed to make pipeline from %s", pipe.str().c_str());
+	}
+
+	LogDebug("Made pipelin");
+	return element;
+}
+
 RTSPServer::RTSPServer()
 {
 	LogDebug("RTSPServer::RTSPServer");
@@ -10,6 +154,12 @@ RTSPServer::RTSPServer()
 	m_port = 8554;
 	Thread::Start();
 	m_startbar.Wait();
+	
+	//FIXME: This is ugly. Need a new glib subclass
+	GstRTSPMediaFactory *factory = gst_rtsp_media_factory_new ();
+	default_pipeline = GST_RTSP_MEDIA_FACTORY_GET_CLASS(factory)->create_element;
+	GST_RTSP_MEDIA_FACTORY_GET_CLASS(factory)->create_element = transcode_pipeline;
+	g_object_unref(factory);
 }
 
 RTSPServer::~RTSPServer()
@@ -20,21 +170,21 @@ RTSPServer::~RTSPServer()
 	Thread::Stop();
 }
 
-void RTSPServer::PipelineAdd(const std::string url, const std::string pipeline)
+void RTSPServer::VideoPipelineAdd(const std::string url, const std::string pipeline)
 {
 	ScopedLock lock = ScopedLock(&m_mutex);
-	LogDebug("RTSPServer::PipelineAdd(%s, %s)", url.c_str(), pipeline.c_str());
+	LogDebug("RTSPServer::VideoPipelineAdd(%s, %s)", url.c_str(), pipeline.c_str());
 
-	std::map<std::string, std::string>::iterator it = m_urls.find(url);
-	if (it != m_urls.end())
+	std::map<std::string, std::string>::iterator it = m_videopipelines.find(url);
+	if (it != m_videopipelines.end())
 	{
-		LogCritical("RTSPServer::PipelineAdd - url '%s' already exists", url.c_str());
+		LogCritical("RTSPServer::VideoPipelineAdd - url '%s' already exists", url.c_str());
 		abort();
 	}
 
 	GstRTSPMountPoints *mounts = gst_rtsp_server_get_mount_points (m_server);
+	
 	GstRTSPMediaFactory *factory = gst_rtsp_media_factory_new ();
-
 	gst_rtsp_media_factory_add_role (factory, "RTSP",
 		GST_RTSP_PERM_MEDIA_FACTORY_ACCESS, G_TYPE_BOOLEAN, TRUE,
 		GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT, G_TYPE_BOOLEAN, TRUE, NULL);
@@ -43,27 +193,40 @@ void RTSPServer::PipelineAdd(const std::string url, const std::string pipeline)
 	gst_rtsp_media_factory_set_shared (factory, TRUE);
 	gst_rtsp_mount_points_add_factory (mounts, url.c_str(), factory);
 
+	GstRTSPMediaFactory *transcode = gst_rtsp_media_factory_new ();
+	gst_rtsp_media_factory_add_role (transcode, "RTSP",
+		GST_RTSP_PERM_MEDIA_FACTORY_ACCESS, G_TYPE_BOOLEAN, TRUE,
+		GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT, G_TYPE_BOOLEAN, TRUE, NULL);
+
+	std::string transurl = url + "/transcode";
+	gst_rtsp_media_factory_set_launch (transcode, "xyz");
+	gst_rtsp_media_factory_set_shared (transcode, TRUE);
+	gst_rtsp_mount_points_add_factory (mounts, transurl.c_str(), transcode);
+
+
 	g_object_unref(mounts);
 
-	m_urls[url] = pipeline;
+	m_videopipelines[url] = pipeline;
 }
 
-void RTSPServer::PipelineRemove(const std::string url)
+void RTSPServer::VideoPipelineRemove(const std::string url)
 {
+	std::string transurl = url + "/transcode";
 	ScopedLock lock = ScopedLock(&m_mutex);
-	LogDebug("RTSPServer::PipelineRemove(%s)", url.c_str());
+	LogDebug("RTSPServer::VideoPipelineRemove(%s)", url.c_str());
 
-	std::map<std::string, std::string>::iterator it = m_urls.find(url);
-	if (it == m_urls.end())
+	std::map<std::string, std::string>::iterator it = m_videopipelines.find(url);
+	if (it == m_videopipelines.end())
 	{
-		LogCritical("RTSPServer::PipelineRemove - url '%s' does not exist", url.c_str());
+		LogCritical("RTSPServer::VideoPipelineRemove - url '%s' does not exist", url.c_str());
 		abort();
 	}
 
 	GstRTSPMountPoints *mounts = gst_rtsp_server_get_mount_points (m_server);
 	gst_rtsp_mount_points_remove_factory(mounts, url.c_str());
+	gst_rtsp_mount_points_remove_factory(mounts, transurl.c_str());
 	g_object_unref (mounts);
-	m_urls.erase(it);	
+	m_videopipelines.erase(it);	
 }
 
 static GstRTSPFilterResult KickAllFilter (GstRTSPServer *server, GstRTSPClient *client, gpointer user_data)
@@ -107,8 +270,8 @@ int RTSPServer::SetPort(int port)
 	}
 
 	//Take a copy of our url + pipelines
-	std::map<std::string, std::string> urls = m_urls;
-	m_urls.clear();
+	std::map<std::string, std::string> videopipelines = m_videopipelines;
+	m_videopipelines.clear();
 	guint backlog = BacklogGet();
 
 	//gst rtsp services do not permit us to change the when the service is running so we need to restart it
@@ -135,10 +298,10 @@ int RTSPServer::SetPort(int port)
 	m_startbar.Wait();
 
 	//Put pipelines back
-	std::map<std::string, std::string>::iterator it = urls.begin();
-	while(it != urls.end())
+	std::map<std::string, std::string>::iterator it = videopipelines.begin();
+	while(it != videopipelines.end())
 	{
-		PipelineAdd(it->first, it->second);
+		VideoPipelineAdd(it->first, it->second);
 		it++;
 	}
 

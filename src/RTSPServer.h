@@ -5,8 +5,8 @@ class RTSPServer : Thread
 		RTSPServer();
 		~RTSPServer();
 
-		void PipelineAdd(const std::string url, const std::string pipeline);
-		void PipelineRemove(const std::string url);
+		void VideoPipelineAdd(const std::string url, const std::string pipeline);
+		void VideoPipelineRemove(const std::string url);
 
 		void KickAll();
 
@@ -36,7 +36,7 @@ class RTSPServer : Thread
 		GstRTSPAuth *m_auth;
 		Barrier m_startbar;
 		Mutex m_mutex;
-		std::map<std::string, std::string> m_urls;
+		std::map<std::string, std::string> m_videopipelines;
 };
 
 

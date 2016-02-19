@@ -611,7 +611,7 @@ bool CameraHandler::VideoInputEnable(unsigned int input)
 		LogCritical("Unknown Codec: %s", m_VideoInputs[input]->GetCodec().c_str());
 		abort();
 	}
-	RServer->PipelineAdd(url.str().c_str(), pipe.str().c_str());
+	RServer->VideoPipelineAdd(url.str().c_str(), pipe.str().c_str());
 	return true;
 }
 
@@ -629,7 +629,7 @@ bool CameraHandler::VideoInputDisable(unsigned int input)
 	std::stringstream url;
 	url << "/video/" << input;
 
-	RServer->PipelineRemove(url.str().c_str());
+	RServer->VideoPipelineRemove(url.str().c_str());
 	if (m_Platform->VideoInputDisable(input) == false)
 	{
 		LogError("Platform Failed to disable video input %u", input);

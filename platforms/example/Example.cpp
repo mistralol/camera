@@ -108,9 +108,14 @@ bool Example::VideoInputPipeline(unsigned int input, VideoInputConfig *config, s
 			pipe << " ! videoflip method=horizontal-flip";
 		if (config->vflip)
 			pipe << " ! videoflip method=vertical-flip";
+		pipe << " ! tee name=raw";
+		pipe << " ! queue leaky=2 max-size-buffers=5";
 		pipe << " ! x264enc key-int-max=" << config->GetFrameRate() << " threads=1";
 		pipe << " ! video/x-h264, stream-format=avc, alignment=au";
 		pipe << " ! internalsink streamname=video" << input;
+		
+		pipe << " raw. ! queue leaky=2 max-size-buffers=5";
+		pipe << " ! internalsink streamname=video" << input << "raw";
 
 	} else if (config->GetCodec() == "MJPEG")
 	{
@@ -121,9 +126,13 @@ bool Example::VideoInputPipeline(unsigned int input, VideoInputConfig *config, s
 			pipe << " ! videoflip method=horizontal-flip";
 		if (config->vflip)
 			pipe << " ! videoflip method=vertical-flip";
+		pipe << " ! tee name=raw";
+		pipe << " ! queue leaky=2 max-size-buffers=5";
 		pipe << " ! jpegenc";
 		pipe << " ! internalsink streamname=video" << input;
-
+		
+		pipe << " raw. ! queue leaky=2 max-size-buffers=5";
+		pipe << " ! internalsink streamname=video" << input << "raw";
 	}
 	else
 	{
