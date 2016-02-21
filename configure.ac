@@ -11,6 +11,9 @@ AC_PROG_CXX
 
 AX_CXX_COMPILE_STDCXX_11(noext, optional)
 
+AX_COMPILER_FLAGS([WARN_CFLAGS],[WARN_LDFLAGS])
+AC_SUBST([AM_CXXFLAGS], $WARN_CXXFLAGS)
+
 AC_PROG_LIBTOOL
 
 dnl give error and exit if we don't have pkgconfig
@@ -114,8 +117,6 @@ fi
 
 plugindir="\$(libdir)/camera-1.0"
 AC_SUBST(plugindir)
-
-AC_SUBST([AM_CXXFLAGS], ["-Wall -Werror"])
 
 AC_CHECK_HEADER_STDBOOL()
 

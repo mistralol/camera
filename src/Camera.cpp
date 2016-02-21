@@ -227,7 +227,6 @@ int main(int argc, char **argv)
 	guint GLibLogger = g_log_set_handler(NULL, G_LOG_LEVEL_MASK, GLibLogHandler, NULL);
 
 	CameraTimers = new Timers();
-	CameraTimers->Start();
 
 	Signals.Block(); //Switch off signals during startup
 	//Init Handler (This is the "system" init call)
@@ -258,7 +257,6 @@ int main(int argc, char **argv)
 	//Cleanup!
 	delete Server;
 	delete Manager;
-	CameraTimers->Stop();
 	delete CameraTimers;
 	delete PidFile;
 	LogManager::RemoveAll();

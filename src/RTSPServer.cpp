@@ -31,7 +31,6 @@ static GstElement *transcode_pipeline(GstRTSPMediaFactory *factory, const GstRTS
 		LogError("Invalid Paramaters");
 		return NULL;
 	}
-	LogDebug("Map %d", qmap.size());
 
 	std::string codec;
 	std::string codec_mode;
