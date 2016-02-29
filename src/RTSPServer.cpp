@@ -80,7 +80,7 @@ static GstElement *transcode_pipeline(GstRTSPMediaFactory *factory, const GstRTS
 		if (fps > 0)
 			pipe << " ! videorate ! video/x-raw, framerate=" << fps << "/1";
 		if (fps < 0)
-			pipe << " ! videorate ! video/x-raw, framrrate=1/" << fps;
+			pipe << " ! videorate ! video/x-raw, framerate=1/" << abs(fps);
 		pipe << " ! videoconvert";
 		if (quality > 0 && quality < 100)
 			pipe << " ! jpegenc quality=" << quality;
@@ -99,7 +99,7 @@ static GstElement *transcode_pipeline(GstRTSPMediaFactory *factory, const GstRTS
 		if (fps > 0)
 			pipe << " ! videorate ! video/x-raw, framerate=" << fps << "/1";
 		if (fps < 0)
-			pipe << " ! videorate ! video/x-raw, framrrate=1/" << fps;
+			pipe << " ! videorate ! video/x-raw, framerate=1/" << abs(fps);
 		pipe << " ! videoconvert";
 		if (quality > 0 && quality < 100)
 		{
@@ -127,6 +127,8 @@ static GstElement *transcode_pipeline(GstRTSPMediaFactory *factory, const GstRTS
 	{
 		LogError("transcode unknown codec %s", codec.c_str());
 	}
+
+	LogDebug("Using Pipeline: %s", pipe.str().c_str());
 
 	GError *error = NULL;
 	GstElement *element = gst_parse_launch (pipe.str().c_str(), &error);
