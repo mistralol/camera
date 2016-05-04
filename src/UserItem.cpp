@@ -106,33 +106,5 @@ bool UserItem::ConfigSave(Json::Value &json)
 	return true;
 }
 	
-std::string UserItem::Encode()
-{
-	Json::Value json;
-	ConfigSave(json);
-	std::stringstream ss;
-	Json::StyledWriter styledWriter;
-	ss << styledWriter.write(json);
-	return ss.str();
-}
-	
-bool UserItem::Decode(const std::string str)
-{
-	Json::Value root;
-	Json::Reader reader;
 
-	if (reader.parse(str, root ) == false)
-		return false;
-                
-	try
-	{
-		if (ConfigLoad(root) == false)
-			return false;
-	}
-	catch(...)
-	{
-		return false;
-	}
-	return true;
-}
 

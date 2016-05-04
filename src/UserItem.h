@@ -8,9 +8,6 @@ class UserItem
 		bool ConfigLoad(Json::Value &json);
 		bool ConfigSave(Json::Value &json);
 		
-		std::string Encode();
-		bool Decode(const std::string str);
-		
 		std::string Key;
 		std::string Username;
 		std::string Password;

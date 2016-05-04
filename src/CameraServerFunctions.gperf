@@ -2,7 +2,7 @@
 
 struct TType {
     const char *name;
-    int (*func) (CameraHandler *Handler, IServerConnection *Connection, Request *request, Request *response);
+    int (*func) (CameraHandler *Handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 };
 
 %}
@@ -29,18 +29,7 @@ VideoInputGetConfig,	CameraServer::VideoInputGetConfig
 VideoInputSetConfig,	CameraServer::VideoInputSetConfig
 VideoInputGetSupported,	CameraServer::VideoInputGetSupported
 ####
-VideoOutputCount,	CameraServer::VideoOutputCount
-VideoOutputGetSupported,CameraServer::VideoOutputGetSupported
-VideoOutputTourList,	CameraServer::VideoOutputTourList
-VideoOutputTourAdd,	CameraServer::VideoOutputTourAdd
-VideoOutputTourGet,	CameraServer::VideoOutputTourGet
-VideoOutputTourUpdate,	CameraServer::VideoOutputTourUpdate
-VideoOutputTourExists,	CameraServer::VideoOutputTourExists
-VideoOutputTourRemove,	CameraServer::VideoOutputTourRemove
 #####
-GPIOOutputCount,	CameraServer::GPIOOutputCount
-GPIOOutputSetState,	CameraServer::GPIOOutputSetState
-GPIOOutputGetState,	CameraServer::GPIOOutputGetState
 #####
 UserCreate,		CameraServer::UserCreate
 UserAuth,		CameraServer::UserAuth

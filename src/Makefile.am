@@ -24,8 +24,10 @@ camera_SOURCES= Camera.cpp \
 		Version.cpp \
 		WebServer.cpp \
 		WebStream.cpp \
+		WebStreamOptions.cpp \
 		WebStreamPipeline.cpp \
-		GPIOOutputTimer.cpp
+		GPIOOutputTimer.cpp \
+		UserItem.cpp
 
 camera_LDFLAGS=-rdynamic -Wl,-z,defs -L../libcameracommon/.libs/ -lcameracommon \
 	$(GST_LIBS) -lgstrtsp-1.0 \
