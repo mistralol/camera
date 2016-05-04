@@ -13,14 +13,6 @@ struct TType {
 struct TType
 %%
 #####
-RTSPKickAll,		CameraServer::RTSPKickAll
-RTSPGetPort,		CameraServer::RTSPGetPort
-RTSPSetPort,		CameraServer::RTSPSetPort
-RTSPGetMaxBacklog,	CameraServer::RTSPGetMaxBacklog
-RTSPSetMaxBacklog,	CameraServer::RTSPSetMaxBacklog
-RTSPGetMaxClients,	CameraServer::RTSPGetMaxClients
-RTSPSetMaxClients,	CameraServer::RTSPSetMaxClients
-RTSPGetClientCount,	CameraServer::RTSPGetClientCount
 #####
 VideoInputCount,	CameraServer::VideoInputCount
 VideoInputSetEnabled,	CameraServer::VideoInputSetEnabled
@@ -50,18 +42,7 @@ UserGetAutoLogOff,	CameraServer::UserGetAutoLogOff
 UserSetAutoLogOff,	CameraServer::UserSetAutoLogOff
 UserInfo,		CameraServer::UserInfo
 UserList,		CameraServer::UserList
-UserGetFromEMail,	CameraServer::UserGetFromEMail
-UserGetFromKey,		CameraServer::UserGetFromKey
-#####
-GroupCreate,		CameraServer::GroupCreate
-GroupDelete,		CameraServer::GroupDelete
-GroupExists,		CameraServer::GroupExists
-GroupIsUserInGroup,	CameraServer::GroupIsUserInGroup
-GroupUserAdd,		CameraServer::GroupUserAdd
-GroupUserRemove,	CameraServer::GroupUserRemove
-GroupList,		CameraServer::GroupList
-GroupListUsers,		CameraServer::GroupListUsers
-#####
+###########
 WebServerGetPort,	CameraServer::WebServerGetPort
 WebServerSetPort,	CameraServer::WebServerSetPort
 WebServerGetEnabled,	CameraServer::WebServerGetEnabled

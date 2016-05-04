@@ -36,37 +36,6 @@ CameraHandler::~CameraHandler()
 		delete config;
 	}
 	
-	//Cleanup Any timers we might have
-	while(m_GPIOOutputTimers.size() > 0)
-	{
-		std::map<unsigned int, GPIOOutputTimer *>::iterator it = m_GPIOOutputTimers.begin();
-		GPIOOutputTimer *t = it->second;
-		CameraTimers->Remove(t);
-		m_GPIOOutputTimers.erase(it);
-		delete t;
-	}
-
-	//Cleanup any Video Output's
-	while(m_VideoOutputs.size() > 0)
-	{
-		std::map<unsigned int, VideoOutputConfig *>::iterator it = m_VideoOutputs.begin();
-//		int output = it->first;
-		VideoOutputConfig *config = it->second;
-//		if (config->GetEnabled())
-//			m_Platform->VideoOutputDisable(output);
-		m_VideoOutputs.erase(it);
-		delete config;
-	}
-
-	//Cleanup any tours we may have
-	while(m_VideoOutputTours.size() > 0)
-	{
-		std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.begin();
-		VideoOutputTour *config = it->second;
-		m_VideoOutputTours.erase(it);
-		delete config;
-	}
-
 	WServer->Stop();
 	delete WServer;
 	
@@ -197,9 +166,6 @@ void CameraHandler::Init(const std::string WebRoot, const std::string Platform, 
 		}
 	}
 	
-	//Video Outputs
-	LogInfo("Supported Video Outputs: %u", m_Platform->VideoOutputCount());
-
 	//Audio Inputs
 	LogInfo("Supported Audio Inputs: %u", m_Platform->AudioInputCount());
 
@@ -273,10 +239,6 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		if (User::ConfigLoad(json["users"]) == false)
 			return false;
 
-	if (json.isMember("group"))
-		if (Group::ConfigLoad(json["groups"]) == false)
-			return false;
-
 	if (json.isMember("platform"))
 		if (m_Platform->ConfigSave(json["platform"]) == false)
 			return false;
@@ -313,50 +275,7 @@ bool CameraHandler::ConfigLoad(Json::Value &json)
 		}
 	}
 
-	{
-		ScopedLock VideoOutputLock(&m_VideoOutputMutex);
-		std::map<unsigned int, VideoOutputConfig *>::iterator it = m_VideoOutputs.begin();
-		while(it != m_VideoOutputs.end())
-		{
-			std::stringstream ss;
-			ss << "VideoutOutputConfig_" << it->first;
-			if (json.isMember(ss.str()))
-			{
-				if (it->second->ConfigLoad(json[ss.str()]) == false)
-				{
-					LogWarning("CameraHandler::ConfigLoad - Failed to load configuration for video output '%s'", ss.str().c_str());
-					return false;
-				}
-				LogInfo("VideoOutput %u loaded config '%s'", it->first, it->second->ToStr().c_str());
-			}
-			else
-			{
-				LogWarning("CameraHandler::ConfigLoad - No configuration for video output '%s'", ss.str().c_str());
-			}
-			it++;
-		}
-	}
 
-	//Load VideoOutput Tours
-	{
-		ScopedLock VideoOutputLock(&m_VideoOutputMutex);
-		if (json.isMember("VideoOutputTours") && json["VideoOutputTours"].isArray())
-		{
-			for(int i=0;i<json["VideoOutputTours"].size();i++)
-			{
-				VideoOutputTour *tour = new VideoOutputTour();
-				if (tour->ConfigLoad(json["VideoOutputTours"][i]) == false)
-				{
-					LogError("CameraHandler::ConfigLoad - Failed to load tour '%d'", i);
-					delete tour;
-					return false;
-				}
-				m_VideoOutputTours[tour->GetName()] = tour;
-				LogInfo("CameraHandler::ConfigLoad - Loaded Tour '%s'", tour->GetName().c_str());
-			}
-		}
-	}
-	
 
 	return true;
 }
@@ -394,45 +313,7 @@ bool CameraHandler::ConfigSave(Json::Value &json)
 		}
 	}
 
-	//Save VideoOutput Config
-	{
-		ScopedLock VideoOutputLock = ScopedLock(&m_VideoOutputMutex);
-		std::map<unsigned int, VideoOutputConfig *>::iterator it = m_VideoOutputs.begin();
-		while(it != m_VideoOutputs.end())
-		{
-			std::stringstream ss;
-			ss << "VideoOutputConfig_" << it->first;
-			if (it->second->ConfigSave(json[ss.str()]) == false)
-			{
-				LogError("CameraHandler::ConfigSave Failed to save configuration for video output '%s'", ss.str().c_str());
-				return false;
-			}
-			it++;
-		}
-	}
-
-	//Save VideoOutputTours
-	{
-		ScopedLock VideoOutputLock = ScopedLock(&m_VideoOutputMutex);
-		std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.begin();
-		json["VideoOutputTours"] = Json::arrayValue;
-		while(it != m_VideoOutputTours.end())
-		{
-			Json::Value sub;
-			if (it->second->ConfigSave(sub) == false)
-			{
-				LogError("CameraHandler::ConfigSave Failed to save configuration for tour '%s'", it->second->GetName().c_str());
-				return false;
-			}
-			json["VideoOutputTours"].append(sub);
-			it++;
-		}
-	}
-
 	if (User::ConfigSave(json["users"]) == false)
-		return false;
-
-	if (Group::ConfigSave(json["groups"]) == false)
 		return false;
 
 	if (WServer->ConfigSave(json["webserver"]) == false)
@@ -638,155 +519,6 @@ bool CameraHandler::VideoInputDisable(unsigned int input)
 	return true;
 }
 
-int CameraHandler::VideoOutputCount()
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputCount()");
-	return m_Platform->VideoOutputCount();
-}
-
-int CameraHandler::VideoOutputGetSupported(unsigned int output, VideoOutputSupported *info)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputGetSupported(%d, %p)", output, info);
-	return -1;
-}
-
-std::vector<std::string> CameraHandler::VideoOutputTourList()
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputTourList()");
-	std::vector<std::string> lst;
-}
-
-int CameraHandler::VideoOutputTourAdd(VideoOutputTour *tour)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputTourAdd(%s)", tour->GetName().c_str());
-	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(tour->GetName());
-	if (it != m_VideoOutputTours.end())
-	{
-		LogError("CameraHandler::VideoOutputTourAdd - Tour '%s' already exists", tour->GetName().c_str());
-		return -EEXIST;
-	}
-	VideoOutputTour *tmp = new VideoOutputTour();
-	*tmp = *tour;
-	m_VideoOutputTours[tour->GetName()] = tmp;
-}
-
-int CameraHandler::VideoOutputTourUpdate(VideoOutputTour *tour)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputTourList(%s)", tour->GetName().c_str());
-	if (VideoOutputTourExists(tour->GetName()))
-	{
-		if (VideoOutputTourRemove(tour->GetName()) < 0)
-		{
-			LogCritical("CameraHandler::VideoOutputTourUpdate - Tour '%s' Exists but could not be removed?", tour->GetName().c_str());
-			abort(); //Should be unreachable
-		}
-	}
-	return VideoOutputTourAdd(tour);
-}
-
-int CameraHandler::VideoOutputTourGet(const std::string &name, VideoOutputTour *info)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputTourGet(%s)", name.c_str());
-	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(name);
-	if (it == m_VideoOutputTours.end())
-	{
-		LogError("CameraHandler::VideoOutputTourRemove - Tour '%s' does not exist", name.c_str());
-		return -EEXIST;
-	}
-	*info = *it->second;
-	return 0;
-}
-
-bool CameraHandler::VideoOutputTourExists(const std::string &name)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputTourExists(%s)", name.c_str());
-	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(name);
-	if (it == m_VideoOutputTours.end())
-		return false;
-	return true;
-}
-
-int CameraHandler::VideoOutputTourRemove(const std::string &name)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoOutputMutex);
-	LogDebug("CameraHandler::VideoOutputTourRemove(%s)", name.c_str());
-	std::map<std::string, VideoOutputTour *>::iterator it = m_VideoOutputTours.find(name);
-	if (it == m_VideoOutputTours.end())
-	{
-		LogError("CameraHandler::VideoOutputTourRemove - Tour '%s' does not exist", name.c_str());
-		return -EEXIST;
-	}
-	delete it->second;
-	m_VideoOutputTours.erase(it);
-	return 0;
-}
-
-int CameraHandler::GPIOOutputCount()
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
-	LogDebug("CameraHandler::GPIOOutputCount");
-	return m_Platform->GPIOOutputCount();
-}
-
-int CameraHandler::GPIOOutputSetState(unsigned int output, bool state)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
-	LogDebug("CameraHandler::GPIOOutputSetState(%u, %s)", output, state ? "On" : "Off");
-	if (output >= CameraHandler::GPIOOutputCount())
-		return -EEXIST;
-
-	//Cancel existing timers if they exist	
-	std::map<unsigned int, GPIOOutputTimer *>::iterator it = m_GPIOOutputTimers.find(output);
-	if (it != m_GPIOOutputTimers.end())
-	{
-		GPIOOutputTimer *t = it->second;
-		CameraTimers->Remove(t);
-		m_GPIOOutputTimers.erase(it);
-		delete t;
-	}
-
-	m_Platform->GPIOOutputSetState(output, state);
-}
-
-int CameraHandler::GPIOOutputSetState(unsigned int output, bool state, const struct timespec *tv)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
-	LogDebug("CameraHandler::GPIOOutputSetState(%u, %s, { %ld, %ld })", output, state ? "On" : "Off", tv->tv_sec, tv->tv_nsec);
-	if (output >= CameraHandler::GPIOOutputCount())
-		return -EEXIST;
-
-	//Cancel existing timers if they exist	
-	std::map<unsigned int, GPIOOutputTimer *>::iterator it = m_GPIOOutputTimers.find(output);
-	if (it != m_GPIOOutputTimers.end())
-	{
-		GPIOOutputTimer *t = it->second;
-		CameraTimers->Remove(t);
-		m_GPIOOutputTimers.erase(it);
-		delete t;
-	}
-
-	bool next = state ? false : true; //Invert
-
-	m_Platform->GPIOOutputSetState(output, state);
-	GPIOOutputTimer *t = new GPIOOutputTimer(output, this, tv, next);
-	m_GPIOOutputTimers[output] = t;
-	CameraTimers->Add(t);
-	return 0;
-}
-
-bool CameraHandler::GPIOOutputGetState(unsigned int output)
-{
-	ScopedLock VideoLock = ScopedLock(&m_VideoInputMutex);
-	LogDebug("CameraHandler::GPIOOutputGetState(%u)", output);
-	return m_Platform->GPIOOutputGetState(output);
-}
 
 void CameraHandler::Wait()
 {

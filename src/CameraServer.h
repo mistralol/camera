@@ -10,15 +10,6 @@ class CameraServer : public IServerHandler
 		void Wait();
 		void Quit();
 
-		static int RTSPKickAll(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPSetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPGetClientCount(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPSetMaxClients(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPGetMaxClients(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-
 		static int VideoInputCount(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 		static int VideoInputSetEnabled(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 		static int VideoInputGetEnabled(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
@@ -45,17 +36,6 @@ class CameraServer : public IServerHandler
 		static int UserSetAutoLogOff(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 		static int UserInfo(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 		static int UserList(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int UserGetFromEMail(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int UserGetFromKey(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		
-		static int GroupCreate(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupDelete(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupExists(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupIsUserInGroup(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupUserAdd(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupUserRemove(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupList(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
-		static int GroupListUsers(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 
 		static int WebServerGetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);
 		static int WebServerSetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response);

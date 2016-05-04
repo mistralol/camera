@@ -5,8 +5,8 @@ class WebStreamOptions
 	public:
 		WebStreamOptions();
 
-		void Encode(Json::Value &options);
-		void Decode(const Json::Value &options);
+		bool Encode(std::string &str);
+		bool Decode(const std::string &str);
 		
 		int vinput;
 		WebStreamType type;

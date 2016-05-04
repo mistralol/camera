@@ -22,6 +22,6 @@ void GPIOOutputTimer::GetDelay(struct timespec *ts)
 
 void GPIOOutputTimer::TimerExpired(Timers *timers, ITimer *timer)
 {
-	m_handler->GPIOOutputSetState(m_output, m_enabled);
+	//m_handler->GPIOOutputSetState(m_output, m_enabled);
 }
 

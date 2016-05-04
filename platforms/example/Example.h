@@ -15,9 +15,6 @@ class Example : public PlatformBase
 		void VideoInputDefaultConfig(unsigned int stream, VideoInputConfig *config);
 		bool VideoInputPipeline(unsigned int input, VideoInputConfig *config, std::string *str);
 
-		unsigned int VideoOutputCount();
-		void VideoOutputSupportedInfo(unsigned int output, VideoOutputSupported *info);
-
 		unsigned int GPIOOutputCount();
 		void GPIOOutputSetState(unsigned int output, bool enabled);
 		bool GPIOOutputGetState(unsigned int output);

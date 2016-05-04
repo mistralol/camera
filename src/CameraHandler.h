@@ -18,21 +18,6 @@ class CameraHandler
 		bool VideoInputEnable(unsigned int input);
 		bool VideoInputDisable(unsigned int input);
 
-		int VideoOutputCount();
-		int VideoOutputGetSupported(unsigned int output, VideoOutputSupported *info);
-
-		std::vector<std::string> VideoOutputTourList();
-		int VideoOutputTourAdd(VideoOutputTour *tour);
-		int VideoOutputTourUpdate(VideoOutputTour *tour);
-		int VideoOutputTourGet(const std::string &name, VideoOutputTour *);
-		bool VideoOutputTourExists(const std::string &name);
-		int VideoOutputTourRemove(const std::string &name);
-
-		int GPIOOutputCount();
-		int GPIOOutputSetState(unsigned int output, bool state);
-		int GPIOOutputSetState(unsigned int output, bool state, const struct timespec *tv);
-		bool GPIOOutputGetState(unsigned int output);
-
 		void Wait();
 		void Quit();
 
@@ -57,14 +42,6 @@ class CameraHandler
 		Mutex m_VideoInputMutex;
 		std::map<unsigned int, VideoInputConfig *> m_VideoInputs;
 
-		//Video Output Stuff
-		Mutex m_VideoOutputMutex;
-		std::map<unsigned int, VideoOutputConfig *> m_VideoOutputs;
-		std::map<std::string, VideoOutputTour *> m_VideoOutputTours;
-
-		//GPIO Output Stuff
-		Mutex m_GPIOOutputMutex;
-		std::map<unsigned int, GPIOOutputTimer *> m_GPIOOutputTimers;
 };
 
 

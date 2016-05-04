@@ -35,7 +35,6 @@ using namespace liblogger;
 #include <UserItem.h>
 #include <User.h>
 #include <UserScopedLock.h>
-#include <Group.h>
 
 #include <IPipeline.h>
 #include <PipelineBasic.h>
@@ -44,11 +43,6 @@ using namespace liblogger;
 
 #include <VideoInputSupported.h>
 #include <VideoInputConfig.h>
-
-#include <VideoOutputSupported.h>
-#include <VideoOutputConfig.h>
-#include <VideoOutputTourItem.h>
-#include <VideoOutputTour.h>
 
 #include <PlatformBase.h>
 

@@ -15,34 +15,47 @@ WebStreamOptions::WebStreamOptions() :
 
 }
 
-void WebStreamOptions::Encode(Json::Value &options)
+bool WebStreamOptions::Encode(std::string &str)
 {
-	options["vinput"] = vinput;
-	options["type"] = type;
-	options["localonly"] = localonly;
-	options["timeout"] = timeout;
+	Json::Value json;
+	
+	json["vinput"] = vinput;
+	json["type"] = type;
+	json["localonly"] = localonly;
+	json["timeout"] = timeout;
 
-	options["width"] = width;
-	options["height"] = height;
+	json["width"] = width;
+	json["height"] = height;
 
-	options["mjpeg_fps"] = mjpeg_fps;
-	options["mjpeg_quality"] = mjpeg_quality;
-
+	json["mjpeg_fps"] = mjpeg_fps;
+	json["mjpeg_quality"] = mjpeg_quality;
+	
+	std::stringstream ss;
+	Json::StyledWriter styledWriter;
+	ss << styledWriter.write(json);
+	str = ss.str();
+	return true;
 }
 
-void WebStreamOptions::Decode(const Json::Value &options)
+bool WebStreamOptions::Decode(const std::string &str)
 {
-	//FIXME: Checks
-	vinput = options["vinput"].asInt();
-	type = (WebStreamType) options["type"].asInt();
-	localonly = options["localonly"].asBool();
-	timeout = options["timeout"].asInt();
-	
-	width = options["width"].asInt();
-	height = options["height"].asInt();
+	Json::Value root;
+	Json::Reader reader;
 
-	mjpeg_fps = options["mjpeg_fps"].asInt();
-	mjpeg_quality = options["mjpeg_quality"].asInt();
+        if (reader.parse(str, root ) == false)
+		return false;
+		
+	vinput = root["vinput"].asInt();
+	type = (WebStreamType) root["type"].asInt();
+	localonly = root["localonly"].asBool();
+	timeout = root["timeout"].asInt();
+	
+	width = root["width"].asInt();
+	height = root["height"].asInt();
+
+	mjpeg_fps = root["mjpeg_fps"].asInt();
+	mjpeg_quality = root["mjpeg_quality"].asInt();
+
 		
 	return true;
 }

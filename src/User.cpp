@@ -16,19 +16,6 @@ bool User::Init()
 	if (m_map.empty() == false)
 		abort();
 	Create("admin", "admin", "");
-	if (Group::Exists("admin") == false)
-	{
-		if (Group::Create("admin") < 0)
-		{
-			LogCritical("User::Init - Group::Create Failed");
-			return false;
-		}
-	}
-	if (Group::UserAdd("admin", "admin") < 0)
-	{
-		LogCritical("User::Init - GroupUserAdd Failed");
-		return false;
-	}
 	
 	m_TmrLockout = new TimerFunc(60, ProcessUnlock, NULL);
 	CameraTimers->Add(m_TmrLockout);
@@ -241,7 +228,6 @@ int User::Delete(const std::string User)
 	}
 	delete it->second;
 	m_map.erase(it);
-	Group::UserRemoveFromAll(User);
 	LogInfo("User::Delete - Deleted User '%s'", User.c_str());
 	return 0;
 }

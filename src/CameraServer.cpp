@@ -30,101 +30,10 @@ void CameraServer::Quit()
 	m_handler->Quit();
 }
 
-int CameraServer::RTSPKickAll(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	handler->RServer->KickAll();
-	return 0;
-}
-
-int CameraServer::RTSPGetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	response["value"] = handler->RServer->GetPort();
-	LogDebug("CameraServer::RTSPGetPort { value = %d }", response["value"].asInt());
-	return 0;
-}
-
-int CameraServer::RTSPSetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("value") == false || request["value"].isInt() == false)
-	{
-		LogError("CameraServer:RTSPSetPort Failed - Paramater '%s' is missing", request.isMember("value") ? "true" : "false");		 
-		return -EINVAL;
-	}
-	int value = request["value"].asInt();
-	
-	if (value <= 0 || value > 65535)
-	{
-		LogError("CameraServer:RTSPSetPort Failed - value <= 0 value: %d", value);
-		return -EINVAL;
-	}
-	response["value"] = handler->RServer->SetPort(value);
-	handler->Cfg->Dirty();
-	return 0;
-}
-
-int CameraServer::RTSPGetClientCount(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	response["value"] = handler->RServer->SessionsCount();
-	LogDebug("CameraServer::RTSPGetClientCount { value = %d }", response["value"].asInt());
-	return 0;
-}
-
-int CameraServer::RTSPSetMaxClients(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	int value = 0;
-	if (request->GetInt("value", &value) == false)
-	{
-		LogError("CameraServer:RTSPSetMaxClients Failed - Paramater '%s' is missing", request.isMember("value") ? "true" : "false");
-		return -EINVAL;
-	}
-	if (value < 0)
-	{
-		LogError("CameraServer:RTSPSetMaxClients Failed - value < 0 value: %d", value);
-		return -EINVAL;
-	}
-	handler->RServer->SessionsSetMax(value);
-	handler->Cfg->Dirty();
-	return 0;
-}
-
-int CameraServer::RTSPGetMaxClients(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	int value = handler->RServer->SessionsGetMax();
-	response->SetArg("value", value);
-	LogDebug("CameraServer::RTSPGetMaxClients { value = %d }", value);
-	return 0;
-}
-
-int CameraServer::RTSPSetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	int value = 0;
-	if (request->GetInt("value", &value) == false)
-	{
-		LogError("CameraServer::RTSPSetMaxBacklog Failed - Paramater '%s' is missing", request.isMember("value") ? "true" : "false");
-		return -EINVAL;
-	}
-	if (value <= 0)
-	{
-		LogError("CameraServer::RTSPSetMaxBacklog Failed - value <= 0 value: %d", value);
-		return -EINVAL;
-	}
-	handler->RServer->BacklogSet(value);
-	handler->Cfg->Dirty();
-	return 0;
-}
-
-int CameraServer::RTSPGetMaxBacklog(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	int value = handler->RServer->BacklogGet();
-	response->SetArg("value", value);
-	LogDebug("CameraServer::RTSPGetMaxBacklog { value = %d }", value);
-	return 0;
-}
-
 int CameraServer::VideoInputCount(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
 {
 	int count = handler->VideoInputCount();
-	response->SetArg("value", count);
+	response["value"] = count;
 	return 0;
 }
 
@@ -132,7 +41,7 @@ int CameraServer::VideoInputSetEnabled(CameraHandler *handler, IServerConnection
 {
 	unsigned int input = -1;
 	bool enabled = false;
-
+/*
 	if (request->GetUInt("input", &input) == false)
 	{
 		LogError("CameraServer::VideoInputSetEnabled Failed - Paramater '%s' is missing", request.isMember("input") ? "true" : "false");
@@ -150,7 +59,7 @@ int CameraServer::VideoInputSetEnabled(CameraHandler *handler, IServerConnection
 		handler->Cfg->Dirty();
 		return 0;
 	}
-
+*/
 	return -1;
 }
 
@@ -158,7 +67,7 @@ int CameraServer::VideoInputGetEnabled(CameraHandler *handler, IServerConnection
 {
 	unsigned int input = -1;
 	bool enabled = false;
-
+/*
 	if (request->GetUInt("input", &input) == false)
 	{
 		LogError("CameraServer::VideoInputGetEnabled Failed - exists: %s", request.isMember("input") ? "true" : "false");
@@ -170,8 +79,8 @@ int CameraServer::VideoInputGetEnabled(CameraHandler *handler, IServerConnection
 		return -EINVAL;
 	}
 	response->SetArg("enabled", enabled);
-
-	return 0;
+*/
+	return -1;
 }
 
 int CameraServer::VideoInputGetConfig(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
@@ -179,6 +88,7 @@ int CameraServer::VideoInputGetConfig(CameraHandler *handler, IServerConnection 
 	unsigned int input = -1;
 	VideoInputConfig cfg;
 
+/*
 	if (request->GetUInt("input", &input) == false)
 	{
 		LogError("CameraServer::VideoInputGetConfig Failed - exists: %s", request.isMember("input") ? "true" : "false");
@@ -190,11 +100,13 @@ int CameraServer::VideoInputGetConfig(CameraHandler *handler, IServerConnection 
 		return ret;
 	
 	response->SetArg("config", cfg.Encode());
-	return ret;
+*/
+	return -1;
 }
 
 int CameraServer::VideoInputSetConfig(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
 {
+/*
 	unsigned int input = -1;
 	VideoInputConfig cfg;
 	std::string data;
@@ -220,25 +132,33 @@ int CameraServer::VideoInputSetConfig(CameraHandler *handler, IServerConnection 
 	int ret = handler->VideoInputSetConfig(input, &cfg);
 	handler->Cfg->Dirty();
 	return ret;
+*/
 }
 
 int CameraServer::VideoInputGetSupported(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
 {
-	unsigned int input = -1;
-	VideoInputSupported info;
-
-	if (request->GetUInt("input", &input) == false)
+/*
+	if (request.isMember("input") == false || request["input"].isInt() == false)
 	{
 		LogError("CameraServer::VideoInputGetSupported Failed - exists: %s", request.isMember("input") ? "true" : "false");
 		return -EINVAL;
 	}
 
+	int input = request["input"].asInt();
+	VideoInputSupported info;
+	if (input < 0)
+		return -EINVAL;
+
+
 	int ret = handler->VideoInputGetSupported(input, &info);
 	if (ret < 0)
 		return ret;
 	
-	response->SetArg("info", info.Encode());
-	return ret;
+	Json::Value json;
+	info.Encode(info);
+	response["info"] = json;
+*/
+	return -1;
 }
 
 int CameraServer::UserCreate(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
@@ -518,180 +438,6 @@ int CameraServer::UserList(CameraHandler *handler, IServerConnection *Connection
 	return lst.size();
 }
 
-int CameraServer::UserGetFromEMail(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("EMail") == false || request["EMail"].isString() == false)
-	{
-		LogError("CameraServer::UserGetFromEMail Failed - Key exists: %s", request.isMember("EMail") ? "true" : "false");
-		return -EINVAL;
-	}
-	
-	std::string EMail = request["EMail"].asString();
-	std::string Username = "";
-	
-	int ret = User::GetUserFromEMail(EMail, &Username);
-	if (ret < 0)
-		return ret;
-	response["Username"] = Username;
-	return ret;
-}
-
-int CameraServer::UserGetFromKey(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Key") == false || request["Key"].isString() == false)
-	{
-		LogError("CameraServer::UserGetFromKey Failed - Key exists: %s", request.isMember("Username") ? "true" : "false");
-		return -EINVAL;
-	}
-	
-	std::string Key = request["Key"].asString();
-	std::string Username = "";
-
-	int ret = User::GetUserFromKey(Key, &Username);
-	if (ret < 0)
-		return ret;
-	response["Username"] = Username;
-	return ret;
-}
-
-int CameraServer::GroupCreate(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupCreate Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-
-	std::string Group = request["Group"].asString();
-	int ret = Group::Create(Group);
-	if (ret >= 0)
-		handler->Cfg->Dirty();
-	return ret;
-}
-
-int CameraServer::GroupDelete(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupDelete Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-
-	std::string Group = request["Group"].asString();
-	int ret = Group::Delete(Group);
-	if (ret >= 0)
-		handler->Cfg->Dirty();
-	return ret;
-}
-
-int CameraServer::GroupExists(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupExists Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-	
-	std::string Group = request["Group"].asString();
-	return Group::Exists(Group);
-}
-
-int CameraServer::GroupIsUserInGroup(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-
-	if (request.isMember("Username") == false || request["Username"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Username exists: %s", request.isMember("Username") ? "true" : "false");
-		return -EINVAL;
-	}
-
-	std::string Group = request["Group"].asString();
-	std::string Username = request["Username"].asString();
-	return Group::IsUserInGroup(Group, Username);
-}
-
-int CameraServer::GroupUserAdd(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-	
-	if (request.isMember("Username") == false || request["Username"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Username exists: %s", request.isMember("Username") ? "true" : "false");
-		return -EINVAL;
-	}
-	
-	std::string Group = request["Group"].asString();
-	std::string Username = request["Username"].asString();
-
-	int ret = Group::UserAdd(Group, Username);
-	if (ret >= 0)
-		handler->Cfg->Dirty();
-	return ret;
-}
-
-int CameraServer::GroupUserRemove(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-
-	if (request.isMember("Username") == false || request["Username"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Username exists: %s", request.isMember("Username") ? "true" : "false");
-		return -EINVAL;
-	}
-	
-	std::string Group = request["Group"].asString();
-	std::string Username = request["Username"].asString();
-
-	int ret = Group::UserRemove(Group, Username);
-	if (ret >= 0)
-		handler->Cfg->Dirty();
-	return ret;
-}
-
-int CameraServer::GroupList(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	std::list<std::string> lst = Group::List();
-	response["value"] = Json::arrayValue;
-	for(auto str : lst)
-	{
-		response["value"].append(str);
-	}
-	return lst.size();
-}
-
-int CameraServer::GroupListUsers(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
-{
-	if (request.isMember("Group") == false || request["Group"].isString() == false)
-	{
-		LogError("CameraServer::GroupIsUserInGroup Failed - Group exists: %s", request.isMember("Group") ? "true" : "false");
-		return -EINVAL;
-	}
-
-	std::string Group = request["Group"].asString();
-	std::list<std::string> lst = Group::ListUsers(Group);
-	
-	response["value"] = Json::arrayValue;
-	for(auto str : lst)
-	{
-		response["value"].append(str);
-	}
-	
-	return lst.size();
-}
-
 int CameraServer::WebServerGetPort(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
 {
 	int port = handler->WServer->GetPort();
@@ -806,7 +552,7 @@ int CameraServer::WebStreamStart(CameraHandler *handler, IServerConnection *Conn
 		return -EINVAL;
 	}
 
-	options.Decode(request["options"]);
+//	options.Decode(request["options"]);
 
 	return handler->WStream->StartVideoInput(&options);
 }

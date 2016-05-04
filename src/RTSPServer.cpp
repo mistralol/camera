@@ -435,12 +435,14 @@ static gboolean Authenticate(GstRTSPAuth *auth, GstRTSPContext *ctx)
 			return FALSE;
 		}
 
+/*
 		if (Group::IsUserInGroup("RTSP", Username) == false && 
 			Group::IsUserInGroup("admin", Username) == false)
 		{
 			LogWarning("RTSPServer::Authenticate - Failed to auth user '%s' is not in group RTSP,admin", Username.c_str());
 			return false;
 		}
+*/
 		LogInfo("RTSPServer::Authenticate - Success");
 		
 		GstRTSPToken *token = gst_rtsp_token_new(GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE, G_TYPE_STRING, "RTSP", NULL);

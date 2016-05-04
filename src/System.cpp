@@ -1,7 +1,7 @@
 
 #include <Camera.h>
 
-int System::Reboot(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+int System::Reboot(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
 {
 	LogInfo("System::Reboot");
 	UserID user = UserID();
@@ -21,7 +21,7 @@ int System::Reboot(CameraHandler *handler, IServerConnection *Connection, Reques
 	return 0;
 }
 
-int System::Shutdown(CameraHandler *handler, IServerConnection *Connection, Request *request, Request *response)
+int System::Shutdown(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)
 {
 	LogInfo("System::Shutdown");
 	UserID user = UserID();
