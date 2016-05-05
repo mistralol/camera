@@ -55,18 +55,6 @@ PKG_CHECK_MODULES(JSON, [
 	])
 ])
 
-dnl Check for python
-PKG_CHECK_MODULES(PYTHON, [
-	python >= 2.7
-], [
-	AC_SUBST(PYTHON_CFLGAGS)
-	AC_SUBST(PYTHON_LIBS)
-], [
-	AC_MSG_ERROR([
-		You need to install or upgrade python-dev
-	])
-])
-
 dnl Check for liblogger
 PKG_CHECK_MODULES(LIBLOGGER, [
 	liblogger >= 1.0.0
@@ -91,29 +79,10 @@ PKG_CHECK_MODULES(LIBCLIENTSERVER, [
 	])
 ])
 
-dnl Check for swig
-AC_CHECK_PROG(SWIG_CHECK,swig,yes)
-if test x"$SWIG_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install swig before installing.])
-fi
-
 AC_CHECK_PROG(GPERF_CHECK,gperf,yes)
 if test x"$GPERF_CHECK" != x"yes" ; then
     AC_MSG_ERROR([Please install gperf before installing.])
 fi
-
-dnl Check for gmcs
-AC_CHECK_PROG(GMCS_CHECK,gmcs,yes)
-if test x"$GMCS_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install gmcs before installing. gmcs is part of mono])
-fi
-
-dnl Check for xbuild
-AC_CHECK_PROG(XBUILD_CHECK,xbuild,yes)
-if test x"$XBUILD_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install xbuild before installing. xbuild is part of mono])
-fi
-
 
 plugindir="\$(libdir)/camera-1.0"
 AC_SUBST(plugindir)
