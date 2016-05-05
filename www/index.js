@@ -35,6 +35,39 @@ app.use(session({
 	cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }));
 
+app.get('/', function (req, res) {
+	if (req.session.IsUser == undefined)
+	{
+		res.redirect('/login');
+	}
+	else
+	{
+		res.redirect('/live');
+	}
+});
+
+app.get('/login', function(req, res) {
+	res.render('login',
+		{
+			title : 'Camera Login'
+		}
+	);
+});
+
+app.post('/login', function(req, res) {
+	res.render('login',
+		{
+			title : 'Camera Login'
+		}
+	);
+});
+
+
+app.get('/logout', function(req, res) {
+	req.session.destroy();
+	res.redirect('/login');
+});
+
 app.listen(3000);
 
 
