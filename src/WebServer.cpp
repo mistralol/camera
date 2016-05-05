@@ -250,9 +250,12 @@ bool WebServer::Exec()
 		if (sigprocmask(SIG_UNBLOCK, &all, NULL) < 0)
 			abort();
 
-		if (chdir(m_WebRoot.c_str()) < 0)
+		char port[128];
+		snprintf(port, sizeof(port), "%d", m_port);
+
+		if (setenv("PORT", port, 1) < 0)
 		{
-			perror("chdir failed");
+			perror("setenv");
 			exit(EXIT_FAILURE);
 		}
 

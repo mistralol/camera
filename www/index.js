@@ -68,6 +68,15 @@ app.get('/logout', function(req, res) {
 	res.redirect('/login');
 });
 
-app.listen(3000);
+if (process.env.PORT == undefined)
+{
+	console.log("PORT Is not set listening on port 3000 instead!!!");
+	app.listen(3000);
+}
+else
+{
+	console.log("Listening on Port: " + process.env.PORT);
+	app.listen(process.env.PORT);
+}
 
 
