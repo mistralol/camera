@@ -225,6 +225,8 @@ bool WebServer::Exec()
 	ss << m_port;
 	std::string sport = ss.str();
 	LogInfo("WebRoot: %s", m_WebRoot.c_str());
+	std::string Root = m_WebRoot + "/index.js";
+	LogDebug("WebRoot: %s", Root.c_str());
 	pid_t pid = fork();
 	if (pid < 0)
 	{
@@ -234,14 +236,13 @@ bool WebServer::Exec()
 
 	if (pid == 0)
 	{
-		//Child process. Start xsp4 to act as a web server
 		//FIXME: Hardcoded values
 		
 		//Close All fd's
 		for(int i=3;i<1024;i++)
 			close(i);
 		
-		//Restore all signals or mono freak's out!
+		//Restore all signals or process might freak's out!
 		sigset_t all;
 		if (sigfillset(&all) < 0)
 			abort();
@@ -255,11 +256,12 @@ bool WebServer::Exec()
 			exit(EXIT_FAILURE);
 		}
 
-		if (execl("/usr/bin/xsp4", "/usr/bin/xsp4", "--nonstop", "--root", m_WebRoot.c_str(), "--port", sport.c_str(), NULL) < 0)
+		if (execl("/usr/local/bin/nodemon", "/usr/local/bin/nodemon", Root.c_str(), NULL) < 0)
 		{
 			printf("execl failed: %s\n", strerror(errno));
 			abort();
 		}
+
 	}
 	m_pid = pid;
 	LogInfo("WebServer has new pid %d", m_pid);
@@ -323,8 +325,8 @@ void WebServer::Run()
 			//so by "fixme" I mean we need to scan for the correct process to kill
 			if (FastFailures > 5)
 			{
-				LogNotice("WebServer::Run() - Running killall mono");
-				int ret = system("killall mono");
+				LogNotice("WebServer::Run() - Running killall nodemon");
+				int ret = system("killall nodemon");
 				LogDebug("WebServer::Run() - Exit Status WEXITSTATUS(%d)", WEXITSTATUS(ret));
 				if (WEXITSTATUS(ret) != 0)
 				{

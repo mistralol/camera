@@ -37,5 +37,5 @@ m4/
 Config.json
 CameraServerFunctions.i
 src/camera
-www/sessions.db
+sessions.db
 www/node_modules
