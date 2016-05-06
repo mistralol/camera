@@ -55,9 +55,13 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
+
+	console.log(req.body);
+
 	res.render('login',
 		{
-			title : 'Camera Login'
+			title : 'Camera Login',
+			failed : true
 		}
 	);
 });
