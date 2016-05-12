@@ -1,62 +1,72 @@
 
-#include <string>
-#include <sstream>
-#include <json/json.h>
-
-#include <stdio.h>
-
-#include <WebStreamType.h>
-#include <WebStreamOptions.h>
+#include <Camera.h>
 
 WebStreamOptions::WebStreamOptions() :
-	vinput(0), type(Unknown), localonly(true), timeout(60),
-	mjpeg_fps(0), mjpeg_quality(0)
+	vinput(0),
+	type("Unknown"),
+	localonly(true),
+	timeout(60)
 {
 
 }
 
-bool WebStreamOptions::Encode(std::string &str)
+bool WebStreamOptions::Encode(Json::Value &json)
 {
-	Json::Value json;
-	
 	json["vinput"] = vinput;
 	json["type"] = type;
 	json["localonly"] = localonly;
 	json["timeout"] = timeout;
 
-	json["width"] = width;
-	json["height"] = height;
-
-	json["mjpeg_fps"] = mjpeg_fps;
-	json["mjpeg_quality"] = mjpeg_quality;
-	
-	std::stringstream ss;
-	Json::StyledWriter styledWriter;
-	ss << styledWriter.write(json);
-	str = ss.str();
 	return true;
 }
 
-bool WebStreamOptions::Decode(const std::string &str)
+bool WebStreamOptions::Decode(const Json::Value &json)
 {
-	Json::Value root;
-	Json::Reader reader;
-
-        if (reader.parse(str, root ) == false)
-		return false;
-		
-	vinput = root["vinput"].asInt();
-	type = (WebStreamType) root["type"].asInt();
-	localonly = root["localonly"].asBool();
-	timeout = root["timeout"].asInt();
+	if (json.isMember("vinput") && json["vinput"].isInt())
+	{
+		vinput = json["vinput"].asInt();
+	}
+	else
+	{
+		LogError("WebStreamOptions::Decode - Missing Parameter vinput");
+		throw("Missing Parameter vinput");
+	}
 	
-	width = root["width"].asInt();
-	height = root["height"].asInt();
+	if (json.isMember("type") && json["type"].isString())
+	{
+		type = json["type"].asString();	
+	}
+	else
+	{
+		LogError("WebStreamOptions::Decode - Missing Parameter type");
+		throw("Missing Parameter type");
+	}
 
-	mjpeg_fps = root["mjpeg_fps"].asInt();
-	mjpeg_quality = root["mjpeg_quality"].asInt();
+	if (json.isMember("localonly"))
+	{
+		if (json["localonly"].isBool())
+		{
+			localonly = json["localonly"].asBool();
+		}
+		else
+		{
+			LogWarning("WebStreamOptions::Decode - Ignoring localonly option as its not a bool!");
+		}
+	}
 
-		
+	if (json.isMember("timeout"))
+	{
+		if (json["timeout"].isInt())
+		{
+			timeout = json["timeout"].asInt();		
+		}
+		else
+		{
+			LogWarning("WebStreamOptions::Decode - Ignoring timeout option as its not an int!");
+		}
+	}
+
+	
 	return true;
 }
 

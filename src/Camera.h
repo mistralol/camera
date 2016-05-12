@@ -48,7 +48,6 @@ using namespace liblogger;
 
 #include <GPIOOutputTimer.h>
 
-#include <WebStreamType.h>
 #include <WebStreamOptions.h>
 #include <WebStreamPipeline.h>
 #include <WebStream.h>

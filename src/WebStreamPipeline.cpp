@@ -145,39 +145,43 @@ restart_poll:
 	//Make pipeline
 	std::stringstream ss;
 	
-	switch(m_options.type)
+	if (m_options.type == "Unknown")
 	{
-		case Unknown:
-			LogError("WebStreamPipeline::Run() - Unknown format requested");
-			goto cleanup;
-			break;
-		case MP4:
-			ss << "internalsrc streamname=video" << m_options.vinput;
-			ss << " ! h264parse";
-			ss << " ! qtmux streamable=true fragment-duration=250";
-			ss << " ! fdsink fd=" << fd;
-			break;
-		case MKV:
-			ss << "internalsrc streamname=video" << m_options.vinput;
-			ss << " ! h264parse";
-			ss << " ! matroskamux streamable=true";
-			ss << " ! fdsink fd=" << fd;
-			break;
-		case WEBM:
-			ss << "internalsrc streamname=video" << m_options.vinput;
-			ss << " ! webmmux streamable=true";
-			ss << " ! fdsink fd=" << fd;
-			break;
-		case FLV:
-			ss << "internalsrc streamname=video" << m_options.vinput;
-			ss << " ! flvmux streamable=true";
-			ss << " ! fdsink fd=" << fd;
-			break;
-		case MJPEG:
-			ss << "internalsrc streamname=video" << m_options.vinput;
-			ss << " ! multipartmux boundary=boundary";
-			ss << " ! fdsink fd=" << fd;
-			break;
+		LogError("WebStreamPipeline::Run() - Unknown format requested");
+		goto cleanup;
+	}
+	else if (m_options.type == "MP4")
+	{
+		ss << "internalsrc streamname=video" << m_options.vinput;
+		ss << " ! h264parse";
+		ss << " ! qtmux streamable=true fragment-duration=250";
+		ss << " ! fdsink fd=" << fd;
+	}
+	else if (m_options.type == "MKV")
+	{
+		ss << "internalsrc streamname=video" << m_options.vinput;
+		ss << " ! h264parse";
+		ss << " ! matroskamux streamable=true";
+		ss << " ! fdsink fd=" << fd;
+	}
+	else if (m_options.type == "WEBM")
+	{
+		ss << "internalsrc streamname=video" << m_options.vinput;
+		ss << " ! webmmux streamable=true";
+		ss << " ! fdsink fd=" << fd;
+	}
+	else if (m_options.type == "MJPEG")
+	{
+		ss << "internalsrc streamname=video" << m_options.vinput;
+		ss << " ! multipartmux boundary=boundary";
+		ss << " ! fdsink fd=" << fd;
+	}
+	else
+	{
+		LogCritical("WebStreamPipeline::Run() - Bad value or unsuported type %s", m_options.type.c_str());
+		goto cleanup;
+	}
+/*
 		case MJPEG_TRANS:
 			ss << "internalsrc streamname=video" << m_options.vinput;
 			ss << " ! decodebin";
@@ -199,11 +203,8 @@ restart_poll:
 			ss << " ! multipartmux boundary=boundary";
 			ss << " ! fdsink fd=" << fd;
 			break;
-		default:
-			LogCritical("WebStreamPipeline::Run() - Bad value or unsuported type %d", m_options.type);
-			abort();
-			break;
-	}
+*/
+
 
 	//Start gstreamer pipeline
 	do {
