@@ -101,24 +101,29 @@ static GstElement *transcode_pipeline(GstRTSPMediaFactory *factory, const GstRTS
 		if (fps < 0)
 			pipe << " ! videorate ! video/x-raw, framerate=1/" << abs(fps);
 		pipe << " ! videoconvert";
-		if (quality > 0 && quality < 100)
+
+		if (codec_mode == "cq")
 		{
-			pipe << " ! x264enc key-int-max=" << gop << " pass=5 quantizer=" << quality / 2;
-		}
-		else
-		{
-			if (codec_mode == "cbr")
+			if (quality > 0 && quality < 100)
 			{
-				pipe << " ! x264enc key-int-max=" << gop << " pass=0 bitrate=" << bitrate;			
-			}
-			else if (codec_mode == "vbr")
-			{
-				pipe << " ! x264enc key-int-max=" << gop << " pass=17 bitrate=" << bitrate;			
+				pipe << " ! x264enc tune=4 key-int-max=" << gop << " pass=5 quantizer=" << quality / 2;
 			}
 			else
 			{
-				pipe << " ! x264enc key-int-max=" << gop << " bitrate=" << bitrate;
+				pipe << " ! x264enc tune=4 key-int-max=" << gop << " pass=5 quantizer=" << 50 / 2;
 			}
+		}
+		if (codec_mode == "cbr")
+		{
+			pipe << " ! x264enc tune=4 key-int-max=" << gop << " pass=0 bitrate=" << bitrate;			
+		}
+		else if (codec_mode == "vbr")
+		{
+			pipe << " ! x264enc tune=4 key-int-max=" << gop << " pass=17 bitrate=" << bitrate;			
+		}
+		else
+		{
+			pipe << " ! x264enc tune=4 key-int-max=" << gop << " bitrate=" << bitrate;
 		}
 		pipe << " ! h264parse ! rtph264pay name=pay0 pt=96";
 		pipe << " )";
