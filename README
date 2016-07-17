@@ -33,7 +33,6 @@ Getting Started
 
 The camera framework requires several core packages in order to compile it.
 
-* mono (c# compiler)
 * liblogger (https://github.com/mistralol/liblogger)
 * libclientserver (https://github.com/mistralol/libclientserver)
 * libgstreamer1.0 (at least version 1.4 but may work with 1.2)
@@ -47,7 +46,7 @@ Runtime dependancies
 * gstreamer-js (https://github.com/mistralol/gstreamer-js)
 * gst-rpicamsrc (https://github.com/thaytan/gst-rpicamsrc)
 * gst-omx
-* xsp4
+* nodejs
 
 Note: gst-rpicamsrc is only required if you want to run on the pi
 
@@ -64,10 +63,4 @@ A: It will be on port 8080
 Q: Whats the default rtsp port
 A: It will be on port 8554 and the video url looks like
    rtsp://username:password@<ip>/video/0
-
-Q: The Web gui take a really long time to access on first attempt
-A: This would be mono doing the jit compile for its system lib's
-   You can speed them up doing an ahead of time compile of the mono libs
-   for i in `find /usr/lib/mono -type f -name "*.dll"` ; do mono --aot $i ; done
-
 
