@@ -47,6 +47,11 @@ app.get('/', function (req, res) {
 });
 
 app.get('/login', function(req, res) {
+	if (req.session.IsUser == true)
+	{
+		res.redirect('/live');
+	}
+
 	res.render('login',
 		{
 			title : 'Camera Login'
@@ -70,6 +75,15 @@ app.post('/login', function(req, res) {
 app.get('/logout', function(req, res) {
 	req.session.destroy();
 	res.redirect('/login');
+});
+
+app.get('/live', function(req, res)
+{
+	res.render('live',
+		{
+			title : 'Camera',
+		}
+	);
 });
 
 if (process.env.PORT == undefined)
