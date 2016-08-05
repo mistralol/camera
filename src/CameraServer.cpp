@@ -207,10 +207,12 @@ int CameraServer::UserAuth(CameraHandler *handler, IServerConnection *Connection
 	
 	std::string Username = request["Username"].asString();
 	std::string Password = request["Password"].asString();
-	int ret = User::Auth(Username, Password);
+	bool ret = User::Auth(Username, Password);
+	if (!ret)
+		return -EPERM;
 	if (ret >= 0)
 		handler->Cfg->Dirty();
-	return ret;
+	return 0;
 }
 
 int CameraServer::UserDelete(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)

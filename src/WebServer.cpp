@@ -225,8 +225,6 @@ bool WebServer::Exec()
 	ss << m_port;
 	std::string sport = ss.str();
 	LogInfo("WebRoot: %s", m_WebRoot.c_str());
-	std::string Root = m_WebRoot + "/index.js";
-	LogDebug("WebRoot: %s", Root.c_str());
 	pid_t pid = fork();
 	if (pid < 0)
 	{
@@ -259,7 +257,13 @@ bool WebServer::Exec()
 			exit(EXIT_FAILURE);
 		}
 
-		if (execl("/usr/local/bin/nodemon", "/usr/local/bin/nodemon", Root.c_str(), NULL) < 0)
+		if (chdir(m_WebRoot.c_str()) < 0)
+		{
+			perror("chdir");
+			exit(EXIT_FAILURE);
+		}
+
+		if (execl("/usr/local/bin/nodemon", "/usr/local/bin/nodemon", "index.js", NULL) < 0)
 		{
 			printf("execl failed: %s\n", strerror(errno));
 			abort();

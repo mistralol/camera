@@ -8,8 +8,12 @@ var SQLiteStore = require('connect-sqlite3')(session);
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-
 var app = express();
+
+var libclientserver = require("/usr/lib/node_modules/libclientserver.js");
+var Cli = new libclientserver.Client("/tmp/CameraServer");
+Cli.Connect();
+
 
 function compile(str, path) {
 	return stylus(str).set('style.css', path).use(nib());
@@ -62,19 +66,34 @@ app.get('/login', function(req, res) {
 app.post('/login', function(req, res) {
 
 	console.log(req.body);
-
-	res.render('login',
+	
+	var args = {
+		"action" : "UserAuth",
+		"Username" : req.body["username"],
+		"Password" : req.body["password"]
+	};
+	Cli.SendRequest(args, function(data, error) {
+		if (error)
 		{
-			title : 'Camera Login',
-			failed : true
+			console.log("/login Error: " + error);
+			res.render('login',
+			{
+				title : 'Camera Login',
+				failed : true
+			});
 		}
-	);
+		else
+		{
+			res.redirect('/live');
+		}
+	});
 });
 
-
 app.get('/logout', function(req, res) {
+	req.session.IsUser = false;
 	req.session.destroy();
 	res.redirect('/login');
+	res.end();
 });
 
 app.get('/live', function(req, res)
@@ -85,6 +104,85 @@ app.get('/live', function(req, res)
 		}
 	);
 });
+
+app.post('/api/generic', function(req, res)
+{
+	if (req.session.IsUser != true)
+	{
+		res.status(401).send('Not logged in');
+		return;
+	}
+
+	Cli.SendRequest(args, function(data, error) {
+		if (error)
+		{
+			res.status(500).send(error);
+		}
+		else
+		{
+			res.json(data);
+		}
+	});
+});
+
+app.get('/api/ping', function(req, res)
+{
+	if (req.session.IsUser != true)
+	{
+		res.status(401).send('Not logged in');
+		return;
+	}
+
+	var args = { "action" : "PING" };
+	Cli.SendRequest(args, function(data, error) {
+		if (error)
+		{
+			res.status(500);
+			res.send(error);
+		}
+		else
+		{
+			res.json(data);
+		}
+	});
+});
+
+app.get('/api/version', function(req, res)
+{
+	if (req.session.IsUser != true)
+	{
+		res.status(401).send('Not logged in');
+		return;
+	}
+
+	var args = { "action" : "VERSION" };
+	Cli.SendRequest(args, function(data, error) {
+		if (error)
+		{
+			res.status(500);
+			res.send(error);
+		}
+		else
+		{
+			res.json(data);
+		}
+	});
+});
+
+
+//Send a keepalive to backend so we do not get disconnected
+function Ping()
+{
+	var args = { "action" : "PING" };
+	Cli.SendRequest(args, function(data, error) {
+		if (error)
+		{
+			console.log("Ping Error: " + error);
+		}
+		setTimeout(Ping, 60000);
+	});
+}
+setTimeout(Ping, 60000);
 
 if (process.env.PORT == undefined)
 {
