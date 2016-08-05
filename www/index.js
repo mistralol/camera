@@ -85,6 +85,7 @@ app.post('/login', function(req, res) {
 		}
 		else
 		{
+			req.session.IsUser = true;
 			res.redirect('/live');
 		}
 	});
@@ -99,6 +100,12 @@ app.get('/logout', function(req, res) {
 
 app.get('/live', function(req, res)
 {
+	if (req.session.IsUser != true)
+	{
+		res.redirect('/login');
+		return;
+	}
+
 	res.render('live',
 		{
 			title : 'Camera',
@@ -108,7 +115,12 @@ app.get('/live', function(req, res)
 
 app.get('/videostream', function(req, res)
 {
-	console.log(req.query);
+	if (req.session.IsUser != true)
+	{
+		res.status(401).send('Not logged in');
+		return;
+	}
+	console.log("VideoStream: ", req.query);
 	
 	var args = {
 		"action" : "WebStreamStart",
@@ -132,7 +144,10 @@ app.get('/videostream', function(req, res)
 			client.connect(data["port"], "127.0.0.1");
 			
 			client.on('data', function(data) {
-				res.write(data);
+				if (res.write(data) == false)
+				{
+					client.destroy();
+				}
 			});
 			
 			client.on('close', function(data) {
@@ -150,7 +165,7 @@ app.post('/api/generic', function(req, res)
 		return;
 	}
 
-	Cli.SendRequest(args, function(data, error) {
+	Cli.SendRequest(req.body, function(data, error) {
 		if (error)
 		{
 			res.status(500).send(error);
@@ -196,8 +211,7 @@ app.get('/api/version', function(req, res)
 	Cli.SendRequest(args, function(data, error) {
 		if (error)
 		{
-			res.status(500);
-			res.send(error);
+			res.status(500).send(error);
 		}
 		else
 		{
