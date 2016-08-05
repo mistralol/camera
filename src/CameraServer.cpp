@@ -554,9 +554,13 @@ int CameraServer::WebStreamStart(CameraHandler *handler, IServerConnection *Conn
 		return -EINVAL;
 	}
 
-//	options.Decode(request["options"]);
+	options.Decode(request["options"]);
 
-	return handler->WStream->StartVideoInput(&options);
+	int port = handler->WStream->StartVideoInput(&options);
+	if (port < 0)
+		return -port;
+	response["port"] = port;
+	return 0;
 }
 
 int CameraServer::DebugGetEnabled(CameraHandler *handler, IServerConnection *Connection, Json::Value &request, Json::Value &response)

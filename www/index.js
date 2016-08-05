@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var app = express();
+var net = require('net');
 
 var libclientserver = require("/usr/lib/node_modules/libclientserver.js");
 var Cli = new libclientserver.Client("/tmp/CameraServer");
@@ -103,6 +104,42 @@ app.get('/live', function(req, res)
 			title : 'Camera',
 		}
 	);
+});
+
+app.get('/videostream', function(req, res)
+{
+	console.log(req.query);
+	
+	var args = {
+		"action" : "WebStreamStart",
+		"options" : {
+			"vinput" : 0,
+			"type" : "MKV"
+		}
+	};
+	
+	Cli.SendRequest(args, function(data, error) {
+		if (error)
+		{
+			console.log(error);
+			res.status(500).send(error);
+		}
+		else
+		{
+			console.log(data);
+			
+			var client = new net.Socket();
+			client.connect(data["port"], "127.0.0.1");
+			
+			client.on('data', function(data) {
+				res.write(data);
+			});
+			
+			client.on('close', function(data) {
+				console.log("No More Data");
+			});
+		}
+	});
 });
 
 app.post('/api/generic', function(req, res)
