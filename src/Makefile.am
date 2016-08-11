@@ -25,6 +25,7 @@ camera_SOURCES= Camera.cpp \
 		WebStream.cpp \
 		WebStreamOptions.cpp \
 		WebStreamPipeline.cpp \
+		WebStreamPipe.cpp \
 		GPIOOutputTimer.cpp \
 		UserItem.cpp \
 		VideoInputConfig.cpp \

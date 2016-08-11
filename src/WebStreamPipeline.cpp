@@ -164,6 +164,16 @@ restart_poll:
 		ss << " ! matroskamux streamable=true";
 		ss << " ! fdsink fd=" << fd;
 	}
+	else if (m_options.type == "MKV_TRANS")
+	{
+		ss << "internalsrc streamname=video" << m_options.vinput;
+		ss << " ! h264parse ! decodebin ";
+		ss << " ! videorate ! video/x-raw, framerate=15/1 ";
+		ss << " ! queue name=queue leaky=1 max-size-buffers=5";
+		ss << " ! x264enc name=encoder tune=4 key-int-max=1 bitrate=1024";
+		ss << " ! matroskamux streamable=true";
+		ss << " ! fdsink fd=" << fd;
+	}
 	else if (m_options.type == "WEBM")
 	{
 		ss << "internalsrc streamname=video" << m_options.vinput;
@@ -209,7 +219,7 @@ restart_poll:
 	//Start gstreamer pipeline
 	do {
 		LogDebug("Starting Pipeline '%s'", ss.str().c_str());
-		std::unique_ptr<PipelineBasic> Pipeline(new PipelineBasic(ss.str()));
+		std::unique_ptr<WebStreamPipe> Pipeline(new WebStreamPipe(ss.str()));
 		Pipeline->SetName("WebStream");
 		Pipeline->SetRestart(false);
 		Pipeline->Start();

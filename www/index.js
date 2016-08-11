@@ -126,7 +126,7 @@ app.get('/videostream', function(req, res)
 		"action" : "WebStreamStart",
 		"options" : {
 			"vinput" : 0,
-			"type" : "MKV"
+			"type" : "MKV_TRANS"
 		}
 	};
 	
@@ -138,20 +138,33 @@ app.get('/videostream', function(req, res)
 		}
 		else
 		{
-			console.log(data);
+			//console.log(data);
 			
 			var client = new net.Socket();
 			client.connect(data["port"], "127.0.0.1");
 			
+			req.socket.on('close', function(data) {
+				//console.log("Browser Socket Closed");
+				client.destroy();
+			});
+
+			req.socket.on('drain', function(data) {
+				//console.log("Broswer Socket writable again");
+				client.resume();
+			});
+
 			client.on('data', function(data) {
-				if (res.write(data) == false)
+				var status = res.write(data);
+				//console.log(status);
+				if (status == false)
 				{
-					client.destroy();
+					//console.log("Pausing Socket");
+					client.pause();
 				}
 			});
 			
 			client.on('close', function(data) {
-				console.log("No More Data");
+				//console.log("No More Data");
 			});
 		}
 	});

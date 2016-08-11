@@ -50,6 +50,7 @@ using namespace liblogger;
 
 #include <WebStreamOptions.h>
 #include <WebStreamPipeline.h>
+#include <WebStreamPipe.h>
 #include <WebStream.h>
 #include <WebServer.h>
 

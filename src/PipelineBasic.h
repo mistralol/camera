@@ -2,10 +2,13 @@
 
 class PipelineBasic : public IPipeline
 {
+	protected:
+		PipelineBasic();
+
 	public:
 		PipelineBasic(const std::string name, const std::string strpipe);
 		PipelineBasic(const std::string strpipe);
-		~PipelineBasic();
+		virtual ~PipelineBasic();
 
 		void SetName(const std::string name);
 		void SetRestart(bool value);
@@ -37,7 +40,6 @@ class PipelineBasic : public IPipeline
 	protected:
 		std::string m_name;
 
-	private:
 		Mutex m_mutex;
 		pthread_t m_thread;
 		volatile bool m_running;
@@ -45,7 +47,9 @@ class PipelineBasic : public IPipeline
 		bool m_restart;
 		bool m_exited;
 		struct timespec m_restartdelay;
-		GstElement *m_pipeline; //For use in local context only
+		//If you access m_pipeline it is safe to do so without a lock so long as it is a callback from the pipeline
+		//If you access it from outside the pipeline then you must hold m_mutex and also expect it to be a NULL value!
+		GstElement *m_pipeline;
 };
 
 
